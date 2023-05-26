@@ -13,7 +13,7 @@ public class WelcomePage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.welcome_page);
 
         firstButton = findViewById(R.id.clickToContinue);
         firstButton.setOnClickListener(new View.OnClickListener() {

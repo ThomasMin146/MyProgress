@@ -19,7 +19,7 @@ public class LoginPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.login_page);
         dbHelper = new DataBaseHelper(this);
 
         TextView username = findViewById(R.id.username);
@@ -36,6 +36,7 @@ public class LoginPage extends AppCompatActivity {
                     Toast.makeText(LoginPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginPage.this, HomePage.class);
                     startActivity(intent);
+                    finish();
 
                 } else {
                     Toast.makeText(LoginPage.this, "Login Failed", Toast.LENGTH_SHORT).show();

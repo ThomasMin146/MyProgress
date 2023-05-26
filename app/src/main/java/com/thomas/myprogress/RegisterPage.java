@@ -18,7 +18,7 @@ public class RegisterPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register_page);
+        setContentView(R.layout.register_page);
 
         Button createAcc = findViewById(R.id.createAccountButton);
         EditText newUsername = findViewById(R.id.newUsername);

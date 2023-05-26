@@ -7,16 +7,18 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    private static String DB_PATH = "/data/data/com.thomas.myprogress/databases/";
-    private static String DB_NAME = "UserLogin.db";
+    private static final String DB_PATH = "/data/data/com.thomas.myprogress/databases/";
+    private static final String DB_NAME = "AppDatabase.db";
     private static final String TABLE_NAME = "Users";
     private SQLiteDatabase myDataBase;
     private final Context myContext;
@@ -99,13 +101,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public SQLiteDatabase openDataBase() throws SQLException {
 
-        //Open the database
-        String myPath = DB_PATH + DB_NAME;
-        myDataBase = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
-        return myDataBase;
-    }
     @Override
     public synchronized void close() {
 
@@ -157,12 +153,36 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         if (cursor != null && cursor.moveToFirst()) {
             // Username and password match in the database
             cursor.close();
+            db.close();
             return true;
         } else {
             // Invalid username or password
             cursor.close();
+            db.close();
             return false;
         }
+    }
+
+    public ArrayList<String> allExercisesNames(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ArrayList<String> exerciseNames = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query("Exercise", new String[]{"name"}, null, null, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int nameIndex = cursor.getColumnIndex("name");
+                do {
+                    String exerciseName = cursor.getString(nameIndex);
+                    exerciseNames.add(exerciseName);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return exerciseNames;
     }
 
 }
