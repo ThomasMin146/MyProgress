@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.thomas.myprogress.dbhelper.DataBaseHelper;
 
-import org.w3c.dom.Text;
 
 public class LoginPage extends AppCompatActivity {
     private DataBaseHelper dbHelper;
@@ -25,22 +24,22 @@ public class LoginPage extends AppCompatActivity {
 
         TextView username = findViewById(R.id.username);
         TextView password = findViewById(R.id.password);
-        //TextView testText = findViewById(R.id.testText);
 
         Button loginButton = findViewById(R.id.loginButton);
         Button registrateButton = findViewById(R.id.registrateButton);
-        Button allUsers = findViewById(R.id.idBtnReadCourse);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(username.getText().toString().equals("admin") && password.getText().toString().equals("admin")){
+
+                if(dbHelper.checkUser(username.getText().toString(), password.getText().toString())){
                     Toast.makeText(LoginPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LoginPage.this, HomePage.class);
+                    startActivity(intent);
+
                 } else {
                     Toast.makeText(LoginPage.this, "Login Failed", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
 
@@ -52,12 +51,5 @@ public class LoginPage extends AppCompatActivity {
             }
         });
 
-        allUsers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(LoginPage.this, ViewUsers.class);
-                startActivity(i);
-            }
-        });
     }
 }

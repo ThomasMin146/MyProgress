@@ -47,7 +47,7 @@
         android:inputType="textPassword"
         />
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/createAccountButton"
         android:layout_width="250dp"
         android:layout_height="60dp"
@@ -60,6 +60,13 @@
         app:layout_constraintTop_toBottomOf="@id/newPassword"
         tools:ignore="MissingConstraints" />
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Already registered? Login."
+        android:textSize="30sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/createAccountButton"
+        android:layout_margin="20dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

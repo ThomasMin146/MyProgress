@@ -14,6 +14,7 @@ public class RegisterPage extends AppCompatActivity {
     DataBaseHelper dbHelper;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
