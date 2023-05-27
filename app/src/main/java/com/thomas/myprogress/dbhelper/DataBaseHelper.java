@@ -113,11 +113,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String query = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ("
-                + "id" + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + "name" + " TEXT,"
-                + "password" + " TEXT)";
+        String query = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,password TEXT)";
+        String query2 = "CREATE TABLE IF NOT EXISTS Exercise (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,difficulty TEXT, type TEXT)";
         db.execSQL(query);
+        db.execSQL(query2);
     }
 
     @Override
