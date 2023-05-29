@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
     <Spinner
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -13,20 +14,77 @@
         android:id="@+id/exerciseSpinner"
         />
 
-    <Button
+    <EditText
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/lastButton"
-        android:text="Check last Workout"
-        android:textSize="40dp"/>
+        android:id="@+id/repetitionText"
+        android:hint="Number of repetitions"
+        android:textColor="@color/black"
+        />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/allButton"
-        android:text="Check all Workouts"
-        android:textSize="40dp"/>
+        android:id="@+id/saveButton"
+        android:text="Save exercise to current workout"
+        android:layout_margin="50dp"
+        android:textSize="30dp"/>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="00 : 00 : 00"
+            android:id="@+id/minTime"
+            android:textStyle="bold"
+            android:textAlignment="center"
+            android:textSize="40dp"/>
+
+
+
+
+    </LinearLayout>
+
+
+
+    <GridLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:rowCount="2"
+        android:columnCount="2"
+        android:layout_weight="1">
+
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/startTimerButton"
+            android:text="Start timer"
+            android:layout_margin="0dp"
+            android:textSize="25dp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/stopTimerButton"
+            android:text="Stop timer"
+            android:layout_margin="0dp"
+            android:textSize="25dp"/>
+
+
+    </GridLayout>
 
 </LinearLayout>
