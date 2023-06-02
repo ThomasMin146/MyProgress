@@ -2,6 +2,9 @@ package com.thomas.myprogress;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,75 +26,35 @@ import java.util.Locale;
 
 public class StartWorkoutPage extends AppCompatActivity {
     DataBaseHelper dbHelper;
-    Spinner exerciseSpinner;
     Stopwatch stopwatch;
     TextView minTime;
     private Button buttonStart, buttonReset;
+    //ArrayList<ExerciseItem> exerciseItems;
+    ArrayList<String> test;
+    RecyclerView exerciseRecyclerView;
+    ExerciseAdapter exerciseAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.start_workout_page);
+        setContentView(R.layout.testing);
 
         dbHelper = new DataBaseHelper(this);
         stopwatch = new Stopwatch();
+        test = new ArrayList<>();
 
-        exerciseSpinner = findViewById(R.id.exerciseSpinner);
-        minTime = findViewById(R.id.minTime);
-        buttonStart = findViewById(R.id.startTimerButton);
-        buttonReset = findViewById(R.id.stopTimerButton);
+        exerciseRecyclerView = findViewById(R.id.mRecyclerView);
+        //minTime = findViewById(R.id.minTime);
+        //buttonStart = findViewById(R.id.startTimerButton);
+        //buttonReset = findViewById(R.id.stopTimerButton);
 
-        ArrayList<String> henlo = dbHelper.allExercisesNames();
-        henlo.add(0,"Choose an exercise...");
+        setUpExerciseItems();
+        exerciseAdapter = new ExerciseAdapter(this, test);
+        exerciseAdapter.getItemCount();
+        exerciseRecyclerView.setAdapter(exerciseAdapter);
+        exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, henlo) {
-            @Override
-            public boolean isEnabled(int position){
-                // Disable the first item from Spinner
-                // First item will be use for hint
-                return position != 0;
-            }
-            @Override
-            public View getDropDownView(int position, View convertView,@NonNull ViewGroup parent) {
-                // Get the item view
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView textView = (TextView) view;
-                if(position == 0){
-                    // Set the hint text color gray
-                    textView.setTextColor(Color.GRAY);
-                }
-                else {
-                    textView.setTextColor(Color.BLACK);
-                }
-                return view;
-            }
-        };
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // Spinner on item selected listener
-        exerciseSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
-
-                // Get the spinner selected item text
-                String selectedItemText = (String) parent.getItemAtPosition(position);
-
-                // If user change the default selection
-                // First item is disable and
-                // it is used for hint
-                if(position > 0){
-                    // Notify the selected item text
-                    Toast.makeText(getApplicationContext(),"Selected : " + selectedItemText, Toast.LENGTH_SHORT).show();
-                }
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-        exerciseSpinner.setAdapter(adapter);
-
-        Handler handler = new Handler();
+        /*Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -117,7 +80,7 @@ public class StartWorkoutPage extends AppCompatActivity {
             public void onClick(View v) {
                 stopwatch.reset();
             }
-        });
+        });*/
 
     }
 
@@ -128,5 +91,16 @@ public class StartWorkoutPage extends AppCompatActivity {
         int milliseconds = (int) (elapsedMillis % 1000);
 
         return String.format(Locale.getDefault(), "%02d : %02d : %02d", hours, minutes, seconds);
+    }
+
+    private void setUpExerciseItems(){
+        String[] exerciseNames = {"pushup", "pullup", "dips"};
+        //int[] exerciseReps = {15, 10, 10};
+        //ExerciseEnums.BodyPart[] bodyPart = {ExerciseEnums.BodyPart.CHEST, ExerciseEnums.BodyPart.BACK, ExerciseEnums.BodyPart.TRICEPS};
+        //ExerciseEnums.ExerciseDifficulty[] exerciseDifficulty = {ExerciseEnums.ExerciseDifficulty.BEGINNER, ExerciseEnums.ExerciseDifficulty.BEGINNER, ExerciseEnums.ExerciseDifficulty.BEGINNER};
+
+        for (int i = 0; i<exerciseNames.length; i++){
+            test.add(exerciseNames[i]);
+        }
     }
 }
