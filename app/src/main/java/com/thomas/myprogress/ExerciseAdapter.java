@@ -13,12 +13,11 @@ import java.util.ArrayList;
 
 public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyViewHolder> {
     Context context;
-    //ArrayList<ExerciseItem> exerciseItems;
-    ArrayList<String> test;
+    ArrayList<ItemExercise> itemExercises;
 
-    public ExerciseAdapter(Context context, ArrayList<String> test){
+    public ExerciseAdapter(Context context, ArrayList<ItemExercise> itemExercises){
         this.context = context;
-        this.test = test;
+        this.itemExercises = itemExercises;
 
     }
     @NonNull
@@ -31,29 +30,31 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.nameTV.setText(test.get(position));
-        //holder.repsTV.setText(exerciseItems.get(position).getReps());
-        //holder.bodyPartTV.setText(String.valueOf(exerciseItems.get(position).getBodyPart()));
-        //holder.difficultyTV.setText(String.valueOf(exerciseItems.get(position).getDifficulty()));
+        holder.nameTV.setText(itemExercises.get(position).getName());
+        holder.repsTV.setText(String.valueOf(itemExercises.get(position).getReps()));
+        holder.bodyPartTV.setText(String.valueOf(itemExercises.get(position).getBodyPart()));
+        holder.difficultyTV.setText(String.valueOf(itemExercises.get(position).getDifficulty()));
 
     }
 
     @Override
     public int getItemCount() {
-        return test.size();
+        return itemExercises.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameTV;
-        //TextView repsTV, bodyPartTV, difficultyTV;
+        TextView repsTV;
+        TextView bodyPartTV;
+        TextView difficultyTV;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
             nameTV = itemView.findViewById(R.id.nameTextView);
-            //repsTV = itemView.findViewById(R.id.repsTextView);
-            //bodyPartTV = itemView.findViewById(R.id.bodyPartTextView);
-            //difficultyTV = itemView.findViewById(R.id.difficultyTextView);
+            repsTV = itemView.findViewById(R.id.repsTextView);
+            bodyPartTV = itemView.findViewById(R.id.testbodyPartTextView);
+            difficultyTV = itemView.findViewById(R.id.testDiffTextView);
 
         }
     }

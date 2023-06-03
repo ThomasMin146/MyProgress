@@ -11,35 +11,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="200dp"
+        android:layout_marginBottom="450dp"
         android:text="Welcome to MyProgress"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="34sp"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
     <TextView
         android:id="@+id/underWelcomeText"
-        android:layout_width="332dp"
-        android:layout_height="76dp"
-        android:layout_marginStart="35dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
         android:gravity="center"
         android:text="In this application you can track your fitness journey!"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/clickToContinue"
         app:layout_constraintTop_toBottomOf="@+id/welcomeText" />
 
     <Button
         android:id="@+id/clickToContinue"
         android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="52dp"
-        android:text="Click to Continue"
-        android:textSize="18dp"
+        android:layout_height="wrap_content"
+        android:text="Click to continue"
+        android:backgroundTint="@color/black"
+        android:gravity="center"
+        android:textSize="25dp"
+        android:outlineAmbientShadowColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/underWelcomeText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

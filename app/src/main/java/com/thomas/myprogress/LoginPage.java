@@ -3,6 +3,7 @@ package com.thomas.myprogress;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,15 +26,16 @@ public class LoginPage extends AppCompatActivity {
         TextView username = findViewById(R.id.username);
         TextView password = findViewById(R.id.password);
 
+        TextView registerHere = findViewById(R.id.missingaccount);
+        registerHere.setPaintFlags(registerHere.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
         Button loginButton = findViewById(R.id.loginButton);
-        Button registrateButton = findViewById(R.id.registrateButton);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if(dbHelper.checkUser(username.getText().toString(), password.getText().toString())){
-                    Toast.makeText(LoginPage.this, "Login Successful", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(LoginPage.this, HomePage.class);
                     startActivity(intent);
                     finish();
@@ -44,7 +46,7 @@ public class LoginPage extends AppCompatActivity {
             }
         });
 
-        registrateButton.setOnClickListener(new View.OnClickListener() {
+        registerHere.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginPage.this, RegisterPage.class);

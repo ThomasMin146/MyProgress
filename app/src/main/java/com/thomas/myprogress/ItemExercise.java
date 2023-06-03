@@ -1,16 +1,16 @@
 package com.thomas.myprogress;
 
-public class ExerciseItem {
+public class ItemExercise {
     private String name;
     private int reps;
-    private ExerciseEnums.ExerciseDifficulty difficulty;
     private ExerciseEnums.BodyPart bodyPart;
+    private ExerciseEnums.ExerciseDifficulty difficulty;
 
-    public ExerciseItem(String name, int reps, ExerciseEnums.ExerciseDifficulty difficulty, ExerciseEnums.BodyPart bodyPart) {
+    public ItemExercise(String name, int reps, ExerciseEnums.BodyPart bodyPart, ExerciseEnums.ExerciseDifficulty difficulty) {
         this.name = name;
         this.reps = reps;
-        this.difficulty = difficulty;
         this.bodyPart = bodyPart;
+        this.difficulty = difficulty;
     }
 
     public String getName() {
