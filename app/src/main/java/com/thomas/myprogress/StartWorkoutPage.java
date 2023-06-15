@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -19,7 +20,7 @@ public class StartWorkoutPage extends AppCompatActivity {
     DataBaseHelper dbHelper;
     Stopwatch stopwatch;
     TextView minTime;
-    private Button playButton, resumeButton, setButton, pauseButton, stopButton;
+    private Button playButton, resumeButton, setButton, pauseButton, stopButton, addButton;
     ArrayList<ItemExercise> exerciseItems;
     RecyclerView exerciseRecyclerView;
     ExerciseAdapter exerciseAdapter;
@@ -34,6 +35,7 @@ public class StartWorkoutPage extends AppCompatActivity {
         exerciseItems = new ArrayList<>();
 
         exerciseRecyclerView = findViewById(R.id.exerciseRecyclerView);
+        addButton = findViewById(R.id.addExercise);
         minTime = findViewById(R.id.minTime);
 
         playButton = findViewById(R.id.playButton);
@@ -103,6 +105,14 @@ public class StartWorkoutPage extends AppCompatActivity {
                 stopButton.setVisibility(View.GONE);
                 resumeButton.setVisibility(View.GONE);
                 playButton.setVisibility(View.VISIBLE);
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StartWorkoutPage.this, AddExercise.class);
+                startActivity(intent);
             }
         });
 

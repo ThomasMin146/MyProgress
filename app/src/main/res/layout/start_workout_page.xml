@@ -4,65 +4,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    android:weightSum="7">
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:text="Workout's exercises list:"
         android:textStyle="bold"
         android:gravity="center"
-        android:textSize="35dp"
-        android:id="@+id/firstText"
-        />
+        android:textSize="30dp"
+        android:id="@+id/firstText"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="500dp">
+        android:layout_height="0dp"
+        android:layout_weight="4">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/exerciseRecyclerView"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@+id/firstText"
-            app:layout_constraintBottom_toTopOf="@+id/timerLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             tools:ignore="NotSibling" />
 
+        <Button
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/addExercise"
+            android:text="+"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        </Button>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/timerLayout"
-        android:weightSum="1">
-
-
+        android:layout_height="0dp"
+        android:layout_weight="2">
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="00 : 00 . 00"
             android:id="@+id/minTime"
             android:textStyle="bold"
             android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             android:textSize="40dp"/>
 
-    </LinearLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -70,7 +69,7 @@
             android:id="@+id/playButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timerLayout"
+            app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="NotSibling">
 
@@ -81,9 +80,8 @@
             android:layout_height="wrap_content"
             android:text="Set"
             android:id="@+id/setButton"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/playButton"
-            app:layout_constraintTop_toBottomOf="@+id/timerLayout"
+            app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"
             tools:ignore="NotSibling">
@@ -96,8 +94,7 @@
             android:text="Pause"
             android:id="@+id/pauseButton"
             app:layout_constraintStart_toEndOf="@id/playButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timerLayout"
+            app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"
             tools:ignore="NotSibling">
@@ -109,9 +106,8 @@
             android:layout_height="wrap_content"
             android:text="Stop"
             android:id="@+id/stopButton"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/playButton"
-            app:layout_constraintTop_toBottomOf="@+id/timerLayout"
+            app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"
             tools:ignore="NotSibling">
@@ -124,8 +120,7 @@
             android:text="Resume"
             android:id="@+id/resumeButton"
             app:layout_constraintStart_toEndOf="@id/playButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timerLayout"
+            app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"
             tools:ignore="NotSibling">
