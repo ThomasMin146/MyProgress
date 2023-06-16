@@ -1,33 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Button
+    <androidx.cardview.widget.CardView
+        android:id="@+id/startWorkoutCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/startButton"
-        android:text="Start a Workout"
-        android:textSize="40dp"/>
+        android:layout_margin="20dp"
+        android:clickable="true"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="25dp">
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/lastButton"
-        android:text="Check last Workout"
-        android:textSize="40dp"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/start_workout">
+        </ImageView>
 
-    <Button
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#90000000" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Start a workout"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="40dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/workoutHistoryCard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:id="@+id/allButton"
-        android:text="Check all Workouts"
-        android:textSize="40dp"/>
+        android:layout_margin="20dp"
+        android:clickable="true"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="25dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/workout_history">
+        </ImageView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#AA000000" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Workout history"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="40dp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/exerciseGraphCard"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_margin="20dp"
+        android:clickable="true"
+        app:cardBackgroundColor="@color/black"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="25dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/exercise_graph">
+        </ImageView>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#99000000" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Exercise graph"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="40dp" />
+
+    </androidx.cardview.widget.CardView>
 
 </LinearLayout>
