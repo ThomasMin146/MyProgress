@@ -3,6 +3,7 @@ package com.thomas.myprogress;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +26,9 @@ public class LoginPage extends AppCompatActivity {
 
         TextView username = findViewById(R.id.username);
         TextView password = findViewById(R.id.password);
+
+        username.setTextColor(Color.WHITE);
+        password.setTextColor(Color.WHITE);
 
         TextView registerHere = findViewById(R.id.missingaccount);
         registerHere.setPaintFlags(registerHere.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
