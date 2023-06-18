@@ -16,7 +16,7 @@ import com.thomas.myprogress.dbhelper.DataBaseHelper;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class StartWorkoutPage extends AppCompatActivity {
+public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
     DataBaseHelper dbHelper;
     Stopwatch stopwatch;
     TextView minTime;
@@ -45,8 +45,7 @@ public class StartWorkoutPage extends AppCompatActivity {
         setButton = findViewById(R.id.setButton);
 
         setUpExerciseItems();
-        exerciseAdapter = new ExerciseAdapter(this, exerciseItems);
-        exerciseAdapter.getItemCount();
+        exerciseAdapter = new ExerciseAdapter(this, exerciseItems, this);
         exerciseRecyclerView.setAdapter(exerciseAdapter);
         exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -130,11 +129,22 @@ public class StartWorkoutPage extends AppCompatActivity {
     private void setUpExerciseItems(){
         String[] exerciseNames = {"Pushups", "Pullups", "Dips", "Squats", "L-sit"};
         int[] exerciseReps = {15, 10, 10, 25, 20};
-        ExerciseEnums.BodyPart[] bodyPart = {ExerciseEnums.BodyPart.CHEST, ExerciseEnums.BodyPart.BACK, ExerciseEnums.BodyPart.TRICEPS, ExerciseEnums.BodyPart.LEGS, ExerciseEnums.BodyPart.ABS};
-        ExerciseEnums.ExerciseDifficulty[] exerciseDifficulty = {ExerciseEnums.ExerciseDifficulty.BEGINNER, ExerciseEnums.ExerciseDifficulty.BEGINNER, ExerciseEnums.ExerciseDifficulty.BEGINNER, ExerciseEnums.ExerciseDifficulty.BEGINNER, ExerciseEnums.ExerciseDifficulty.INTERMEDIATE};
+        int[] exerciseSets = {15, 10, 10, 25, 20};
+        int[] exerciseWeight = {15, 10, 10, 25, 20};
+
 
         for (int i = 0; i<exerciseNames.length; i++){
-            exerciseItems.add(new ItemExercise(exerciseNames[i], exerciseReps[i], bodyPart[i], exerciseDifficulty[i]));
+            exerciseItems.add(new ItemExercise(exerciseNames[i], exerciseReps[i], exerciseSets[i], exerciseWeight[i]));
         }
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise.class);
+        intent.putExtra("Name", exerciseItems.get(position).getName());
+
+        startActivity(intent);
+
+
     }
 }
