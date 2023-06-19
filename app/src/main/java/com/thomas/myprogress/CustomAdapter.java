@@ -1,5 +1,6 @@
 package com.thomas.myprogress;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ItemViewHolder> {
+public class CustomAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     Context context;
     ArrayList<ExerciseModel> exerciseModels;
 
@@ -33,7 +34,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ItemViewHo
         // Inflate the item layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.linear_row_layout, parent, false);
-        return new CustomAdapter.ItemViewHolder(view);
+        return new ItemViewHolder(view).linkAdapter(this);
     }
 
     @Override
@@ -48,28 +49,38 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ItemViewHo
         return exerciseModels.size();
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder{
-        TextView sets;
-        EditText reps, weight;
-        CardView cardView;
-        Button removeButton;
-        CustomAdapter customAdapter;
-        public ItemViewHolder(@NonNull View itemView) {
-            super(itemView);
-            cardView = itemView.findViewById(R.id.linearCV);
-            sets = itemView.findViewById(R.id.setsTextView);
-            reps = itemView.findViewById(R.id.editTextReps);
-            weight = itemView.findViewById(R.id.editTextWeight);
-            removeButton = itemView.findViewById(R.id.removeRowButton);
+    public ArrayList<ExerciseModel> getExerciseModels(){
+        return this.exerciseModels;
+    }
 
-            removeButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    customAdapter.exerciseModels.remove(getAdapterPosition());
-                    customAdapter.notifyItemRemoved(getAdapterPosition());
-                }
-            });
+}
 
-        }
+class ItemViewHolder extends RecyclerView.ViewHolder{
+    TextView sets;
+    EditText reps, weight;
+    CardView cardView;
+    Button removeButton;
+    private CustomAdapter customAdapter;
+    public ItemViewHolder(@NonNull View itemView) {
+        super(itemView);
+        cardView = itemView.findViewById(R.id.linearCV);
+        sets = itemView.findViewById(R.id.setsTextView);
+        reps = itemView.findViewById(R.id.editTextReps);
+        weight = itemView.findViewById(R.id.editTextWeight);
+        removeButton = itemView.findViewById(R.id.removeRowButton);
+
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customAdapter.exerciseModels.remove(getAdapterPosition());
+                customAdapter.notifyItemRemoved(getAdapterPosition());
+                customAdapter.notifyItemRangeChanged(getAdapterPosition()+1, customAdapter.getExerciseModels().size());
+            }
+        });
+
+    }
+    public ItemViewHolder linkAdapter(CustomAdapter adapter){
+        this.customAdapter = adapter;
+        return this;
     }
 }

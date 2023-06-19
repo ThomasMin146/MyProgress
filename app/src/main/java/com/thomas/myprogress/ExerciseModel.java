@@ -7,7 +7,6 @@ public class ExerciseModel {
 
     public ExerciseModel(int sets) {
         this.sets = sets;
-
     }
 
     public int getSets() {
