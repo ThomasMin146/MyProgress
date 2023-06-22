@@ -5,6 +5,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.thomas.myprogress.dbhelper.DataBaseHelper;
+import com.thomas.myprogress.dbhelper.MyWorkout;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -22,8 +25,11 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
     TextView minTime;
     private Button playButton, resumeButton, setButton, pauseButton, stopButton, addButton;
     ArrayList<ItemExercise> exerciseItems;
+    ArrayList<ItemExercise> test;
+    ArrayList<MyWorkout> myWorkouts;
     RecyclerView exerciseRecyclerView;
     ExerciseAdapter exerciseAdapter;
+    SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +38,9 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
         dbHelper = new DataBaseHelper(this);
         stopwatch = new Stopwatch();
+
         exerciseItems = new ArrayList<>();
+        test = new ArrayList<>();
 
         exerciseRecyclerView = findViewById(R.id.exerciseRecyclerView);
         addButton = findViewById(R.id.addExercise);
@@ -44,10 +52,29 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         pauseButton = findViewById(R.id.pauseButton);
         setButton = findViewById(R.id.setButton);
 
-        setUpExerciseItems();
-        exerciseAdapter = new ExerciseAdapter(this, exerciseItems, this);
+        db = dbHelper.getWritableDatabase();
+        //dbHelper.addWorkout("Workout A", "Exercise 1", 3, 12, 50);
+        //dbHelper.deleteWorkoutsByExercise("Exercise 1");
+
+        //setUpExerciseItems();
+
+        exerciseAdapter = new ExerciseAdapter(this, test, this);
         exerciseRecyclerView.setAdapter(exerciseAdapter);
         exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // database operations
+        Cursor cursor = db.query("MyWorkout", null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+
+            ItemExercise itemExercise = new ItemExercise();
+            itemExercise.setName(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_name")));
+            test.add(itemExercise);
+
+
+        }
+        cursor.close();
+        exerciseAdapter.notifyDataSetChanged();
+        //addButton.setText(String.valueOf(exerciseAdapter.getItemCount()));
 
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -126,7 +153,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         return String.format(Locale.getDefault(), "%02d : %02d . %02d", minutes, seconds, milliseconds/10);
     }
 
-    private void setUpExerciseItems(){
+    /*private void setUpExerciseItems(){
         String[] exerciseNames = {"Pushups", "Pullups", "Dips", "Squats", "L-sit"};
         int[] exerciseReps = {15, 10, 10, 25, 20};
         int[] exerciseSets = {15, 10, 10, 25, 20};
@@ -136,12 +163,12 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         for (int i = 0; i<exerciseNames.length; i++){
             exerciseItems.add(new ItemExercise(exerciseNames[i], exerciseReps[i], exerciseSets[i], exerciseWeight[i]));
         }
-    }
+    }*/
 
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise.class);
-        intent.putExtra("Name", exerciseItems.get(position).getName());
+        intent.putExtra("Name", test.get(position).getName());
 
         startActivity(intent);
 

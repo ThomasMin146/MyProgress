@@ -4,9 +4,13 @@ public class ExerciseModel {
 
 
     int sets, reps, weight;
+    String exerciseName;
 
     public ExerciseModel(int sets) {
         this.sets = sets;
+    }
+    public ExerciseModel(){
+
     }
 
     public int getSets() {
@@ -31,5 +35,13 @@ public class ExerciseModel {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public String getExerciseName() {
+        return exerciseName;
+    }
+
+    public void setExerciseName(String exerciseName) {
+        this.exerciseName = exerciseName;
     }
 }

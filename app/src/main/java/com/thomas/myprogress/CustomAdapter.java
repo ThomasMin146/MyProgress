@@ -41,6 +41,7 @@ public class CustomAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         // Set the data for each item
         holder.sets.setText(String.valueOf(position+1)+".");
+        holder.reps.getText();
 
     }
 

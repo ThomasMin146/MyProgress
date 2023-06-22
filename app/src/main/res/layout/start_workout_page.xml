@@ -13,14 +13,15 @@
         android:layout_weight="1"
         android:text="Workout's exercises list:"
         android:textStyle="bold"
+        android:textColor="@color/black"
         android:gravity="center"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:id="@+id/firstText"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4">
+        android:layout_weight="5">
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
@@ -37,6 +38,7 @@
             android:layout_height="60dp"
             android:id="@+id/addExercise"
             android:text="+"
+            android:backgroundTint="@color/black"
             android:layout_marginEnd="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
@@ -48,13 +50,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2">
+        android:layout_weight="1">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="00 : 00 . 00"
             android:id="@+id/minTime"
+            android:textColor="@color/black"
             android:textStyle="bold"
             android:textAlignment="center"
             app:layout_constraintTop_toTopOf="parent"
@@ -67,6 +70,7 @@
             android:layout_height="wrap_content"
             android:text="Play"
             android:id="@+id/playButton"
+            android:backgroundTint="@color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/minTime"
@@ -80,6 +84,7 @@
             android:layout_height="wrap_content"
             android:text="Set"
             android:id="@+id/setButton"
+            android:backgroundTint="@color/black"
             app:layout_constraintEnd_toStartOf="@id/playButton"
             app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -93,6 +98,7 @@
             android:layout_height="wrap_content"
             android:text="Pause"
             android:id="@+id/pauseButton"
+            android:backgroundTint="@color/black"
             app:layout_constraintStart_toEndOf="@id/playButton"
             app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -106,6 +112,7 @@
             android:layout_height="wrap_content"
             android:text="Stop"
             android:id="@+id/stopButton"
+            android:backgroundTint="@color/black"
             app:layout_constraintEnd_toStartOf="@id/playButton"
             app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -119,6 +126,7 @@
             android:layout_height="wrap_content"
             android:text="Resume"
             android:id="@+id/resumeButton"
+            android:backgroundTint="@color/black"
             app:layout_constraintStart_toEndOf="@id/playButton"
             app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -127,9 +135,6 @@
 
         </Button>
 
-        
     </androidx.constraintlayout.widget.ConstraintLayout>
-        
-        
 
 </LinearLayout>

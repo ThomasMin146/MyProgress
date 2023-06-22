@@ -1,5 +1,7 @@
 package com.thomas.myprogress;
 
+import android.content.ClipData;
+
 public class ItemExercise {
     private String name;
     private int reps;
@@ -11,6 +13,13 @@ public class ItemExercise {
         this.reps = reps;
         this.sets = sets;
         this.weight = weight;
+    }
+    public ItemExercise(){
+
+    }
+
+    public ItemExercise(String name) {
+        this.name = name;
     }
 
     public String getName() {
