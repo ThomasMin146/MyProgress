@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:weightSum="8"
+    android:weightSum="9"
     tools:context=".ChosenExercise">
 
 
@@ -18,7 +18,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center_horizontal"
-        android:textSize="35dp"
+        android:textSize="35sp"
         android:textStyle="bold"
         />
 
@@ -80,6 +80,17 @@
         android:layout_weight="1"
         android:backgroundTint="@color/black"
         android:text="Add set"
+        android:textSize="25sp">
+
+    </Button>
+
+    <Button
+        android:id="@+id/saveSetButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/black"
+        android:text="Save set"
         android:textSize="25sp">
 
     </Button>

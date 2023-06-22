@@ -5,7 +5,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,12 +19,14 @@ import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.thomas.myprogress.dbhelper.DataBaseHelper;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class ChosenExercise extends AppCompatActivity {
-    private Button addSetButton;
+    private Button addSetButton, saveSetButton;
     RecyclerView rvLayout;
     ArrayList<ExerciseModel> exerciseModels;
     private int setCounter;
@@ -39,10 +44,9 @@ public class ChosenExercise extends AppCompatActivity {
         setCounter = 1;
 
         addSetButton = findViewById(R.id.addSetButton);
+        saveSetButton = findViewById(R.id.saveSetButton);
 
         exerciseModels = new ArrayList<>();
-
-
 
         textView.setText(name);
         exerciseModels.add(new ExerciseModel(1));
@@ -60,6 +64,19 @@ public class ChosenExercise extends AppCompatActivity {
                 exerciseModels.add(new ExerciseModel(setCounter));
                 adapter.notifyItemInserted(exerciseModels.size()-1);
 
+            }
+        });
+
+        saveSetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DataBaseHelper dbHelper = new DataBaseHelper(v.getContext());
+                SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+                Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
+
+
+                v.getContext().startActivity(intent);
             }
         });
     }

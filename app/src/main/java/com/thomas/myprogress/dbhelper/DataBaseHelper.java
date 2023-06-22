@@ -209,6 +209,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateMyWorkoutColumn(int workoutId, String columnName, String columnValue) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(columnName, columnValue);
+
+        String whereClause = "workout_id = ?";
+        String[] whereArgs = { String.valueOf(workoutId) };
+
+        db.update("MyWorkout", values, whereClause, whereArgs);
+
+        db.close();
+    }
+
 
 
 }
