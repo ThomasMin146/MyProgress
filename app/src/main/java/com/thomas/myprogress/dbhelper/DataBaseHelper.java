@@ -215,14 +215,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(columnName, columnValue);
 
-        String whereClause = "workout_id = ?";
+        String whereClause = "MyWorkout_id = ?";
         String[] whereArgs = { String.valueOf(workoutId) };
 
         db.update("MyWorkout", values, whereClause, whereArgs);
 
         db.close();
     }
-
-
 
 }

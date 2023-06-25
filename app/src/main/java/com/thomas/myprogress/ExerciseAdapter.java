@@ -39,7 +39,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.nameTV.setText(itemExercises.get(position).getName());
-        //holder.repsTV.setText(String.valueOf(itemExercises.get(position).getReps()));
+        //holder.repsTV.setText(String.valueOf(itemExercises.get(position).getId()));
         //holder.bodyPartTV.setText(String.valueOf(itemExercises.get(position).getSets()));
         //holder.difficultyTV.setText(String.valueOf(itemExercises.get(position).getWeight()));
     }
@@ -80,6 +80,7 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
                         int position = getAdapterPosition();
 
                         if(position != RecyclerView.NO_POSITION){
+
                             rvInterface.onItemClick(position);
                         }
                     }

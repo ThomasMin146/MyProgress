@@ -24,9 +24,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
     Stopwatch stopwatch;
     TextView minTime;
     private Button playButton, resumeButton, setButton, pauseButton, stopButton, addButton;
-    ArrayList<ItemExercise> exerciseItems;
     ArrayList<ItemExercise> test;
-    ArrayList<MyWorkout> myWorkouts;
     RecyclerView exerciseRecyclerView;
     ExerciseAdapter exerciseAdapter;
     SQLiteDatabase db;
@@ -39,7 +37,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         dbHelper = new DataBaseHelper(this);
         stopwatch = new Stopwatch();
 
-        exerciseItems = new ArrayList<>();
+
         test = new ArrayList<>();
 
         exerciseRecyclerView = findViewById(R.id.exerciseRecyclerView);
@@ -53,8 +51,6 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         setButton = findViewById(R.id.setButton);
 
         db = dbHelper.getWritableDatabase();
-        //dbHelper.addWorkout("Workout A", "Exercise 1", 3, 12, 50);
-        //dbHelper.deleteWorkoutsByExercise("Exercise 1");
 
         //setUpExerciseItems();
 
@@ -67,13 +63,14 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         while (cursor.moveToNext()) {
 
             ItemExercise itemExercise = new ItemExercise();
+            itemExercise.setId(cursor.getInt(cursor.getColumnIndexOrThrow("MyWorkout_id")));
             itemExercise.setName(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_name")));
             test.add(itemExercise);
 
 
         }
         cursor.close();
-        exerciseAdapter.notifyDataSetChanged();
+        //exerciseAdapter.notifyDataSetChanged();
         //addButton.setText(String.valueOf(exerciseAdapter.getItemCount()));
 
         Handler handler = new Handler();
@@ -169,6 +166,8 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
     public void onItemClick(int position) {
         Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise.class);
         intent.putExtra("Name", test.get(position).getName());
+        intent.putExtra("ID", test.get(position).getId());
+        intent.putExtra("position", position);
 
         startActivity(intent);
 

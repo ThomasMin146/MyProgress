@@ -3,7 +3,7 @@ package com.thomas.myprogress;
 public class ExerciseModel {
 
 
-    int sets, reps, weight;
+    int sets, reps, weight, id;
     String exerciseName;
 
     public ExerciseModel(int sets) {
@@ -43,5 +43,13 @@ public class ExerciseModel {
 
     public void setExerciseName(String exerciseName) {
         this.exerciseName = exerciseName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

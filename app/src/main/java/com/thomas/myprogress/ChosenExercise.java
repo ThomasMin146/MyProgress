@@ -28,9 +28,10 @@ import java.util.ArrayList;
 public class ChosenExercise extends AppCompatActivity {
     private Button addSetButton, saveSetButton;
     RecyclerView rvLayout;
-    ArrayList<ExerciseModel> exerciseModels;
+    ArrayList<ItemExercise> exerciseModels;
+    ArrayList<EditText> editTextList;
     private int setCounter;
-
+    DataBaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +41,20 @@ public class ChosenExercise extends AppCompatActivity {
         String name = getIntent().getStringExtra("Name");
         TextView textView = findViewById(R.id.exerciseName);
 
+        dbHelper = new DataBaseHelper(this);
         rvLayout = findViewById(R.id.rvLayout);
+
         setCounter = 1;
+
 
         addSetButton = findViewById(R.id.addSetButton);
         saveSetButton = findViewById(R.id.saveSetButton);
+        editTextList = new ArrayList<>();
 
         exerciseModels = new ArrayList<>();
 
         textView.setText(name);
-        exerciseModels.add(new ExerciseModel(1));
+        exerciseModels.add(new ItemExercise(setCounter));
 
         CustomAdapter adapter = new CustomAdapter(this, exerciseModels);
         rvLayout.setAdapter(adapter);
@@ -60,18 +65,26 @@ public class ChosenExercise extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 setCounter++;
-
-                exerciseModels.add(new ExerciseModel(setCounter));
+                exerciseModels.add(new ItemExercise(setCounter));
                 adapter.notifyItemInserted(exerciseModels.size()-1);
 
             }
         });
 
+
         saveSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DataBaseHelper dbHelper = new DataBaseHelper(v.getContext());
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+
+                int position = getIntent().getIntExtra("position", -1);
+
+                int workoutid = getIntent().getIntExtra("ID", -1);
+
+                dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets",
+                        String.valueOf(adapter.getExerciseModels().get(0).getReps()));
+
 
                 Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
 

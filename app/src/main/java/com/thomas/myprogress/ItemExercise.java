@@ -7,6 +7,7 @@ public class ItemExercise {
     private int reps;
     private int sets;
     private int weight;
+    private int id;
 
     public ItemExercise(String name, int reps, int sets, int weight) {
         this.name = name;
@@ -16,6 +17,10 @@ public class ItemExercise {
     }
     public ItemExercise(){
 
+    }
+
+    public ItemExercise(int sets){
+        this.sets = sets;
     }
 
     public ItemExercise(String name) {
@@ -52,5 +57,13 @@ public class ItemExercise {
 
     public void setWeight(int weight) {
         this.weight = weight;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
