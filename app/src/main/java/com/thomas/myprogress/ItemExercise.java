@@ -4,12 +4,12 @@ import android.content.ClipData;
 
 public class ItemExercise {
     private String name;
-    private int reps;
-    private int sets;
-    private int weight;
+    private String reps;
+    private String sets;
+    private String weight;
     private int id;
 
-    public ItemExercise(String name, int reps, int sets, int weight) {
+    public ItemExercise(String name, String reps, String sets, String weight) {
         this.name = name;
         this.reps = reps;
         this.sets = sets;
@@ -19,13 +19,13 @@ public class ItemExercise {
 
     }
 
-    public ItemExercise(int sets){
+    public ItemExercise(String sets){
         this.sets = sets;
     }
 
-    public ItemExercise(String name) {
+    /*public ItemExercise(String name) {
         this.name = name;
-    }
+    }*/
 
     public String getName() {
         return name;
@@ -35,27 +35,27 @@ public class ItemExercise {
         this.name = name;
     }
 
-    public int getReps() {
+    public String getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public void setReps(String reps) {
         this.reps = reps;
     }
 
-    public int getSets() {
+    public String getSets() {
         return sets;
     }
 
-    public void setSets(int sets) {
+    public void setSets(String sets) {
         this.sets = sets;
     }
 
-    public int getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 

@@ -64,7 +64,28 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
             ItemExercise itemExercise = new ItemExercise();
             itemExercise.setId(cursor.getInt(cursor.getColumnIndexOrThrow("MyWorkout_id")));
+
             itemExercise.setName(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_name")));
+
+            if(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_reps"))==null){
+                itemExercise.setReps(" ");
+            } else {
+                itemExercise.setReps(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_reps")));
+            }
+
+            if(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_sets"))==null){
+                itemExercise.setSets(" ");
+            } else {
+                itemExercise.setSets(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_sets")));
+            }
+
+            if(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_weight"))==null){
+                itemExercise.setWeight(" ");
+            } else {
+                itemExercise.setWeight(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_weight")));
+            }
+
+            //itemExercise.setReps(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_reps")));
             test.add(itemExercise);
 
 
@@ -72,6 +93,8 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         cursor.close();
         //exerciseAdapter.notifyDataSetChanged();
         //addButton.setText(String.valueOf(exerciseAdapter.getItemCount()));
+
+
 
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -164,7 +187,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise.class);
+        Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise2.class);
         intent.putExtra("Name", test.get(position).getName());
         intent.putExtra("ID", test.get(position).getId());
         intent.putExtra("position", position);

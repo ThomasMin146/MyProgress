@@ -39,9 +39,9 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.nameTV.setText(itemExercises.get(position).getName());
-        //holder.repsTV.setText(String.valueOf(itemExercises.get(position).getId()));
-        //holder.bodyPartTV.setText(String.valueOf(itemExercises.get(position).getSets()));
-        //holder.difficultyTV.setText(String.valueOf(itemExercises.get(position).getWeight()));
+        holder.repsTV.setText(String.valueOf(itemExercises.get(position).getReps()));
+        holder.setsTV.setText(String.valueOf(itemExercises.get(position).getSets()));
+        holder.weightTV.setText(String.valueOf(itemExercises.get(position).getWeight()));
     }
     @Override
     public int getItemCount() {
@@ -55,10 +55,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView nameTV;
-        TextView repsTV;
-        TextView bodyPartTV;
-        TextView difficultyTV;
+        TextView nameTV, repsTV, setsTV, weightTV;
+
         Button deleteButton;
         public CardView cardView;
 
@@ -70,8 +68,8 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
 
             nameTV = itemView.findViewById(R.id.nameTextView);
             repsTV = itemView.findViewById(R.id.repsTextView);
-            bodyPartTV = itemView.findViewById(R.id.setsTextView);
-            difficultyTV = itemView.findViewById(R.id.weightTextView);
+            setsTV = itemView.findViewById(R.id.setsTextView);
+            weightTV = itemView.findViewById(R.id.weightTextView);
 
             cardView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +34,7 @@ public class ChosenExercise extends AppCompatActivity {
     private int setCounter;
     DataBaseHelper dbHelper;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,7 @@ public class ChosenExercise extends AppCompatActivity {
         setCounter = 1;
 
 
+
         addSetButton = findViewById(R.id.addSetButton);
         saveSetButton = findViewById(R.id.saveSetButton);
         editTextList = new ArrayList<>();
@@ -54,18 +57,32 @@ public class ChosenExercise extends AppCompatActivity {
         exerciseModels = new ArrayList<>();
 
         textView.setText(name);
-        exerciseModels.add(new ItemExercise(setCounter));
+        exerciseModels.add(new ItemExercise(String.valueOf(setCounter)));
 
         CustomAdapter adapter = new CustomAdapter(this, exerciseModels);
         rvLayout.setAdapter(adapter);
         rvLayout.setLayoutManager(new LinearLayoutManager(this));
+
+        RecyclerView.ViewHolder viewHolder = rvLayout.findViewHolderForAdapterPosition(0);
+
+        /*if (viewHolder instanceof ItemViewHolder) {
+            ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
+
+            // Access the custom methods in your ViewHolder
+            Pair<String, String> enteredValues = itemViewHolder.getEnteredValues();
+            String repsValue = enteredValues.first;
+            String weightValue = enteredValues.second;
+
+            // Use the obtained information as needed
+        } */
+
 
 
         addSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setCounter++;
-                exerciseModels.add(new ItemExercise(setCounter));
+                exerciseModels.add(new ItemExercise(String.valueOf(setCounter)));
                 adapter.notifyItemInserted(exerciseModels.size()-1);
 
             }
@@ -75,19 +92,28 @@ public class ChosenExercise extends AppCompatActivity {
         saveSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DataBaseHelper dbHelper = new DataBaseHelper(v.getContext());
-
-
-                int position = getIntent().getIntExtra("position", -1);
 
                 int workoutid = getIntent().getIntExtra("ID", -1);
 
-                dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets",
-                        String.valueOf(adapter.getExerciseModels().get(0).getReps()));
+                //dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets",
+                        //String.valueOf(adapter.getExerciseModels().get(0).getReps()));
+
+                if (viewHolder instanceof ItemViewHolder) {
+                    ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
+
+                    // Access the custom methods in your ViewHolder
+                    Pair<String, String> enteredValues = itemViewHolder.getEnteredValues();
+                    String repsValue = enteredValues.first;
+                    String weightValue = enteredValues.second;
 
 
+                    // Use the obtained information as needed
+                    dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets", repsValue);
+                }
+
+
+                //dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets",);
                 Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
-
 
                 v.getContext().startActivity(intent);
             }

@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,10 +52,7 @@ public class CustomAdapter extends RecyclerView.Adapter<ItemViewHolder> {
         this.exerciseModels.add(new ItemExercise());
         //this.exerciseModels.get(position).setReps(holder.getRepsText());
 
-
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -66,6 +64,7 @@ public class CustomAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     }
 
 
+
 }
 
 class ItemViewHolder extends RecyclerView.ViewHolder{
@@ -74,6 +73,7 @@ class ItemViewHolder extends RecyclerView.ViewHolder{
     CardView cardView;
     Button removeButton;
     private CustomAdapter customAdapter;
+    static ArrayList<String> test;
     public ItemViewHolder(@NonNull View itemView) {
         super(itemView);
         cardView = itemView.findViewById(R.id.linearCV);
@@ -81,6 +81,8 @@ class ItemViewHolder extends RecyclerView.ViewHolder{
         reps = itemView.findViewById(R.id.editTextReps);
         weight = itemView.findViewById(R.id.editTextWeight);
         removeButton = itemView.findViewById(R.id.removeRowButton);
+
+        test = new ArrayList<>();
 
 
         removeButton.setOnClickListener(new View.OnClickListener() {
@@ -98,8 +100,10 @@ class ItemViewHolder extends RecyclerView.ViewHolder{
         return this;
     }
 
-    public int getRepsText() {
-        String repsText = reps.getText().toString();
-        return Integer.valueOf(repsText);
+    public Pair<String, String> getEnteredValues() {
+        String repsValue = reps.getText().toString();
+        String weightValue = weight.getText().toString();
+        return new Pair<>(repsValue, weightValue);
     }
+
 }

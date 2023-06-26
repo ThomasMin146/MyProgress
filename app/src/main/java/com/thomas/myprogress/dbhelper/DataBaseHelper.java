@@ -23,7 +23,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private SQLiteDatabase myDataBase;
     private final Context myContext;
     public DataBaseHelper(Context context) {
-        super(context, DB_NAME, null, 3);
+        super(context, DB_NAME, null, 4);
         this.myContext = context;
         this.createDataBase();
     }
@@ -219,6 +219,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = { String.valueOf(workoutId) };
 
         db.update("MyWorkout", values, whereClause, whereArgs);
+
+        db.close();
+    }
+
+    public void newExercise(String tableName, String exerciseName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        onCreate(db);
+
+        ContentValues values = new ContentValues();
+        values.put("name", exerciseName);
+        values.put("difficulty", "beginner");
+        values.put("type", "beginner");
+
+        db.insert(tableName, null, values);
 
         db.close();
     }

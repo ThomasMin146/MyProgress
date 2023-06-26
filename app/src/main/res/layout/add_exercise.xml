@@ -167,4 +167,16 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <Button
+        android:id="@+id/createExercise"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create exercise"
+        android:backgroundTint="@color/black"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </Button>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
