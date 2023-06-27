@@ -1,182 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="5dp"
+    android:orientation="vertical"
+    android:weightSum="8"
     tools:context=".AddExercise">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:text="Choose an exercise"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/chooseBodyPartTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filter by bodypart"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        android:layout_marginTop="10dp"/>
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bodyPartGRID"
-        app:layout_constraintTop_toBottomOf="@+id/chooseBodyPartTV"
-        app:layout_constraintStart_toStartOf="parent"
-        android:rowCount="2"
-        android:columnCount="4"
-        android:layout_marginTop="10dp">
-
-        <Switch
-            android:id="@+id/shouldersOPTION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="SHOULDERS"
-            android:layout_row="0"
-            android:layout_column="0"/>
-
-        <Switch
-            android:id="@+id/coreOPTION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CORE"
-            android:layout_row="0"
-            android:layout_column="1"/>
-
-        <Switch
-            android:id="@+id/absOPTION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ABS"
-            android:layout_row="0"
-            android:layout_column="2"/>
-
-        <Switch
-            android:id="@+id/chestOPTION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CHEST"
-            android:layout_row="0"
-            android:layout_column="3"/>
-
-        <Switch
-            android:id="@+id/legsOPTION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LEGS"
-            android:layout_row="1"
-            android:layout_column="0"/>
-
-        <Switch
-            android:id="@+id/tricepsOPTION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TRICEPS"
-            android:layout_row="1"
-            android:layout_column="1"/>
-
-        <Switch
-            android:id="@+id/backOPTION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BACK"
-            android:layout_row="1"
-            android:layout_column="2"/>
-
-        <Switch
-            android:id="@+id/bicepsOPTION"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BICEPS"
-            android:layout_row="1"
-            android:layout_column="3"/>
-
-    </GridLayout>
-
-    <TextView
-        android:id="@+id/chooseDifficultyTV"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Filter by difficulty"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bodyPartGRID"
-        android:layout_marginTop="10dp"/>
-
-    <GridLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:columnCount="3"
-        android:id="@+id/diffGRID"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chooseDifficultyTV">
-
-        <Switch
-            android:id="@+id/option1RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="BEGINNER"
-            android:layout_column="0" />
-
-        <Switch
-            android:id="@+id/option2RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="INTERMEDIATE"
-            android:layout_column="1" />
-
-        <Switch
-            android:id="@+id/option3RadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ADVANCED"
-            android:layout_column="2"/>
-    </GridLayout>
 
     <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:id="@+id/searchExerciseET"
-        app:layout_constraintTop_toBottomOf="@+id/diffGRID"
-        app:layout_constraintStart_toStartOf="parent"
         android:hint="Search"
-        android:drawableLeft="@drawable/baseline_search_20">
+        android:drawableStart="@drawable/baseline_search_20">
 
     </EditText>
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/exerciseRV"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchExerciseET">
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:id="@+id/exerciseRV">
 
     </androidx.recyclerview.widget.RecyclerView>
 
     <Button
         android:id="@+id/createExercise"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:text="Create exercise"
         android:backgroundTint="@color/black"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:textSize="30sp">
 
     </Button>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

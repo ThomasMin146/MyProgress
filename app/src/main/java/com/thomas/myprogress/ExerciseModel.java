@@ -4,7 +4,7 @@ public class ExerciseModel {
 
 
     int sets, reps, weight, id;
-    String exerciseName;
+    String exerciseName, bodypart, difficulty;
 
     public ExerciseModel(int sets) {
         this.sets = sets;
@@ -12,6 +12,8 @@ public class ExerciseModel {
     public ExerciseModel(){
 
     }
+
+
 
     public int getSets() {
         return sets;
@@ -51,5 +53,21 @@ public class ExerciseModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getBodypart() {
+        return bodypart;
+    }
+
+    public void setBodypart(String bodypart) {
+        this.bodypart = bodypart;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 }

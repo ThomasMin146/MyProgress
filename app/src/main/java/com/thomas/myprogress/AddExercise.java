@@ -48,10 +48,13 @@ public class AddExercise extends AppCompatActivity {
 
             ExerciseModel item = new ExerciseModel();
             item.setExerciseName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
+            item.setBodypart(cursor.getString(cursor.getColumnIndexOrThrow("type")));
+            item.setDifficulty(cursor.getString(cursor.getColumnIndexOrThrow("difficulty")));
             exerciseItems.add(item);
 
         }
         cursor.close();
+        db.close();
 
         createExercise.setOnClickListener(new View.OnClickListener() {
             @Override

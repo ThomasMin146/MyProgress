@@ -23,7 +23,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private SQLiteDatabase myDataBase;
     private final Context myContext;
     public DataBaseHelper(Context context) {
-        super(context, DB_NAME, null, 4);
+        super(context, DB_NAME, null, 7);
         this.myContext = context;
         this.createDataBase();
     }
@@ -112,15 +112,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String query2 = "CREATE TABLE IF NOT EXISTS Exercise (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,difficulty TEXT, type TEXT)";
         String query3 = "CREATE TABLE IF NOT EXISTS MyWorkout (MyWorkout_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " MyWorkout_name TEXT NOT NULL, Exercise_name TEXT, Exercise_sets INTEGER, Exercise_reps INTEGER, Exercise_weight INTEGER)";
+
         db.execSQL(query);
         db.execSQL(query2);
         db.execSQL(query3);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        String query3 = "CREATE TABLE IF NOT EXISTS MyWorkout (MyWorkout_id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " MyWorkout_name TEXT NOT NULL, Exercise_name TEXT, Exercise_sets INTEGER, Exercise_reps INTEGER, Exercise_weight INTEGER)";
-        db.execSQL(query3);
 
     }
 
@@ -161,43 +159,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<String> allExercisesNames(){
-        SQLiteDatabase db = this.getReadableDatabase();
-        ArrayList<String> exerciseNames = new ArrayList<>();
-        Cursor cursor = null;
-
-        try {
-            cursor = db.query("Exercise", new String[]{"name"}, null, null, null, null, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                int nameIndex = cursor.getColumnIndex("name");
-                do {
-                    String exerciseName = cursor.getString(nameIndex);
-                    exerciseNames.add(exerciseName);
-                } while (cursor.moveToNext());
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-        return exerciseNames;
-    }
-
-    public void addWorkout(String workoutName, String exerciseName, int sets, int reps, int weight) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("MyWorkout_name", workoutName);
-        values.put("Exercise_name", exerciseName);
-        values.put("Exercise_sets", sets);
-        values.put("Exercise_reps", reps);
-        values.put("Exercise_weight", weight);
-
-        db.insert("MyWorkout", null, values);
-
-        db.close();
-    }
-
     public void deleteWorkoutsByExercise(String exerciseName) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -223,18 +184,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void newExercise(String tableName, String exerciseName) {
+    public void createExercise(String tableName, String name, String difficulty, String type) {
         SQLiteDatabase db = this.getWritableDatabase();
-        onCreate(db);
 
         ContentValues values = new ContentValues();
-        values.put("name", exerciseName);
-        values.put("difficulty", "beginner");
-        values.put("type", "beginner");
+        values.put("name", name);
+        values.put("difficulty", difficulty);
+        values.put("type", type);
 
         db.insert(tableName, null, values);
 
         db.close();
     }
+
 
 }

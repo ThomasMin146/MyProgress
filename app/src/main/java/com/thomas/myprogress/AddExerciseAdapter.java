@@ -48,6 +48,9 @@ public class AddExerciseAdapter extends RecyclerView.Adapter<ExerciseViewHolder>
         // Set the data for each item
         // here add text from database
         holder.name.setText(exerciseModels.get(position).getExerciseName());
+        holder.bodypart.setText(exerciseModels.get(position).getBodypart());
+        holder.difficulty.setText(exerciseModels.get(position).getDifficulty());
+
     }
 
     @Override
@@ -62,7 +65,7 @@ public class AddExerciseAdapter extends RecyclerView.Adapter<ExerciseViewHolder>
 }
 
 class ExerciseViewHolder extends RecyclerView.ViewHolder{
-    TextView name;
+    TextView name, bodypart, difficulty;
     CardView cardView;
     AddExerciseAdapter adapter;
 
@@ -70,6 +73,8 @@ class ExerciseViewHolder extends RecyclerView.ViewHolder{
         super(itemView);
 
         name = itemView.findViewById(R.id.nameTextView);
+        bodypart = itemView.findViewById(R.id.bodyPartTextView);
+        difficulty = itemView.findViewById(R.id.difficultyTextView);
 
         cardView = itemView.findViewById(R.id.exerciseCV);
 
