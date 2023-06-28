@@ -1,9 +1,6 @@
 package com.thomas.myprogress;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +53,6 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameTV, repsTV, setsTV, weightTV;
-
         Button deleteButton;
         public CardView cardView;
 
@@ -71,28 +67,22 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
             setsTV = itemView.findViewById(R.id.setsTextView);
             weightTV = itemView.findViewById(R.id.weightTextView);
 
-            cardView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(rvInterface != null){
-                        int position = getAdapterPosition();
+            cardView.setOnClickListener(v -> {
+                if(rvInterface != null){
+                    int position = getAdapterPosition();
 
-                        if(position != RecyclerView.NO_POSITION){
+                    if(position != RecyclerView.NO_POSITION){
 
-                            rvInterface.onItemClick(position);
-                        }
+                        rvInterface.onItemClick(position);
                     }
                 }
             });
 
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DataBaseHelper dbHelper = new DataBaseHelper(v.getContext());
-                    dbHelper.deleteWorkoutsByExercise(String.valueOf(nameTV.getText()));
-                    adapter.deleteItem(getAdapterPosition());
+            deleteButton.setOnClickListener(v -> {
+                DataBaseHelper dbHelper = new DataBaseHelper(v.getContext());
+                dbHelper.deleteWorkoutsByExercise(String.valueOf(nameTV.getText()));
+                adapter.deleteItem(getAdapterPosition());
 
-                }
             });
 
         }

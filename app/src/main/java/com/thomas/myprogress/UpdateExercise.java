@@ -1,21 +1,23 @@
 package com.thomas.myprogress;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.thomas.myprogress.dbhelper.DataBaseHelper;
 
-
-public class CreateExercise extends AppCompatActivity {
+public class UpdateExercise extends AppCompatActivity {
+    TextView exercise;
     EditText nameOfNewExercise;
-    Button createExerciseButton;
+    Button createExerciseButton, updateExerciseButton;
     Spinner bodypart, difficulty;
     DataBaseHelper dbHelper;
     String selectedBodypartOption;
@@ -28,12 +30,15 @@ public class CreateExercise extends AppCompatActivity {
 
         dbHelper = new DataBaseHelper(this);
 
+        exercise = findViewById(R.id.exercise);
         nameOfNewExercise = findViewById(R.id.nameOfNewExercise);
+        createExerciseButton = findViewById(R.id.createExerciseButton);
+        updateExerciseButton = findViewById(R.id.updateExerciseButton);
         bodypart = findViewById(R.id.bodyPartOfNewExercise);
         difficulty = findViewById(R.id.difficultyOfNewExercise);
 
-
-        createExerciseButton = findViewById(R.id.createExerciseButton);
+        createExerciseButton.setVisibility(View.GONE);
+        updateExerciseButton.setVisibility(View.VISIBLE);
 
         String[] bodypartOptions = {"Select a bodypart", "LEGS", "ABS", "CORE", "TRICEPS", "BICEPS", "CHEST", "BACK", "SHOULDERS"};
         String[] difficultyOptions = {"Select a difficulty", "BEGINNER", "INTERMEDIATE", "ADVANCED"};
@@ -50,11 +55,30 @@ public class CreateExercise extends AppCompatActivity {
         bodypart.setSelection(0, false);
         difficulty.setSelection(0, false);
 
-        createExerciseButton.setOnClickListener(v -> {
-            dbHelper.createExercise(nameOfNewExercise.getText().toString(), selectedDifficultyOption, selectedBodypartOption);
+        exercise.setText(getIntent().getStringExtra("ExerciseName"));
+        nameOfNewExercise.setText(getIntent().getStringExtra("ExerciseName"));
 
-            Intent intent = new Intent(CreateExercise.this, AddExercise.class);
+        ArrayAdapter<String> bodypartAA = (ArrayAdapter<String>) bodypart.getAdapter();
+        if (bodypartAA != null) {
+            int position = bodypartAA.getPosition(getIntent().getStringExtra("Bodypart"));
+            if (position != Spinner.INVALID_POSITION) {
+                bodypart.setSelection(position);
+            }
+        }
 
+        ArrayAdapter<String> difficultyAA = (ArrayAdapter<String>) difficulty.getAdapter();
+        if (difficultyAA != null) {
+            int position = difficultyAA.getPosition(getIntent().getStringExtra("Difficulty"));
+            if (position != Spinner.INVALID_POSITION) {
+                difficulty.setSelection(position);
+            }
+        }
+
+
+        updateExerciseButton.setOnClickListener(v -> {
+            //dbHelper.createExercise(nameOfNewExercise.getText().toString(), selectedDifficultyOption, selectedBodypartOption);
+
+            Intent intent = new Intent(UpdateExercise.this, AddExercise.class);
             startActivity(intent);
         });
 

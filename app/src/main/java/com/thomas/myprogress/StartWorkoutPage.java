@@ -23,7 +23,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
     DataBaseHelper dbHelper;
     Stopwatch stopwatch;
     TextView minTime;
-    private Button playButton, resumeButton, setButton, pauseButton, stopButton, addButton;
+    Button playButton, resumeButton, setButton, pauseButton, stopButton, addButton;
     ArrayList<ItemExercise> test;
     RecyclerView exerciseRecyclerView;
     ExerciseAdapter exerciseAdapter;
@@ -51,8 +51,6 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         setButton = findViewById(R.id.setButton);
 
         db = dbHelper.getWritableDatabase();
-
-        //setUpExerciseItems();
 
         exerciseAdapter = new ExerciseAdapter(this, test, this);
         exerciseRecyclerView.setAdapter(exerciseAdapter);
@@ -85,16 +83,11 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
                 itemExercise.setWeight(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_weight")));
             }
 
-            //itemExercise.setReps(cursor.getString(cursor.getColumnIndexOrThrow("Exercise_reps")));
             test.add(itemExercise);
 
 
         }
         cursor.close();
-        //exerciseAdapter.notifyDataSetChanged();
-        //addButton.setText(String.valueOf(exerciseAdapter.getItemCount()));
-
-
 
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -173,18 +166,6 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         return String.format(Locale.getDefault(), "%02d : %02d . %02d", minutes, seconds, milliseconds/10);
     }
 
-    /*private void setUpExerciseItems(){
-        String[] exerciseNames = {"Pushups", "Pullups", "Dips", "Squats", "L-sit"};
-        int[] exerciseReps = {15, 10, 10, 25, 20};
-        int[] exerciseSets = {15, 10, 10, 25, 20};
-        int[] exerciseWeight = {15, 10, 10, 25, 20};
-
-
-        for (int i = 0; i<exerciseNames.length; i++){
-            exerciseItems.add(new ItemExercise(exerciseNames[i], exerciseReps[i], exerciseSets[i], exerciseWeight[i]));
-        }
-    }*/
-
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise2.class);
@@ -193,7 +174,6 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         intent.putExtra("position", position);
 
         startActivity(intent);
-
 
     }
 }

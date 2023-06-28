@@ -26,7 +26,7 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/searchExerciseET"
-        android:hint="Search by name, bodypart, difficulty..."
+        android:hint="Search by name, bodypart or difficulty..."
         android:drawableStart="@drawable/baseline_search_20">
 
     </EditText>

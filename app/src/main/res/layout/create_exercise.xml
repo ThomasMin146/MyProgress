@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".CreateExercise"
-    android:weightSum="8"
+    android:weightSum="9"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/exercise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -24,22 +24,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:text="Name of exercise:"
-        android:textSize="30sp"
-        android:gravity=""
-        android:textColor="@color/black">
+        android:layout_weight="1">
 
     </TextView>
+
+
 
     <EditText
         android:id="@+id/nameOfNewExercise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="Name"
+        android:hint="Name of new exercise"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
         android:textSize="30sp"
@@ -51,36 +47,23 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Choose bodypart:"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:textSize="30sp"
-        android:gravity=""
-        android:textColor="@color/black">
+        android:layout_weight="1">
 
     </TextView>
+
 
     <Spinner
         android:id="@+id/bodyPartOfNewExercise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp">
+        android:layout_weight="1">
 
     </Spinner>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Choose difficulty:"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:textSize="30sp"
-        android:gravity=""
-        android:textColor="@color/black">
+        android:layout_weight="1">
 
     </TextView>
 
@@ -88,11 +71,16 @@
         android:id="@+id/difficultyOfNewExercise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp">
+        android:layout_weight="1">
 
     </Spinner>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </TextView>
 
     <Button
         android:id="@+id/createExerciseButton"
@@ -102,6 +90,18 @@
         android:backgroundTint="@color/black"
         android:text="Create"
         android:textSize="30sp">
+
+    </Button>
+
+    <Button
+        android:id="@+id/updateExerciseButton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:backgroundTint="@color/black"
+        android:text="Update"
+        android:textSize="30sp"
+        android:visibility="gone">
 
     </Button>
 

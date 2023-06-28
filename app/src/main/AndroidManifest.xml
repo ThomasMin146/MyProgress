@@ -17,6 +17,9 @@
             android:name=".CreateExercise"
             android:exported="false" />
         <activity
+            android:name=".UpdateExercise"
+            android:exported="false" />
+        <activity
             android:name=".ChosenExercise"
             android:exported="false" />
         <activity

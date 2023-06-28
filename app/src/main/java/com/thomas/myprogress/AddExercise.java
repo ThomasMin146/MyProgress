@@ -4,23 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ClipData;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.thomas.myprogress.dbhelper.DataBaseHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class AddExercise extends AppCompatActivity {
+public class AddExercise extends AppCompatActivity implements RVInterface{
     AddExerciseAdapter addExerciseAdapter;
     ArrayList<ExerciseModel> exerciseItems;
     RecyclerView exerciseRV;
@@ -43,7 +40,7 @@ public class AddExercise extends AppCompatActivity {
 
         exerciseItems = new ArrayList<>();
 
-        addExerciseAdapter = new AddExerciseAdapter(this, exerciseItems);
+        addExerciseAdapter = new AddExerciseAdapter(this, exerciseItems, this);
         exerciseRV.setAdapter(addExerciseAdapter);
         exerciseRV.setLayoutManager(new LinearLayoutManager(this));
 
@@ -61,12 +58,9 @@ public class AddExercise extends AppCompatActivity {
         cursor.close();
         db.close();
 
-        createExercise.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(AddExercise.this, CreateExercise.class);
-                startActivity(intent);
-            }
+        createExercise.setOnClickListener(v -> {
+            Intent intent = new Intent(AddExercise.this, CreateExercise.class);
+            startActivity(intent);
         });
 
         searchEditText.addTextChangedListener(new TextWatcher() {
@@ -116,4 +110,14 @@ public class AddExercise extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(AddExercise.this, UpdateExercise.class);
+        intent.putExtra("ExerciseName", exerciseItems.get(position).getExerciseName());
+        intent.putExtra("Bodypart", exerciseItems.get(position).getBodypart());
+        intent.putExtra("Difficulty", exerciseItems.get(position).getDifficulty());
+        intent.putExtra("position", position);
+
+        startActivity(intent);
+    }
 }

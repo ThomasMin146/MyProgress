@@ -1,17 +1,12 @@
 package com.thomas.myprogress;
 
-import android.content.ClipData;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -19,19 +14,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thomas.myprogress.dbhelper.DataBaseHelper;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class AddExerciseAdapter extends RecyclerView.Adapter<ExerciseViewHolder> {
     Context context;
     ArrayList<ExerciseModel> exerciseModels;
+    RVInterface rvInterface;
 
 
-    public AddExerciseAdapter(Context context, ArrayList<ExerciseModel> exerciseModels){
+    public AddExerciseAdapter(Context context, ArrayList<ExerciseModel> exerciseModels, RVInterface rvInterface){
         this.context = context;
         this.exerciseModels = exerciseModels;
+        this.rvInterface = rvInterface;
     }
 
     @NonNull
@@ -40,7 +34,7 @@ public class AddExerciseAdapter extends RecyclerView.Adapter<ExerciseViewHolder>
         // Inflate the item layout
         LayoutInflater inflater = LayoutInflater.from(context);
         View view = inflater.inflate(R.layout.add_item_exercise_layout, parent, false);
-        return new ExerciseViewHolder(view).linkAdapter(this);
+        return new ExerciseViewHolder(view, rvInterface).linkAdapter(this);
     }
 
     @Override
@@ -58,13 +52,15 @@ public class AddExerciseAdapter extends RecyclerView.Adapter<ExerciseViewHolder>
         return exerciseModels.size();
     }
 
-    public ArrayList<ExerciseModel> getExerciseModels(){
-        return this.exerciseModels;
-    }
-
     public void setItems(ArrayList<ExerciseModel> items) {
         this.exerciseModels = items;
         notifyDataSetChanged();
+    }
+
+    public void deleteItem(int position){
+        exerciseModels.remove(position);
+        notifyItemRemoved(position);
+
     }
 
 }
@@ -72,37 +68,49 @@ public class AddExerciseAdapter extends RecyclerView.Adapter<ExerciseViewHolder>
 class ExerciseViewHolder extends RecyclerView.ViewHolder{
     TextView name, bodypart, difficulty;
     CardView cardView;
+    Button deleteExerciseButton, addExerciseButton;
     AddExerciseAdapter adapter;
+    DataBaseHelper dbHelper;
 
-    public ExerciseViewHolder(@NonNull View itemView) {
+    public ExerciseViewHolder(@NonNull View itemView, RVInterface rvInterface) {
         super(itemView);
+
+        dbHelper = new DataBaseHelper(itemView.getContext());
 
         name = itemView.findViewById(R.id.nameTextView);
         bodypart = itemView.findViewById(R.id.bodyPartTextView);
         difficulty = itemView.findViewById(R.id.difficultyTextView);
 
+        deleteExerciseButton = itemView.findViewById(R.id.deleteExerciseButton);
+        addExerciseButton = itemView.findViewById(R.id.addExerciseButton);
+
         cardView = itemView.findViewById(R.id.exerciseCV);
 
-        cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DataBaseHelper dbHelper = new DataBaseHelper(v.getContext());
-                SQLiteDatabase db = dbHelper.getWritableDatabase();
+        cardView.setOnClickListener(v -> {
+            if(rvInterface != null){
+                int position = getAdapterPosition();
 
-                ContentValues values = new ContentValues();
+                if(position != RecyclerView.NO_POSITION){
 
-                values.put("MyWorkout_name", "Workout A");
-                values.put("Exercise_name", String.valueOf(name.getText()));
-
-                db.insert("MyWorkout", null, values);
-
-                db.close();
-
-                Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
-                intent.putExtra("ExerciseName", getAdapterPosition());
-                v.getContext().startActivity(intent);
+                    rvInterface.onItemClick(position);
+                }
             }
         });
+
+        deleteExerciseButton.setOnClickListener(v -> {
+            dbHelper.deleteExerciseByName(String.valueOf(name.getText()));
+            adapter.deleteItem(getAdapterPosition());
+
+        });
+
+        addExerciseButton.setOnClickListener(v -> {
+            dbHelper.createWorkout(String.valueOf(name.getText()));
+
+            Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
+            intent.putExtra("ExerciseName", getAdapterPosition());
+            v.getContext().startActivity(intent);
+        });
+
 
     }
     public ExerciseViewHolder linkAdapter(AddExerciseAdapter adapter){

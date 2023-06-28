@@ -65,19 +65,6 @@ public class ChosenExercise extends AppCompatActivity {
 
         RecyclerView.ViewHolder viewHolder = rvLayout.findViewHolderForAdapterPosition(0);
 
-        /*if (viewHolder instanceof ItemViewHolder) {
-            ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
-
-            // Access the custom methods in your ViewHolder
-            Pair<String, String> enteredValues = itemViewHolder.getEnteredValues();
-            String repsValue = enteredValues.first;
-            String weightValue = enteredValues.second;
-
-            // Use the obtained information as needed
-        } */
-
-
-
         addSetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -3,21 +3,16 @@ package com.thomas.myprogress.dbhelper;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
-
-    private static final String DB_PATH = "/data/data/com.thomas.myprogress/databases/";
+    private final String DB_PATH;
     private static final String DB_NAME = "AppDatabase.db";
     private static final String TABLE_NAME = "Users";
     private SQLiteDatabase myDataBase;
@@ -26,6 +21,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, 7);
         this.myContext = context;
         this.createDataBase();
+        this.DB_PATH = context.getFilesDir().getPath();
     }
 
     /**
@@ -34,16 +30,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public void createDataBase(){
         try {
             boolean dbExist = checkDataBase();
-            if(dbExist){
-                //do nothing - database already exist
-            }else{
-                //By calling this method and empty database will be created into the default system path
-                //of your application so we are gonna be able to overwrite that database with our database.
+            if(!dbExist) {
                 this.getReadableDatabase();
                 copyDataBase();
             }
         }
         catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -54,20 +47,20 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             checkDB = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READONLY);
 
         }catch(SQLiteException e){
-            //database does't exist yet.
+            //database doesn't exist yet.
         }
 
         if(checkDB != null){
             checkDB.close();
         }
 
-        return checkDB != null ? true : false;
+        return checkDB != null;
     } // returns true if db exists, else false
 
     /**
      * Copies your database from your local assets-folder to the just created empty database in the
      * system folder, from where it can be accessed and handled.
-     * This is done by transfering bytestream.
+     * This is done by transferring bitstream.
      * */
     private void copyDataBase(){
 
@@ -81,7 +74,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             //Open the empty db as the output stream
             OutputStream myOutput = new FileOutputStream(outFileName);
 
-            //transfer bytes from the inputfile to the outputfile
+            //transfer bytes from the input file to the output file
             byte[] buffer = new byte[1024];
             int length;
             while ((length = myInput.read(buffer))>0){
@@ -109,7 +102,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,password TEXT)";
-        String query2 = "CREATE TABLE IF NOT EXISTS Exercise (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT,difficulty TEXT, type TEXT)";
+        String query2 = "CREATE TABLE IF NOT EXISTS Exercise (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL,difficulty TEXT, type TEXT)";
         String query3 = "CREATE TABLE IF NOT EXISTS MyWorkout (MyWorkout_id INTEGER PRIMARY KEY AUTOINCREMENT," +
                         " MyWorkout_name TEXT NOT NULL, Exercise_name TEXT, Exercise_sets INTEGER, Exercise_reps INTEGER, Exercise_weight INTEGER)";
 
@@ -122,7 +115,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public Boolean addRow(String username, String password) {
+    public void addRow(String username, String password) {
         SQLiteDatabase db = this.getWritableDatabase();
         onCreate(db);
 
@@ -130,15 +123,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put("name", username);
         values.put("password", password);
 
-        long result = db.insert("Users", null, values);
+        db.insert("Users", null, values);
         db.close();
 
-        if(result == -1){
-            return false;
-        }
-        else {
-            return true;
-        }
     }
 
     public Boolean checkUser(String name, String password){
@@ -153,6 +140,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             return true;
         } else {
             // Invalid username or password
+            assert cursor != null;
             cursor.close();
             db.close();
             return false;
@@ -166,7 +154,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = { exerciseName };
 
         db.delete("MyWorkout", whereClause, whereArgs);
+        db.close();
+    }
 
+    public void deleteExerciseByName(String exerciseName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        String whereClause = "name=?";
+        String[] whereArgs = { exerciseName };
+
+        db.delete("Exercise", whereClause, whereArgs);
         db.close();
     }
 
@@ -180,11 +177,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String[] whereArgs = { String.valueOf(workoutId) };
 
         db.update("MyWorkout", values, whereClause, whereArgs);
-
         db.close();
     }
 
-    public void createExercise(String tableName, String name, String difficulty, String type) {
+    public void createExercise(String name, String difficulty, String type) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -192,10 +188,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         values.put("difficulty", difficulty);
         values.put("type", type);
 
-        db.insert(tableName, null, values);
-
+        db.insert("Exercise", null, values);
         db.close();
     }
+
+    public void createWorkout(String name) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put("MyWorkout_name", "Workout A");
+        values.put("Exercise_name", name);
+
+        db.insert("MyWorkout", null, values);
+        db.close();
+    }
+
+
 
 
 }
