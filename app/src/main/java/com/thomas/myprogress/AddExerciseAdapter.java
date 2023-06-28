@@ -62,6 +62,11 @@ public class AddExerciseAdapter extends RecyclerView.Adapter<ExerciseViewHolder>
         return this.exerciseModels;
     }
 
+    public void setItems(ArrayList<ExerciseModel> items) {
+        this.exerciseModels = items;
+        notifyDataSetChanged();
+    }
+
 }
 
 class ExerciseViewHolder extends RecyclerView.ViewHolder{

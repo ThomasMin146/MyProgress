@@ -3,20 +3,24 @@ package com.thomas.myprogress;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import com.thomas.myprogress.dbhelper.DataBaseHelper;
 
-import java.util.ArrayList;
 
 public class CreateExercise extends AppCompatActivity {
-    EditText nameOfNewExercise, bodypartOfNewExercise, difficultyOfNewExercise;
+    EditText nameOfNewExercise;
     Button createExerciseButton;
+    Spinner bodypart, difficulty;
     DataBaseHelper dbHelper;
+    String selectedBodypartOption;
+    String selectedDifficultyOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,19 +30,74 @@ public class CreateExercise extends AppCompatActivity {
         dbHelper = new DataBaseHelper(this);
 
         nameOfNewExercise = findViewById(R.id.nameOfNewExercise);
-        bodypartOfNewExercise = findViewById(R.id.bodyPartOfNewExercise);
-        difficultyOfNewExercise = findViewById(R.id.difficultyOfNewExercise);
+        bodypart = findViewById(R.id.bodyPartOfNewExercise);
+        difficulty = findViewById(R.id.difficultyOfNewExercise);
+
 
         createExerciseButton = findViewById(R.id.createExerciseButton);
 
-        createExerciseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dbHelper.createExercise("Exercise", nameOfNewExercise.getText().toString(),
-                        difficultyOfNewExercise.getText().toString(), bodypartOfNewExercise.getText().toString());
+        String[] bodypartOptions = {"Select a bodypart", "LEGS", "ABS", "CORE", "TRICEPS", "BICEPS", "CHEST", "BACK", "SHOULDERS"};
+        String[] difficultyOptions = {"Select a difficulty", "BEGINNER", "INTERMEDIATE", "ADVANCED"};
 
-                Intent intent = new Intent(CreateExercise.this, AddExercise.class);
-                startActivity(intent);
+        ArrayAdapter<String> bodypartAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bodypartOptions);
+        ArrayAdapter<String> difficultyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, difficultyOptions);
+
+        bodypartAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        bodypart.setAdapter(bodypartAdapter);
+        difficulty.setAdapter(difficultyAdapter);
+
+        bodypart.setSelection(0, false);
+        difficulty.setSelection(0, false);
+
+        createExerciseButton.setOnClickListener(v -> {
+            dbHelper.createExercise("Exercise", nameOfNewExercise.getText().toString(),
+                    selectedDifficultyOption, selectedBodypartOption);
+
+            Intent intent = new Intent(CreateExercise.this, AddExercise.class);
+            startActivity(intent);
+        });
+
+        bodypart.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Handle the selected item
+                if (position != 0) {
+                    // Update the selectedOption variable with the selected string
+                    selectedBodypartOption = bodypartOptions[position];
+                } else {
+                    // Handle the case when the initial selection is made
+                    selectedBodypartOption = null;
+                }
+                // Do something with the selected option
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case when nothing is selected
+                selectedBodypartOption = null;
+            }
+        });
+
+        difficulty.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // Handle the selected item
+                if (position != 0) {
+                    // Update the selectedOption variable with the selected string
+                    selectedDifficultyOption = difficultyOptions[position];
+                } else {
+                    // Handle the case when the initial selection is made
+                    selectedDifficultyOption = null;
+                }
+                // Do something with the selected option
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Handle the case when nothing is selected
+                selectedDifficultyOption = null;
             }
         });
 

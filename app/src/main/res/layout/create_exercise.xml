@@ -61,19 +61,15 @@
 
     </TextView>
 
-    <EditText
+    <Spinner
         android:id="@+id/bodyPartOfNewExercise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:hint="Bodypart"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:textSize="30sp"
-        android:gravity=""
-        android:textColor="@color/black">
+        android:layout_marginEnd="5dp">
 
-    </EditText>
+    </Spinner>
 
     <TextView
         android:layout_width="match_parent"
@@ -88,19 +84,15 @@
 
     </TextView>
 
-    <EditText
+    <Spinner
         android:id="@+id/difficultyOfNewExercise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:hint="Difficulty"
-        android:textSize="30sp"
-        android:gravity=""
-        android:textColor="@color/black">
+        android:layout_marginEnd="5dp">
 
-    </EditText>
+    </Spinner>
 
     <Button
         android:id="@+id/createExerciseButton"

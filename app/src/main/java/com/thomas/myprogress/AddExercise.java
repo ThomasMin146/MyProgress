@@ -9,12 +9,16 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.thomas.myprogress.dbhelper.DataBaseHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class AddExercise extends AppCompatActivity {
     AddExerciseAdapter addExerciseAdapter;
@@ -22,8 +26,8 @@ public class AddExercise extends AppCompatActivity {
     RecyclerView exerciseRV;
     DataBaseHelper dbHelper;
     SQLiteDatabase db;
-
     Button createExercise;
+    EditText searchEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,7 @@ public class AddExercise extends AppCompatActivity {
 
         exerciseRV = findViewById(R.id.exerciseRV);
         createExercise = findViewById(R.id.createExercise);
+        searchEditText = findViewById(R.id.searchExerciseET);
 
         exerciseItems = new ArrayList<>();
 
@@ -64,8 +69,51 @@ public class AddExercise extends AppCompatActivity {
             }
         });
 
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Not used in this case
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Filter the RecyclerView items based on the search text
+                filterItems(s.toString().trim());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Not used in this case
+            }
+        });
+
     }
 
+    private void filterItems(String searchText) {
+        ArrayList<ExerciseModel> filteredList = new ArrayList<>();
+
+        for (ExerciseModel item : exerciseItems) {
+            // Perform the search logic based on your item's properties
+            // For example, if you have a "name" property in YourItem class:
+            String itemName = item.getExerciseName();
+            String itemBodyPart = item.getBodypart();
+            String itemDifficulty = item.getDifficulty();
+
+            itemBodyPart = (itemBodyPart != null) ? itemBodyPart.toLowerCase() : "";
+            itemDifficulty = (itemDifficulty != null) ? itemDifficulty.toLowerCase() : "";
+
+            if (itemName.toLowerCase().contains(searchText.toLowerCase()) ||
+                    itemBodyPart.contains(searchText.toLowerCase()) ||
+                    itemDifficulty.contains(searchText.toLowerCase())) {
+                filteredList.add(item);
+            }
+
+
+        }
+
+        // Update the RecyclerView adapter with the filtered list
+        addExerciseAdapter.setItems(filteredList);
+    }
 
 
 }
