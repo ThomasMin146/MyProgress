@@ -180,6 +180,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void updateExerciseColumn(int id, String columnName, String columnValue) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(columnName, columnValue);
+
+        String whereClause = "id = ?";
+        String[] whereArgs = { String.valueOf(id) };
+
+        db.update("Exercise", values, whereClause, whereArgs);
+        db.close();
+    }
+
     public void createExercise(String name, String difficulty, String type) {
         SQLiteDatabase db = this.getWritableDatabase();
 

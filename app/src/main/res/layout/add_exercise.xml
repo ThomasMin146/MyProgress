@@ -15,7 +15,7 @@
         android:gravity="center"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Choose an exercise"
+        android:text="Add exercise to workout"
         android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="30sp" />
@@ -25,6 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:inputType="textAutoComplete"
         android:id="@+id/searchExerciseET"
         android:hint="Search by name, bodypart or difficulty..."
         android:drawableStart="@drawable/baseline_search_20">
@@ -44,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:text="Create exercise"
+        android:text="Create new exercise"
         android:backgroundTint="@color/black"
         android:textSize="30sp">
 

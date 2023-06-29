@@ -66,6 +66,7 @@ public class UpdateExercise extends AppCompatActivity {
             }
         }
 
+
         ArrayAdapter<String> difficultyAA = (ArrayAdapter<String>) difficulty.getAdapter();
         if (difficultyAA != null) {
             int position = difficultyAA.getPosition(getIntent().getStringExtra("Difficulty"));
@@ -76,7 +77,11 @@ public class UpdateExercise extends AppCompatActivity {
 
 
         updateExerciseButton.setOnClickListener(v -> {
-            //dbHelper.createExercise(nameOfNewExercise.getText().toString(), selectedDifficultyOption, selectedBodypartOption);
+            int id = getIntent().getIntExtra("ID", -1);
+
+            dbHelper.updateExerciseColumn(id, "name", nameOfNewExercise.getText().toString());
+            dbHelper.updateExerciseColumn(id, "type", selectedBodypartOption);
+            dbHelper.updateExerciseColumn(id, "difficulty", selectedDifficultyOption);
 
             Intent intent = new Intent(UpdateExercise.this, AddExercise.class);
             startActivity(intent);

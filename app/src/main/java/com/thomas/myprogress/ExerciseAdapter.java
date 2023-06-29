@@ -37,7 +37,12 @@ public class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.MyView
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.nameTV.setText(itemExercises.get(position).getName());
         holder.repsTV.setText(String.valueOf(itemExercises.get(position).getReps()));
-        holder.setsTV.setText(String.valueOf(itemExercises.get(position).getSets()));
+        if(String.valueOf(itemExercises.get(position).getSets()).equals("0")){
+            holder.setsTV.setText("");
+        } else {
+            holder.setsTV.setText(String.valueOf(itemExercises.get(position).getSets()));
+        }
+
         holder.weightTV.setText(String.valueOf(itemExercises.get(position).getWeight()));
     }
     @Override

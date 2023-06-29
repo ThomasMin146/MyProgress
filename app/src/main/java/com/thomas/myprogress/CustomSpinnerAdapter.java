@@ -14,9 +14,6 @@ public class CustomSpinnerAdapter extends ArrayAdapter<String> {
         super(context, resource, items);
     }
 
-
-    // Other necessary constructors
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView view = (TextView) super.getView(position, convertView, parent);

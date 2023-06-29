@@ -49,6 +49,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         while (cursor.moveToNext()) {
 
             ExerciseModel item = new ExerciseModel();
+            item.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             item.setExerciseName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
             item.setBodypart(cursor.getString(cursor.getColumnIndexOrThrow("type")));
             item.setDifficulty(cursor.getString(cursor.getColumnIndexOrThrow("difficulty")));
@@ -113,6 +114,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(AddExercise.this, UpdateExercise.class);
+        intent.putExtra("ID", exerciseItems.get(position).getId());
         intent.putExtra("ExerciseName", exerciseItems.get(position).getExerciseName());
         intent.putExtra("Bodypart", exerciseItems.get(position).getBodypart());
         intent.putExtra("Difficulty", exerciseItems.get(position).getDifficulty());

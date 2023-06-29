@@ -27,9 +27,7 @@ import org.w3c.dom.Text;
 import java.util.ArrayList;
 
 public class ChosenExercise2 extends AppCompatActivity {
-    private Button saveSetButton;
-    EditText repsET1, repsET2, repsET3, repsET4, repsET5, repsET6;
-    EditText weightET1, weightET2, weightET3, weightET4, weightET5, weightET6;
+    Button saveSetButton;
     ArrayList<String> repsList;
     DataBaseHelper dbHelper;
 
@@ -40,23 +38,48 @@ public class ChosenExercise2 extends AppCompatActivity {
         setContentView(R.layout.chosen_exercise2);
 
         String name = getIntent().getStringExtra("Name");
+        String reps = getIntent().getStringExtra("Reps");
+        String weight = getIntent().getStringExtra("Weight");
+
+        String[] repsArray = reps.split(", ");
+        String[] weightArray = weight.split(", ");
+
+        EditText[] repsEditTexts = new EditText[6];
+        repsEditTexts[0] = findViewById(R.id.repsET1);
+        repsEditTexts[1] = findViewById(R.id.repsET2);
+        repsEditTexts[2] = findViewById(R.id.repsET3);
+        repsEditTexts[3] = findViewById(R.id.repsET4);
+        repsEditTexts[4] = findViewById(R.id.repsET5);
+        repsEditTexts[5] = findViewById(R.id.repsET6);
+
+        EditText[] weightEditTexts = new EditText[6];
+        weightEditTexts[0] = findViewById(R.id.weightET1);
+        weightEditTexts[1] = findViewById(R.id.weightET2);
+        weightEditTexts[2] = findViewById(R.id.weightET3);
+        weightEditTexts[3] = findViewById(R.id.weightET4);
+        weightEditTexts[4] = findViewById(R.id.weightET5);
+        weightEditTexts[5] = findViewById(R.id.weightET6);
+
+        for (int i = 0; i < repsArray.length; i++) {
+            repsEditTexts[i].setText(repsArray[i]);
+        }
+
+        for (int i = repsArray.length; i < repsEditTexts.length; i++) {
+            repsEditTexts[i].setText("");
+        }
+
+        for (int i = 0; i < weightArray.length; i++) {
+            weightEditTexts[i].setText(weightArray[i]);
+        }
+
+        for (int i = weightArray.length; i < weightEditTexts.length; i++) {
+            weightEditTexts[i].setText("");
+        }
+
         TextView textView = findViewById(R.id.exerciseName);
 
         dbHelper = new DataBaseHelper(this);
 
-        repsET1 = findViewById(R.id.repsET1);
-        repsET2 = findViewById(R.id.repsET2);
-        repsET3 = findViewById(R.id.repsET3);
-        repsET4 = findViewById(R.id.repsET4);
-        repsET5 = findViewById(R.id.repsET5);
-        repsET6 = findViewById(R.id.repsET6);
-
-        weightET1 = findViewById(R.id.weightET1);
-        weightET2 = findViewById(R.id.weightET2);
-        weightET3 = findViewById(R.id.weightET3);
-        weightET4 = findViewById(R.id.weightET4);
-        weightET5 = findViewById(R.id.weightET5);
-        weightET6 = findViewById(R.id.weightET6);
 
         repsList = new ArrayList<>();
 
@@ -71,29 +94,44 @@ public class ChosenExercise2 extends AppCompatActivity {
 
                 int workoutid = getIntent().getIntExtra("ID", -1);
 
-                String reps = repsET1.getText() + " " + repsET2.getText() + " " + repsET3.getText() + " " +
-                        repsET4.getText() + " " +  repsET5.getText() + " " + repsET6.getText();
+                StringBuilder stringBuilder = new StringBuilder();
+                int count = 0;
 
-                String weight = weightET1.getText() + " " + weightET2.getText() + " " + weightET3.getText() + " " +
-                        weightET4.getText() + " " +  weightET5.getText() + " " + weightET6.getText();
+                for (EditText repsEditText : repsEditTexts) {
+                    String text = repsEditText.getText().toString().trim();
+                    if (!text.isEmpty()) {
+                        if (count > 0) {
+                            stringBuilder.append(", ");
+                        }
+                        stringBuilder.append(text);
+                        count++;
+                    }
+                }
 
-                if(!repsET1.getText().toString().isEmpty()){
-                    repsList.add(repsET1.getText().toString());
+                String reps = stringBuilder.toString();
+
+                StringBuilder stringBuilder1 = new StringBuilder();
+                int count1 = 0;
+
+                for (EditText weightEditText : weightEditTexts) {
+                    String text1 = weightEditText.getText().toString().trim();
+                    if (!text1.isEmpty()) {
+                        if (count1 > 0) {
+                            stringBuilder1.append(", ");
+                        }
+                        stringBuilder1.append(text1);
+                        count++;
+                    }
                 }
-                if(!repsET2.getText().toString().isEmpty()){
-                    repsList.add(repsET2.getText().toString());
-                }
-                if(!repsET3.getText().toString().isEmpty()){
-                    repsList.add(repsET3.getText().toString());
-                }
-                if(!repsET4.getText().toString().isEmpty()){
-                    repsList.add(repsET4.getText().toString());
-                }
-                if(!repsET5.getText().toString().isEmpty()){
-                    repsList.add(repsET5.getText().toString());
-                }
-                if(!repsET6.getText().toString().isEmpty()){
-                    repsList.add(repsET6.getText().toString());
+
+                String weight = stringBuilder.toString();
+
+
+                for(int i = 0; i < repsEditTexts.length; i++){
+                    if(!repsEditTexts[i].getText().toString().isEmpty()){
+                        repsList.add(repsEditTexts[i].getText().toString());
+                    }
+
                 }
 
                 dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets", String.valueOf(repsList.size()));
