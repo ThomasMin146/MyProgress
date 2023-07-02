@@ -1,19 +1,13 @@
 package com.thomas.myprogress;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import com.thomas.myprogress.dbhelper.DataBaseHelper;
-
+import android.widget.Toast;
 
 public class RegisterPage extends AppCompatActivity {
     DataBaseHelper dbHelper;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +21,12 @@ public class RegisterPage extends AppCompatActivity {
         //DataBase connection
         dbHelper = new DataBaseHelper(this);
 
+        createAcc.setOnClickListener(v -> {
+            dbHelper.addUser(newUsername.getText().toString(), newPassword.getText().toString());
 
-        createAcc.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dbHelper.addRow(newUsername.getText().toString(), newPassword.getText().toString());
-
-                newUsername.setText("");
-                newPassword.setText("");
-            }
+            newUsername.setText("");
+            newPassword.setText("");
+            Toast.makeText(RegisterPage.this, "Account created.", Toast.LENGTH_SHORT).show();
         });
 
     }

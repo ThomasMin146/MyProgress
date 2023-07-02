@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.thomas.myprogress.dbhelper.DataBaseHelper;
+import com.thomas.myprogress.adapters.CustomSpinnerAdapter;
 
 public class UpdateExercise extends AppCompatActivity {
     TextView exercise;
@@ -66,7 +66,6 @@ public class UpdateExercise extends AppCompatActivity {
             }
         }
 
-
         ArrayAdapter<String> difficultyAA = (ArrayAdapter<String>) difficulty.getAdapter();
         if (difficultyAA != null) {
             int position = difficultyAA.getPosition(getIntent().getStringExtra("Difficulty"));
@@ -75,13 +74,9 @@ public class UpdateExercise extends AppCompatActivity {
             }
         }
 
-
         updateExerciseButton.setOnClickListener(v -> {
             int id = getIntent().getIntExtra("ID", -1);
-
-            dbHelper.updateExerciseColumn(id, "name", nameOfNewExercise.getText().toString());
-            dbHelper.updateExerciseColumn(id, "type", selectedBodypartOption);
-            dbHelper.updateExerciseColumn(id, "difficulty", selectedDifficultyOption);
+            dbHelper.updateExercise(id, nameOfNewExercise.getText().toString(), selectedBodypartOption, selectedDifficultyOption);
 
             Intent intent = new Intent(UpdateExercise.this, AddExercise.class);
             startActivity(intent);

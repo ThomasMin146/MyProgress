@@ -13,16 +13,16 @@ import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.thomas.myprogress.dbhelper.DataBaseHelper;
+import com.thomas.myprogress.adapters.ExerciseRVAdapter;
+import com.thomas.myprogress.models.Exercise;
 
 import java.util.ArrayList;
 
 public class AddExercise extends AppCompatActivity implements RVInterface{
-    AddExerciseAdapter addExerciseAdapter;
-    ArrayList<ExerciseModel> exerciseItems;
+    ExerciseRVAdapter addExerciseAdapter;
+    ArrayList<Exercise> exercises;
     RecyclerView exerciseRV;
     DataBaseHelper dbHelper;
-    SQLiteDatabase db;
     Button createExercise;
     EditText searchEditText;
 
@@ -32,32 +32,18 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         setContentView(R.layout.add_exercise);
 
         dbHelper = new DataBaseHelper(this);
-        db = dbHelper.getWritableDatabase();
 
         exerciseRV = findViewById(R.id.exerciseRV);
         createExercise = findViewById(R.id.createExercise);
         searchEditText = findViewById(R.id.searchExerciseET);
 
-        exerciseItems = new ArrayList<>();
+        long workoutId = getIntent().getIntExtra("workoutId", -1);
 
-        addExerciseAdapter = new AddExerciseAdapter(this, exerciseItems, this);
+        exercises = dbHelper.getAllExercises();
+
+        addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, workoutId);
         exerciseRV.setAdapter(addExerciseAdapter);
         exerciseRV.setLayoutManager(new LinearLayoutManager(this));
-
-        // database operations
-        Cursor cursor = db.query("Exercise", null, null, null, null, null, null);
-        while (cursor.moveToNext()) {
-
-            ExerciseModel item = new ExerciseModel();
-            item.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
-            item.setExerciseName(cursor.getString(cursor.getColumnIndexOrThrow("name")));
-            item.setBodypart(cursor.getString(cursor.getColumnIndexOrThrow("type")));
-            item.setDifficulty(cursor.getString(cursor.getColumnIndexOrThrow("difficulty")));
-            exerciseItems.add(item);
-
-        }
-        cursor.close();
-        db.close();
 
         createExercise.setOnClickListener(v -> {
             Intent intent = new Intent(AddExercise.this, CreateExercise.class);
@@ -85,14 +71,14 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     }
 
     private void filterItems(String searchText) {
-        ArrayList<ExerciseModel> filteredList = new ArrayList<>();
+        ArrayList<Exercise> filteredList = new ArrayList<>();
 
-        for (ExerciseModel item : exerciseItems) {
+        for (Exercise exercise : exercises) {
             // Perform the search logic based on your item's properties
             // For example, if you have a "name" property in YourItem class:
-            String itemName = item.getExerciseName();
-            String itemBodyPart = item.getBodypart();
-            String itemDifficulty = item.getDifficulty();
+            String itemName = exercise.getName();
+            String itemBodyPart = exercise.getBodypart();
+            String itemDifficulty = exercise.getDifficulty();
 
             itemBodyPart = (itemBodyPart != null) ? itemBodyPart.toLowerCase() : "";
             itemDifficulty = (itemDifficulty != null) ? itemDifficulty.toLowerCase() : "";
@@ -100,7 +86,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
             if (itemName.toLowerCase().contains(searchText.toLowerCase()) ||
                     itemBodyPart.contains(searchText.toLowerCase()) ||
                     itemDifficulty.contains(searchText.toLowerCase())) {
-                filteredList.add(item);
+                filteredList.add(exercise);
             }
 
 
@@ -114,12 +100,13 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(AddExercise.this, UpdateExercise.class);
-        intent.putExtra("ID", exerciseItems.get(position).getId());
-        intent.putExtra("ExerciseName", exerciseItems.get(position).getExerciseName());
-        intent.putExtra("Bodypart", exerciseItems.get(position).getBodypart());
-        intent.putExtra("Difficulty", exerciseItems.get(position).getDifficulty());
+        intent.putExtra("ID", exercises.get(position).getId());
+        intent.putExtra("ExerciseName", exercises.get(position).getName());
+        intent.putExtra("Bodypart", exercises.get(position).getBodypart());
+        intent.putExtra("Difficulty", exercises.get(position).getDifficulty());
         intent.putExtra("position", position);
 
         startActivity(intent);
     }
+
 }

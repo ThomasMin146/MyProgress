@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.thomas.myprogress.dbhelper.DataBaseHelper;
+import com.thomas.myprogress.adapters.CustomSpinnerAdapter;
 
 
 public class CreateExercise extends AppCompatActivity {
@@ -32,7 +32,6 @@ public class CreateExercise extends AppCompatActivity {
         bodypart = findViewById(R.id.bodyPartOfNewExercise);
         difficulty = findViewById(R.id.difficultyOfNewExercise);
 
-
         createExerciseButton = findViewById(R.id.createExerciseButton);
 
         String[] bodypartOptions = {"Select a bodypart", "LEGS", "ABS", "CORE", "TRICEPS", "BICEPS", "CHEST", "BACK", "SHOULDERS"};
@@ -51,10 +50,9 @@ public class CreateExercise extends AppCompatActivity {
         difficulty.setSelection(0, false);
 
         createExerciseButton.setOnClickListener(v -> {
-            dbHelper.createExercise(nameOfNewExercise.getText().toString(), selectedDifficultyOption, selectedBodypartOption);
-
+            long exerciseId = dbHelper.addExercise(nameOfNewExercise.getText().toString(), selectedBodypartOption, selectedDifficultyOption);
             Intent intent = new Intent(CreateExercise.this, AddExercise.class);
-
+            intent.putExtra("exerciseId", exerciseId);
             startActivity(intent);
         });
 

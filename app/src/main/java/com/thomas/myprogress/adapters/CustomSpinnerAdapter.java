@@ -1,4 +1,4 @@
-package com.thomas.myprogress;
+package com.thomas.myprogress.adapters;
 
 import android.content.Context;
 import android.util.TypedValue;

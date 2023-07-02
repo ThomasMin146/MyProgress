@@ -1,28 +1,13 @@
 package com.thomas.myprogress;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.thomas.myprogress.dbhelper.DataBaseHelper;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
