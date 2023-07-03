@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private final String DB_PATH;
-    private static final String DB_NAME = "Database.db";
+    private static final String DB_NAME = "DBver1.db";
     private SQLiteDatabase myDataBase;
     private final Context myContext;
     public DataBaseHelper(Context context) {
@@ -108,7 +108,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         String query2 = "CREATE TABLE IF NOT EXISTS Workouts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date DATE, timer INTEGER)";
         String query3 = "CREATE TABLE IF NOT EXISTS Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE,bodypart TEXT, difficulty TEXT)";
         String query4 = "CREATE TABLE IF NOT EXISTS ExerciseDetails (id INTEGER PRIMARY KEY AUTOINCREMENT, workout_id INTEGER REFERENCES Workouts(id), " +
-                        "exercise_id INTEGER REFERENCES Exercises(id), sets INTEGER, reps INTEGER, weight INTEGER)";
+                        "exercise_id INTEGER REFERENCES Exercises(id), sets TEXT, reps TEXT, weight TEXT)";
 
         db.execSQL(query1);
         db.execSQL(query2);
@@ -145,7 +145,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     // Add a new row to the ExerciseDetails table
-    public long addExerciseDetails(long workoutId, int exerciseId, int sets, int reps, int weight) {
+    public long addExerciseDetails(long workoutId, int exerciseId, String sets, String reps, String weight) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("workout_id", workoutId);
@@ -187,7 +187,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     // Update a row in the ExerciseDetails table
-    public int updateExerciseDetails(int detailsId, int sets, int reps, int weight) {
+    public int updateExerciseDetails(int detailsId, String sets, String reps, String weight) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("sets", sets);
@@ -263,26 +263,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void deleteWorkoutsByExercise(String exerciseName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        String whereClause = "Exercise_name=?";
-        String[] whereArgs = { exerciseName };
-
-        db.delete("MyWorkout", whereClause, whereArgs);
-        db.close();
-    }
-
-    public void deleteExerciseByName(String exerciseName) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        String whereClause = "name=?";
-        String[] whereArgs = { exerciseName };
-
-        db.delete("Exercise", whereClause, whereArgs);
-        db.close();
-    }
-
     public void updateMyWorkoutColumn(int workoutId, String columnName, String columnValue) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -296,42 +276,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void updateExerciseColumn(int id, String columnName, String columnValue) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(columnName, columnValue);
-
-        String whereClause = "id = ?";
-        String[] whereArgs = { String.valueOf(id) };
-
-        db.update("Exercise", values, whereClause, whereArgs);
-        db.close();
-    }
-
-    public void createExercise(String name, String difficulty, String type) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("name", name);
-        values.put("difficulty", difficulty);
-        values.put("type", type);
-
-        db.insert("Exercise", null, values);
-        db.close();
-    }
-
-    public void createWorkout(String name) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put("MyWorkout_name", "Workout A");
-        values.put("Exercise_name", name);
-
-        db.insert("MyWorkout", null, values);
-        db.close();
-    }
-
     public ArrayList<ExerciseDetails> getAllExerciseDetails() {
         ArrayList<ExerciseDetails> exerciseList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -341,9 +285,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
             int workoutId = cursor.getInt(cursor.getColumnIndexOrThrow("workout_id"));
             int exerciseId = cursor.getInt(cursor.getColumnIndexOrThrow("exercise_id"));
-            int sets = cursor.getInt(cursor.getColumnIndexOrThrow("sets"));
-            int reps = cursor.getInt(cursor.getColumnIndexOrThrow("reps"));
-            double weight = cursor.getDouble(cursor.getColumnIndexOrThrow("weight"));
+            String sets = cursor.getString(cursor.getColumnIndexOrThrow("sets"));
+            String reps = cursor.getString(cursor.getColumnIndexOrThrow("reps"));
+            String weight = cursor.getString(cursor.getColumnIndexOrThrow("weight"));
 
             ExerciseDetails exerciseDetails = new ExerciseDetails(id, workoutId, exerciseId, sets, reps, weight);
             exerciseList.add(exerciseDetails);
@@ -398,14 +342,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             }
         }
 
-        // Close the database connection
         db.close();
-
         return exerciseName;
     }
-
-
-
-
 
 }

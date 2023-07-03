@@ -1,16 +1,11 @@
 package com.thomas.myprogress.models;
 
 public class ExerciseDetails {
-    private int id;
-    private int workoutId;
-    private int exerciseId;
-    private int sets;
-    private int reps;
-    private double weight;
-
+    private int id, workoutId, exerciseId;
+    private String sets, reps, weight;
 
     // Constructors, getters, and setters
-    public ExerciseDetails(int id, int workoutId, int exerciseId, int sets, int reps, double weight) {
+    public ExerciseDetails(int id, int workoutId, int exerciseId, String sets, String reps, String weight) {
         this.id = id;
         this.workoutId = workoutId;
         this.exerciseId = exerciseId;
@@ -43,27 +38,27 @@ public class ExerciseDetails {
         this.exerciseId = exerciseId;
     }
 
-    public int getSets() {
+    public String getSets() {
         return sets;
     }
 
-    public void setSets(int sets) {
+    public void setSets(String sets) {
         this.sets = sets;
     }
 
-    public int getReps() {
+    public String getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public void setReps(String reps) {
         this.reps = reps;
     }
 
-    public double getWeight() {
+    public String getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(String weight) {
         this.weight = weight;
     }
 

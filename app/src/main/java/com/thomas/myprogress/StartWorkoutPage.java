@@ -147,8 +147,8 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise2.class);
         intent.putExtra("Name", dbHelper.getExerciseName(exerciseDetails.get(position).getExerciseId()));
         intent.putExtra("ID", String.valueOf(exerciseDetails.get(position).getId()));
-        intent.putExtra("Reps", String.valueOf(exerciseDetails.get(position).getReps()));
-        intent.putExtra("Weight", String.valueOf(exerciseDetails.get(position).getWeight()));
+        intent.putExtra("Reps", exerciseDetails.get(position).getReps());
+        intent.putExtra("Weight", exerciseDetails.get(position).getWeight());
         intent.putExtra("position", position);
 
         startActivity(intent);
