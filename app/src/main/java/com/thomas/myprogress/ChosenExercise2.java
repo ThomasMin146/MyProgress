@@ -15,7 +15,6 @@ public class ChosenExercise2 extends AppCompatActivity {
     ArrayList<String> repsList;
     DataBaseHelper dbHelper;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,8 +69,6 @@ public class ChosenExercise2 extends AppCompatActivity {
 
         saveSetButton.setOnClickListener(v -> {
 
-            int workoutId = getIntent().getIntExtra("ID", -1);
-
             StringBuilder repsStringBuilder = new StringBuilder();
             int count = 0;
 
@@ -104,20 +101,16 @@ public class ChosenExercise2 extends AppCompatActivity {
 
             String weight1 = weightStringBuilder.toString();
 
-
-            for(int i = 0; i < weightEditTexts.length; i++){
-                if(!weightEditTexts[i].getText().toString().isEmpty()){
-                    repsList.add(weightEditTexts[i].getText().toString());
+            // logic for how many sets we have
+            for(int i = 0; i < repsEditTexts.length; i++){
+                if(!repsEditTexts[i].getText().toString().isEmpty()){
+                    repsList.add(repsEditTexts[i].getText().toString());
                 }
-
             }
 
             dbHelper.updateExerciseDetails(Integer.valueOf(detailsId), String.valueOf(repsList.size()), reps1, weight1);
-            /*dbHelper.updateMyWorkoutColumn(workoutId, "Exercise_sets", String.valueOf(repsList.size()));
-            dbHelper.updateMyWorkoutColumn(workoutId, "Exercise_reps", reps1);
-            dbHelper.updateMyWorkoutColumn(workoutId, "Exercise_weight", weight1);*/
-            Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
 
+            Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
             v.getContext().startActivity(intent);
         });
     }

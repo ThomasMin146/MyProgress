@@ -16,13 +16,13 @@ import com.thomas.myprogress.RVInterface;
 
 import java.util.ArrayList;
 
-public class WorkoutRVAdapter extends RecyclerView.Adapter<WorkoutRVAdapter.MyViewHolder> {
+public class ExerciseDetailsHistoryRVAdapter extends RecyclerView.Adapter<ExerciseDetailsHistoryRVAdapter.MyViewHolder> {
     RVInterface rvInterface;
     Context context;
     ArrayList<ExerciseDetails> exerciseDetails;
     DataBaseHelper dbHelper;
 
-    public WorkoutRVAdapter(Context context, ArrayList<ExerciseDetails> exerciseDetails, RVInterface rvInterface){
+    public ExerciseDetailsHistoryRVAdapter(Context context, ArrayList<ExerciseDetails> exerciseDetails, RVInterface rvInterface){
         this.context = context;
         this.exerciseDetails = exerciseDetails;
         this.rvInterface = rvInterface;
@@ -32,51 +32,34 @@ public class WorkoutRVAdapter extends RecyclerView.Adapter<WorkoutRVAdapter.MyVi
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.item_exercise, parent, false);
-        return new WorkoutRVAdapter.MyViewHolder(itemView, rvInterface);
+        View itemView = inflater.inflate(R.layout.item_exercise_history, parent, false);
+        return new ExerciseDetailsHistoryRVAdapter.MyViewHolder(itemView, rvInterface);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        /*holder.nameTV.setText(dbHelper.getExerciseName(exerciseDetails.get(position).getExerciseId()));
+        holder.nameTV.setText(dbHelper.getExerciseName(exerciseDetails.get(position).getExerciseId()));
         holder.repsTV.setText(exerciseDetails.get(position).getReps());
         holder.setsTV.setText(exerciseDetails.get(position).getSets());
-        holder.weightTV.setText(exerciseDetails.get(position).getWeight());*/
+        holder.weightTV.setText(exerciseDetails.get(position).getWeight());
 
     }
-
 
     @Override
     public int getItemCount() {
         return exerciseDetails.size();
     }
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameTV, repsTV, setsTV, weightTV;
-        Button deleteButton;
-        public CardView cardView;
-
         public MyViewHolder(@NonNull View itemView, RVInterface rvInterface) {
             super(itemView);
-
-            cardView = itemView.findViewById(R.id.cardView);
-            deleteButton = itemView.findViewById(R.id.deleteButton);
 
             nameTV = itemView.findViewById(R.id.nameTextView);
             repsTV = itemView.findViewById(R.id.repsTextView);
             setsTV = itemView.findViewById(R.id.setsTextView);
             weightTV = itemView.findViewById(R.id.weightTextView);
-
-            cardView.setOnClickListener(v -> {
-                rvInterface.onItemClick(getAdapterPosition());
-
-            });
-
-            deleteButton.setOnClickListener(v -> {
-                dbHelper.deleteExerciseDetails(exerciseDetails.get(getAdapterPosition()).getId());
-                exerciseDetails.remove(getAdapterPosition());
-                notifyItemRemoved(getAdapterPosition());
-            });
 
         }
     }

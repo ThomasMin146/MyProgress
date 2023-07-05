@@ -9,11 +9,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.thomas.myprogress.models.Exercise;
 import com.thomas.myprogress.models.ExerciseDetails;
+import com.thomas.myprogress.models.Workout;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private final String DB_PATH;
@@ -263,19 +268,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void updateMyWorkoutColumn(int workoutId, String columnName, String columnValue) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        ContentValues values = new ContentValues();
-        values.put(columnName, columnValue);
-
-        String whereClause = "MyWorkout_id = ?";
-        String[] whereArgs = { String.valueOf(workoutId) };
-
-        db.update("MyWorkout", values, whereClause, whereArgs);
-        db.close();
-    }
-
     public ArrayList<ExerciseDetails> getAllExerciseDetails() {
         ArrayList<ExerciseDetails> exerciseList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -298,6 +290,33 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return exerciseList;
     }
+
+    public ArrayList<ExerciseDetails> getExerciseDetailsByWorkoutId(int workoutId) {
+        ArrayList<ExerciseDetails> exerciseList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selection = "workout_id = ?";
+        String[] selectionArgs = { String.valueOf(workoutId) };
+
+        Cursor cursor = db.query("ExerciseDetails", null, selection, selectionArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            int exerciseId = cursor.getInt(cursor.getColumnIndexOrThrow("exercise_id"));
+            String sets = cursor.getString(cursor.getColumnIndexOrThrow("sets"));
+            String reps = cursor.getString(cursor.getColumnIndexOrThrow("reps"));
+            String weight = cursor.getString(cursor.getColumnIndexOrThrow("weight"));
+
+            ExerciseDetails exerciseDetails = new ExerciseDetails(id, workoutId, exerciseId, sets, reps, weight);
+            exerciseList.add(exerciseDetails);
+        }
+
+        cursor.close();
+        db.close();
+
+        return exerciseList;
+    }
+
 
     public ArrayList<Exercise> getAllExercises() {
         ArrayList<Exercise> exercises = new ArrayList<>();
@@ -344,6 +363,46 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         db.close();
         return exerciseName;
+    }
+
+    public void updateExerciseDetailsWorkoutID(long workoutId) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("workout_id", workoutId);
+        String selection = "workout_id = ?";
+        String[] selectionArgs = { String.valueOf(-1) };
+        db.update("ExerciseDetails", values, selection, selectionArgs);
+        db.close();
+    }
+
+    public ArrayList<Workout> getAllWorkouts() {
+        ArrayList<Workout> workoutList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("Workouts", null, null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            String dateString = cursor.getString(cursor.getColumnIndexOrThrow("date"));
+            int timer = cursor.getInt(cursor.getColumnIndexOrThrow("timer"));
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            Date date = null;
+
+            try {
+                date = dateFormat.parse(dateString);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            Workout workout = new Workout(id, name, date, timer);
+            workoutList.add(workout);
+        }
+
+        cursor.close();
+        db.close();
+
+        return workoutList;
     }
 
 }

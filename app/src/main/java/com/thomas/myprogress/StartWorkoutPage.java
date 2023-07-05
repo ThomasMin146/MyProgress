@@ -39,12 +39,12 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         dbHelper = new DataBaseHelper(this);
         stopwatch = new Stopwatch();
 
-        exerciseDetails = dbHelper.getAllExerciseDetails();
-        //exerciseDetails = new ArrayList<>();
+        //exerciseDetails = dbHelper.getAllExerciseDetails();
+        exerciseDetails = dbHelper.getExerciseDetailsByWorkoutId(-1);
 
-        Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = dateFormat.format(date);
+        //Date date = new Date();
+        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        //String formattedDate = dateFormat.format(date);
 
         exerciseRecyclerView = findViewById(R.id.exerciseRecyclerView);
         addButton = findViewById(R.id.addExercise);
@@ -65,9 +65,6 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         workoutName.setText("Unnamed");
-
-
-        long workoutId = dbHelper.addWorkout(workoutName.getText().toString(), formattedDate, 0);
 
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -117,14 +114,18 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
         addButton.setOnClickListener(v -> {
             Intent intent = new Intent(StartWorkoutPage.this, AddExercise.class);
-            intent.putExtra("workoutId", workoutId);
+            intent.putExtra("workoutId", -1);
             startActivity(intent);
         });
 
         saveWorkout.setOnClickListener(v -> {
             Date currentDate = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate2 = dateFormat.format(currentDate);
-            dbHelper.updateWorkout(workoutId, workoutName.getText().toString(), formattedDate2, 0);
+            long workoutId = dbHelper.addWorkout(workoutName.getText().toString(), formattedDate2, 0);
+            dbHelper.updateExerciseDetailsWorkoutID(workoutId);
+
+            //dbHelper.updateWorkout(workoutId, workoutName.getText().toString(), formattedDate2, 0);
 
             Intent intent = new Intent(StartWorkoutPage.this, HomePage.class);
             startActivity(intent);
