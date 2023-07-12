@@ -1,6 +1,8 @@
 package com.thomas.myprogress.adapters;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,11 +64,13 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
     public class MyViewHolder extends RecyclerView.ViewHolder{
         TextView workoutTV, dateTV, timerTV;
         CardView cardView;
+        Button deleteButton;
 
         public MyViewHolder(@NonNull View itemView, RVInterface rvInterface) {
             super(itemView);
 
             cardView = itemView.findViewById(R.id.cardView);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
 
             workoutTV = itemView.findViewById(R.id.workoutNameTextView);
             dateTV = itemView.findViewById(R.id.dateTextView);
@@ -75,6 +79,24 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
 
             cardView.setOnClickListener(v -> {
                 rvInterface.onItemClick(getAdapterPosition());
+
+            });
+
+            deleteButton.setOnClickListener(v -> {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle("Confirm Delete");
+                builder.setMessage("Are you sure you want to delete this workout?");
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    // Delete the item
+                    dbHelper.deleteWorkout(workouts.get(getAdapterPosition()).getId());
+                    workouts.remove(getAdapterPosition());
+                    notifyItemRemoved(getAdapterPosition());
+
+                });
+                builder.setNegativeButton("No", null);
+                builder.show();
+
 
             });
 

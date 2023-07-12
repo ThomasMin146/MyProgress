@@ -37,11 +37,9 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         createExercise = findViewById(R.id.createExercise);
         searchEditText = findViewById(R.id.searchExerciseET);
 
-        long workoutId = getIntent().getIntExtra("workoutId", -1);
-
         exercises = dbHelper.getAllExercises();
 
-        addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, workoutId);
+        addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, -1);
         exerciseRV.setAdapter(addExerciseAdapter);
         exerciseRV.setLayoutManager(new LinearLayoutManager(this));
 

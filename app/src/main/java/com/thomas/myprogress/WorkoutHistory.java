@@ -15,7 +15,6 @@ import com.thomas.myprogress.models.Workout;
 import java.util.ArrayList;
 
 public class WorkoutHistory extends AppCompatActivity implements RVInterface{
-
     ArrayList<Workout> workouts;
     RecyclerView workoutRecyclerView;
     WorkoutHistoryRVAdapter workoutAdapter;
@@ -29,6 +28,7 @@ public class WorkoutHistory extends AppCompatActivity implements RVInterface{
         dbHelper = new DataBaseHelper(this);
 
         workouts = dbHelper.getAllWorkouts();
+
 
         workoutRecyclerView = findViewById(R.id.workoutRecyclerView);
 

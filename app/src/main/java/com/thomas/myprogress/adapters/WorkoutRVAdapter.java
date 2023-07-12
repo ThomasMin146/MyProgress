@@ -38,10 +38,10 @@ public class WorkoutRVAdapter extends RecyclerView.Adapter<WorkoutRVAdapter.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        /*holder.nameTV.setText(dbHelper.getExerciseName(exerciseDetails.get(position).getExerciseId()));
+        holder.nameTV.setText(dbHelper.getExerciseName(exerciseDetails.get(position).getExerciseId()));
         holder.repsTV.setText(exerciseDetails.get(position).getReps());
         holder.setsTV.setText(exerciseDetails.get(position).getSets());
-        holder.weightTV.setText(exerciseDetails.get(position).getWeight());*/
+        holder.weightTV.setText(exerciseDetails.get(position).getWeight());
 
     }
 

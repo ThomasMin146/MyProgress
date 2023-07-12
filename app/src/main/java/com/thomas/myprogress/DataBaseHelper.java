@@ -17,12 +17,14 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Locale;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private final String DB_PATH;
-    private static final String DB_NAME = "DBver1.db";
+    private static final String DB_NAME = "DBver2.db";
     private SQLiteDatabase myDataBase;
     private final Context myContext;
     public DataBaseHelper(Context context) {
@@ -110,7 +112,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query1 = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE,password TEXT NOT NULL)";
-        String query2 = "CREATE TABLE IF NOT EXISTS Workouts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date DATE, timer INTEGER)";
+        String query2 = "CREATE TABLE IF NOT EXISTS Workouts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date DATE, timer TEXT)";
         String query3 = "CREATE TABLE IF NOT EXISTS Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE,bodypart TEXT, difficulty TEXT)";
         String query4 = "CREATE TABLE IF NOT EXISTS ExerciseDetails (id INTEGER PRIMARY KEY AUTOINCREMENT, workout_id INTEGER REFERENCES Workouts(id), " +
                         "exercise_id INTEGER REFERENCES Exercises(id), sets TEXT, reps TEXT, weight TEXT)";
@@ -126,7 +128,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     // Add a new row to the Workouts table
-    public long addWorkout(String name, String date, int timer) {
+    public long addWorkout(String name, String date, String timer) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
@@ -378,13 +380,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public ArrayList<Workout> getAllWorkouts() {
         ArrayList<Workout> workoutList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query("Workouts", null, null, null, null, null, null);
+        Cursor cursor = db.query("Workouts", null, null, null, null, null, "date DESC");
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
             String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
             String dateString = cursor.getString(cursor.getColumnIndexOrThrow("date"));
-            int timer = cursor.getInt(cursor.getColumnIndexOrThrow("timer"));
+            String timer = cursor.getString(cursor.getColumnIndexOrThrow("timer"));
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date date = null;
@@ -402,7 +404,9 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         cursor.close();
         db.close();
 
+
         return workoutList;
     }
+
 
 }

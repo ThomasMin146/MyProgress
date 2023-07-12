@@ -1,18 +1,17 @@
 package com.thomas.myprogress.models;
 
-import java.time.LocalDate;
 import java.util.Date;
 
-public class Workout {
+public class Workout implements  Comparable<Workout>{
     private int id;
     private String name;
     private Date date;
-    private int timer;
+    private String timer;
 
 
     // Constructors, getters, and setters
 
-    public Workout(int id, String name, Date date, int timer) {
+    public Workout(int id, String name, Date date, String timer) {
         this.id = id;
         this.name = name;
         this.date = date;
@@ -43,12 +42,17 @@ public class Workout {
         this.date = date;
     }
 
-    public int getTimer() {
+    public String getTimer() {
         return timer;
     }
 
-    public void setTimer(int timer) {
+    public void setTimer(String timer) {
         this.timer = timer;
+    }
+
+    @Override
+    public int compareTo(Workout o) {
+        return this.date.compareTo(o.date);
     }
 }
 
