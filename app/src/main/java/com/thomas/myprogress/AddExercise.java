@@ -112,7 +112,6 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
 
     @Override
     public void onAddItemClick(int position) {
-        //dbHelper.addExerciseDetails(workoutId, exercises.get(position).getId(), "","","");
         Intent intent = new Intent(AddExercise.this, StartWorkoutPage.class);
         intent.putExtra("ExerciseId", exercises.get(position).getId());
         intent.putExtra("WorkoutName", workoutName);

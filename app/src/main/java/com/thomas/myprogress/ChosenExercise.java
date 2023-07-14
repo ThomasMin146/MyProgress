@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,15 +14,15 @@ import android.widget.TextView;
 
 import com.thomas.myprogress.adapters.ExerciseDetailsRVAdapter;
 import com.thomas.myprogress.models.ExerciseDetails;
+import com.thomas.myprogress.models.ExerciseInfo;
 
 import java.util.ArrayList;
 
-public class ChosenExercise extends AppCompatActivity {
+public class ChosenExercise extends AppCompatActivity implements RVInterface{
     private Button addSetButton, saveSetButton;
     RecyclerView rvLayout;
-    ArrayList<ExerciseDetails> exerciseDetails;
-    ArrayList<EditText> editTextList;
-    private int setCounter;
+    //ArrayList<ExerciseInfo> exerciseInfo;
+    ArrayList<String> repList, weightList;
     DataBaseHelper dbHelper;
 
 
@@ -30,71 +31,102 @@ public class ChosenExercise extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chosen_exercise);
 
-        String name = getIntent().getStringExtra("Name");
         TextView textView = findViewById(R.id.exerciseName);
 
         dbHelper = new DataBaseHelper(this);
         rvLayout = findViewById(R.id.rvLayout);
 
-        setCounter = 1;
+        String workoutName = getIntent().getStringExtra("WorkoutName");
+        String name = getIntent().getStringExtra("Name");
+        String detailsId = getIntent().getStringExtra("ID");
+        String reps = getIntent().getStringExtra("Reps");
+        String sets = getIntent().getStringExtra("Sets");
+        String weight = getIntent().getStringExtra("Weight");
 
+        String[] repsArray = reps.split(", ");
+        String[] weightArray = weight.split(", ");
 
 
         addSetButton = findViewById(R.id.addSetButton);
         saveSetButton = findViewById(R.id.saveSetButton);
-        editTextList = new ArrayList<>();
 
-        exerciseDetails = new ArrayList<>();
+        repList = new ArrayList<>();
+        weightList = new ArrayList<>();
 
         textView.setText(name);
-        //exerciseDetails.add(new ItemExercise(String.valueOf(setCounter)));
 
-        ExerciseDetailsRVAdapter adapter = new ExerciseDetailsRVAdapter(this, exerciseDetails);
+        if(!sets.equals("")){
+            for(int j = 0; j < Integer.valueOf(sets); j++){
+                repList.add(repsArray[j]);
+                weightList.add(weightArray[j]);
+
+            }
+        }
+
+
+
+        ExerciseDetailsRVAdapter adapter = new ExerciseDetailsRVAdapter(this, repList, weightList);
         rvLayout.setAdapter(adapter);
         rvLayout.setLayoutManager(new LinearLayoutManager(this));
 
-        RecyclerView.ViewHolder viewHolder = rvLayout.findViewHolderForAdapterPosition(0);
 
-        /*addSetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                setCounter++;
-                exerciseDetails.add(new ItemExercise(String.valueOf(setCounter)));
-                adapter.notifyItemInserted(exerciseDetails.size()-1);
 
+
+        addSetButton.setOnClickListener(v -> {
+
+            repList.add("");
+            weightList.add("");
+            adapter.notifyItemInserted(repList.size()-1);
+
+        });
+
+
+        saveSetButton.setOnClickListener(v -> {
+
+            StringBuilder repsStringBuilder = new StringBuilder();
+            int repSize = repList.size();
+
+            for (int i = 0; i < repSize; i++) {
+                repsStringBuilder.append(repList.get(i));
+
+                if (i != repSize - 1) {
+                    repsStringBuilder.append(", ");
+                }
             }
-        });*/
 
+            String reps1 = repsStringBuilder.toString();
 
-        saveSetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            StringBuilder weightStringBuilder = new StringBuilder();
+            int weightSize = weightList.size();
 
-                int workoutid = getIntent().getIntExtra("ID", -1);
+            for (int i = 0; i < weightSize; i++) {
+                weightStringBuilder.append(weightList.get(i));
 
-                //dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets",
-                        //String.valueOf(adapter.getExerciseModels().get(0).getReps()));
-
-                /*if (viewHolder instanceof ItemViewHolder) {
-                    ItemViewHolder itemViewHolder = (ItemViewHolder) viewHolder;
-
-                    // Access the custom methods in your ViewHolder
-                    Pair<String, String> enteredValues = itemViewHolder.getEnteredValues();
-                    String repsValue = enteredValues.first;
-                    String weightValue = enteredValues.second;
-
-
-                    // Use the obtained information as needed
-                    dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets", repsValue);
-                }*/
-
-
-                //dbHelper.updateMyWorkoutColumn(workoutid, "Exercise_sets",);
-                Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
-
-                v.getContext().startActivity(intent);
+                if (i != weightSize - 1) {
+                    weightStringBuilder.append(", ");
+                }
             }
+
+            String weight1 = weightStringBuilder.toString();
+
+
+            dbHelper.updateExerciseDetails(Integer.valueOf(detailsId), String.valueOf(repList.size()), reps1, weight1);
+
+            Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
+
+            intent.putExtra("WorkoutName", workoutName);
+
+            v.getContext().startActivity(intent);
         });
     }
 
+    @Override
+    public void onItemClick(int position) {
+
+    }
+
+    @Override
+    public void onAddItemClick(int position) {
+
+    }
 }

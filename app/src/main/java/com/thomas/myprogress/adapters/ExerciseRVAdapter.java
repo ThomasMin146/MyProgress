@@ -101,13 +101,6 @@ public class ExerciseRVAdapter extends RecyclerView.Adapter<ExerciseRVAdapter.Ex
             addExerciseButton.setOnClickListener(v -> {
                 dbHelper.addExerciseDetails(workoutId, exercises.get(getAdapterPosition()).getId(), "","","");
                 rvInterface.onAddItemClick(getAdapterPosition());
-
-                /*dbHelper.addExerciseDetails(workoutId, exercises.get(getAdapterPosition()).getId(), "","","");
-                Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
-                intent.putExtra("ExerciseId", exercises.get(getAdapterPosition()).getId());
-                intent.putExtra("WorkoutName", "workoutName");
-                intent.putExtra("ExerciseName", exercises.get(getAdapterPosition()).getName());
-                v.getContext().startActivity(intent);*/
             });
 
         }

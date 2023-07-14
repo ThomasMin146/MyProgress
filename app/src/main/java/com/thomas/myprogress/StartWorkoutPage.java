@@ -177,13 +177,14 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise2.class);
+        Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise.class);
 
         intent.putExtra("WorkoutName", workoutName.getText().toString());
 
         intent.putExtra("Name", dbHelper.getExerciseName(exerciseDetails.get(position).getExerciseId()));
         intent.putExtra("ID", String.valueOf(exerciseDetails.get(position).getId()));
         intent.putExtra("Reps", exerciseDetails.get(position).getReps());
+        intent.putExtra("Sets", exerciseDetails.get(position).getSets());
         intent.putExtra("Weight", exerciseDetails.get(position).getWeight());
         intent.putExtra("position", position);
 

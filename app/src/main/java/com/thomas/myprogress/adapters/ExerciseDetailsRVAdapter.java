@@ -1,6 +1,9 @@
 package com.thomas.myprogress.adapters;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,15 +15,20 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.thomas.myprogress.R;
+import com.thomas.myprogress.models.ExerciseInfo;
+
 import java.util.ArrayList;
 
 public class ExerciseDetailsRVAdapter extends RecyclerView.Adapter<ExerciseDetailsRVAdapter.ItemViewHolder> {
     Context context;
-    ArrayList<ExerciseDetails> exerciseDetails;
+    ArrayList<String> repList;
+    ArrayList<String> weightList;
 
-    public ExerciseDetailsRVAdapter(Context context, ArrayList<ExerciseDetails> exerciseDetails){
+
+    public ExerciseDetailsRVAdapter(Context context, ArrayList<String> repList, ArrayList<String> weightList){
         this.context = context;
-        this.exerciseDetails = exerciseDetails;
+        this.repList = repList;
+        this.weightList = weightList;
     }
 
     @NonNull
@@ -28,7 +36,7 @@ public class ExerciseDetailsRVAdapter extends RecyclerView.Adapter<ExerciseDetai
     public ItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the item layout
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.linear_row_layout, parent, false);
+        View view = inflater.inflate(R.layout.item_chosen_exercise, parent, false);
         return new ItemViewHolder(view);
 
     }
@@ -37,19 +45,18 @@ public class ExerciseDetailsRVAdapter extends RecyclerView.Adapter<ExerciseDetai
     public void onBindViewHolder(@NonNull ItemViewHolder holder, int position) {
         // Set the data for each item
         holder.sets.setText(String.valueOf(position+1)+".");
+        holder.reps.setText(repList.get(position));
 
-        //this.exerciseDetails.add(new ExerciseDetails());
+        holder.weight.setText(weightList.get(position));
+
 
     }
 
     @Override
     public int getItemCount() {
-        return exerciseDetails.size();
+        return repList.size();
     }
 
-    public ArrayList<ExerciseDetails> getExerciseModels(){
-        return this.exerciseDetails;
-    }
 
     class ItemViewHolder extends RecyclerView.ViewHolder{
         TextView sets;
@@ -65,11 +72,46 @@ public class ExerciseDetailsRVAdapter extends RecyclerView.Adapter<ExerciseDetai
             removeButton = itemView.findViewById(R.id.removeRowButton);
 
 
+            reps.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    //exerciseInfo.get(getAdapterPosition()).setReps(s.toString());
+                    repList.set(getAdapterPosition(), s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+            weight.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    weightList.set(getAdapterPosition(), s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
 
             removeButton.setOnClickListener(v -> {
-                exerciseDetails.remove(getAdapterPosition());
+                repList.remove(getAdapterPosition());
+                weightList.remove(getAdapterPosition());
                 notifyItemRemoved(getAdapterPosition());
-                notifyItemRangeChanged(getAdapterPosition()+1, getExerciseModels().size());
+                notifyItemRangeChanged(getAdapterPosition()+1, getItemCount());
             });
         }
 
