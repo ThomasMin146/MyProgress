@@ -16,7 +16,6 @@ public class HomePage extends AppCompatActivity {
         startWorkoutCard = findViewById(R.id.startWorkoutCard);
         workoutHistoryCard = findViewById(R.id.workoutHistoryCard);
 
-
         startWorkoutCard.setOnClickListener(v -> {
             Intent intent = new Intent(HomePage.this, StartWorkoutPage.class);
             startActivity(intent);

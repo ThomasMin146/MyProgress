@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
     private final String DB_PATH;
-    private static final String DB_NAME = "DBver2.db";
+    private static final String DB_NAME = "DBver4.db";
     private SQLiteDatabase myDataBase;
     private final Context myContext;
     public DataBaseHelper(Context context) {
@@ -112,7 +112,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query1 = "CREATE TABLE IF NOT EXISTS Users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE,password TEXT NOT NULL)";
-        String query2 = "CREATE TABLE IF NOT EXISTS Workouts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date DATE, timer TEXT)";
+        String query2 = "CREATE TABLE IF NOT EXISTS Workouts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, date DATE, workingTime INTEGER, restingTime INTEGER)";
         String query3 = "CREATE TABLE IF NOT EXISTS Exercises (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL UNIQUE,bodypart TEXT, difficulty TEXT)";
         String query4 = "CREATE TABLE IF NOT EXISTS ExerciseDetails (id INTEGER PRIMARY KEY AUTOINCREMENT, workout_id INTEGER REFERENCES Workouts(id), " +
                         "exercise_id INTEGER REFERENCES Exercises(id), sets TEXT, reps TEXT, weight TEXT)";
@@ -128,12 +128,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     // Add a new row to the Workouts table
-    public long addWorkout(String name, String date, String timer) {
+    public long addWorkout(String name, String date, long workingTime, long restingTime) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("date", date);
-        values.put("timer", timer);
+        values.put("workingTime", workingTime);
+        values.put("restingTime", restingTime);
         long newRowId = db.insert("Workouts", null, values);
         db.close();
         return newRowId;
@@ -166,12 +167,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     // Update a row in the Workouts table
-    public int updateWorkout(long workoutId, String name, String date, int timer) {
+    public int updateWorkout(long workoutId, String name, String date, int workingTime, int restingTime) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
         values.put("date", date);
-        values.put("timer", timer);
+        values.put("workingTime", workingTime);
+        values.put("restingTime", restingTime);
         String selection = "id=?";
         String[] selectionArgs = { String.valueOf(workoutId) };
         int count = db.update("Workouts", values, selection, selectionArgs);
@@ -386,7 +388,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
             String name = cursor.getString(cursor.getColumnIndexOrThrow("name"));
             String dateString = cursor.getString(cursor.getColumnIndexOrThrow("date"));
-            String timer = cursor.getString(cursor.getColumnIndexOrThrow("timer"));
+            int workingTime = cursor.getInt(cursor.getColumnIndexOrThrow("workingTime"));
+            int restingTime = cursor.getInt(cursor.getColumnIndexOrThrow("restingTime"));
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             Date date = null;
@@ -397,7 +400,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
 
-            Workout workout = new Workout(id, name, date, timer);
+            Workout workout = new Workout(id, name, date, workingTime, restingTime);
             workoutList.add(workout);
         }
 

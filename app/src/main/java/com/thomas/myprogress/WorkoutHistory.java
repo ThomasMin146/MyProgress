@@ -46,4 +46,9 @@ public class WorkoutHistory extends AppCompatActivity implements RVInterface{
 
         startActivity(intent);
     }
+
+    @Override
+    public void onAddItemClick(int position) {
+
+    }
 }

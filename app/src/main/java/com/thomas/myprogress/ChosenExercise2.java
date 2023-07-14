@@ -30,6 +30,9 @@ public class ChosenExercise2 extends AppCompatActivity {
         String reps = getIntent().getStringExtra("Reps");
         String weight = getIntent().getStringExtra("Weight");
 
+        String workoutName = getIntent().getStringExtra("WorkoutName");
+
+
         String[] repsArray = reps.split(", ");
         String[] weightArray = weight.split(", ");
 
@@ -111,6 +114,9 @@ public class ChosenExercise2 extends AppCompatActivity {
             dbHelper.updateExerciseDetails(Integer.valueOf(detailsId), String.valueOf(repsList.size()), reps1, weight1);
 
             Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
+
+            intent.putExtra("WorkoutName", workoutName);
+
             v.getContext().startActivity(intent);
         });
     }

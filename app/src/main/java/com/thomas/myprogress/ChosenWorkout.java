@@ -52,4 +52,9 @@ public class ChosenWorkout extends AppCompatActivity implements RVInterface{
     public void onItemClick(int position) {
 
     }
+
+    @Override
+    public void onAddItemClick(int position) {
+
+    }
 }

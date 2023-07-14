@@ -2,7 +2,6 @@ package com.thomas.myprogress.adapters;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.thomas.myprogress.models.ExerciseDetails;
+
 import com.thomas.myprogress.DataBaseHelper;
 import com.thomas.myprogress.R;
 import com.thomas.myprogress.RVInterface;
@@ -38,7 +37,7 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View itemView = inflater.inflate(R.layout.item_workout, parent, false);
+        View itemView = inflater.inflate(R.layout.item_workout_history, parent, false);
         return new WorkoutHistoryRVAdapter.MyViewHolder(itemView, rvInterface);
     }
 
@@ -47,11 +46,12 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
         holder.workoutTV.setText(workouts.get(position).getName());
 
         Date date = workouts.get(position).getDate();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
         String dateString = dateFormat.format(date);
 
         holder.dateTV.setText(dateString);
-        holder.timerTV.setText(String.valueOf(workouts.get(position).getTimer()));
+        String formattedTime = formatTime(workouts.get(position).getWorkingTime() + workouts.get(position).getRestingTime());
+        holder.timerTV.setText(formattedTime);
 
     }
 
@@ -59,6 +59,14 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
     @Override
     public int getItemCount() {
         return workouts.size();
+    }
+
+    private String formatTime(long milliseconds) {
+        int seconds = (int) (milliseconds / 1000) % 60;
+        int minutes = (int) ((milliseconds / (1000 * 60)) % 60);
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+
+        return String.format(Locale.getDefault(), "%02d : %02d : %02d", hours, minutes, seconds);
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
