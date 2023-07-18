@@ -321,6 +321,32 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return exerciseList;
     }
 
+    public ArrayList<ExerciseDetails> getExerciseDetailsByExerciseId(int exerciseId) {
+        ArrayList<ExerciseDetails> exerciseList = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selection = "exercise_id = ?";
+        String[] selectionArgs = { String.valueOf(exerciseId) };
+
+        Cursor cursor = db.query("ExerciseDetails", null, selection, selectionArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            int workoutId = cursor.getInt(cursor.getColumnIndexOrThrow("workout_id"));
+            String sets = cursor.getString(cursor.getColumnIndexOrThrow("sets"));
+            String reps = cursor.getString(cursor.getColumnIndexOrThrow("reps"));
+            String weight = cursor.getString(cursor.getColumnIndexOrThrow("weight"));
+
+            ExerciseDetails exerciseDetails = new ExerciseDetails(id, workoutId, exerciseId, sets, reps, weight);
+            exerciseList.add(exerciseDetails);
+        }
+
+        cursor.close();
+        db.close();
+
+        return exerciseList;
+    }
+
 
     public ArrayList<Exercise> getAllExercises() {
         ArrayList<Exercise> exercises = new ArrayList<>();
@@ -341,6 +367,22 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         db.close();
 
         return exercises;
+    }
+
+    public ArrayList<Integer> getAllExerciseIds() {
+        ArrayList<Integer> exerciseIds = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query("Exercises", new String[]{"id"}, null, null, null, null, null);
+
+        while (cursor.moveToNext()) {
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            exerciseIds.add(id);
+        }
+
+        cursor.close();
+        db.close();
+
+        return exerciseIds;
     }
 
     public String getExerciseName(int exerciseId) {

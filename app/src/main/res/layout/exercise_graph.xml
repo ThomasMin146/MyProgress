@@ -8,24 +8,18 @@
     android:weightSum="7"
     tools:context=".ChosenWorkout">
 
-    <TextView
+    <Spinner
+        android:id="@+id/exercise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="Exercise"
-        android:textStyle="bold"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:textSize="35sp"
-        android:id="@+id/exerciseName"/>
+        android:layout_margin="20dp"
+        android:layout_weight="1"/>
 
-    <com.jjoe64.graphview.GraphView
+    <com.github.mikephil.charting.charts.LineChart
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="6"
+        android:layout_margin="20dp"
         android:id="@+id/graph"/>
-
-
-
 
 </LinearLayout>
