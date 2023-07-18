@@ -1,7 +1,6 @@
 package com.thomas.myprogress.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,8 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thomas.myprogress.DataBaseHelper;
-import com.thomas.myprogress.ExerciseModel;
 import com.thomas.myprogress.R;
 import com.thomas.myprogress.RVInterface;
-import com.thomas.myprogress.StartWorkoutPage;
 import com.thomas.myprogress.models.Exercise;
 
 import java.util.ArrayList;

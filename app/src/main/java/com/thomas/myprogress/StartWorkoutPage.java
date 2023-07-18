@@ -53,19 +53,13 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         minTime = findViewById(R.id.minTime);
         workoutName = findViewById(R.id.workoutName);
 
-        if(getIntent().getStringExtra("WorkoutName")==null){
-            workoutName.setText("Unnamed");
-        } else {
-            workoutName.setText(getIntent().getStringExtra("WorkoutName"));
-        }
-
+        workoutName.setText(getIntent().getStringExtra("WorkoutName"));
 
         playButton = findViewById(R.id.playButton);
         resumeButton = findViewById(R.id.resumeButton);
         stopButton = findViewById(R.id.stopButton);
         pauseButton = findViewById(R.id.pauseButton);
         setButton = findViewById(R.id.setButton);
-
 
         exerciseAdapter = new WorkoutRVAdapter(this, exerciseDetails, this);
         exerciseRecyclerView.setAdapter(exerciseAdapter);
@@ -123,7 +117,6 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
         setButton.setOnClickListener(v -> {
 
-
             if(isWorking){
                 minTime.setBackgroundColor(Color.GREEN);
                 workingTime = workingTime + stopwatch.getElapsedTime();
@@ -157,7 +150,14 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
                 restingTime = restingTime + stopwatch.getElapsedTime();
             }
 
-            long workoutId = dbHelper.addWorkout(workoutName.getText().toString(), formattedDate2, workingTime, restingTime);
+            long workoutId;
+
+            if(workoutName.getText().toString().isEmpty()){
+                workoutId = dbHelper.addWorkout("Unnamed", formattedDate2, workingTime, restingTime);
+            } else {
+                workoutId = dbHelper.addWorkout(workoutName.getText().toString(), formattedDate2, workingTime, restingTime);
+            }
+
             dbHelper.updateExerciseDetailsWorkoutID(workoutId);
 
             Intent intent = new Intent(StartWorkoutPage.this, HomePage.class);

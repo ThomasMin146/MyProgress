@@ -6,22 +6,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.thomas.myprogress.adapters.ExerciseDetailsRVAdapter;
-import com.thomas.myprogress.models.ExerciseDetails;
-import com.thomas.myprogress.models.ExerciseInfo;
 
 import java.util.ArrayList;
 
-public class ChosenExercise extends AppCompatActivity implements RVInterface{
+public class ChosenExercise extends AppCompatActivity {
     private Button addSetButton, saveSetButton;
     RecyclerView rvLayout;
-    //ArrayList<ExerciseInfo> exerciseInfo;
     ArrayList<String> repList, weightList;
     DataBaseHelper dbHelper;
 
@@ -63,14 +57,15 @@ public class ChosenExercise extends AppCompatActivity implements RVInterface{
             }
         }
 
+        if(repList.size()==0){
+            repList.add("");
+            weightList.add("");
+        }
 
 
         ExerciseDetailsRVAdapter adapter = new ExerciseDetailsRVAdapter(this, repList, weightList);
         rvLayout.setAdapter(adapter);
         rvLayout.setLayoutManager(new LinearLayoutManager(this));
-
-
-
 
         addSetButton.setOnClickListener(v -> {
 
@@ -79,7 +74,6 @@ public class ChosenExercise extends AppCompatActivity implements RVInterface{
             adapter.notifyItemInserted(repList.size()-1);
 
         });
-
 
         saveSetButton.setOnClickListener(v -> {
 
@@ -94,8 +88,6 @@ public class ChosenExercise extends AppCompatActivity implements RVInterface{
                 }
             }
 
-            String reps1 = repsStringBuilder.toString();
-
             StringBuilder weightStringBuilder = new StringBuilder();
             int weightSize = weightList.size();
 
@@ -107,26 +99,20 @@ public class ChosenExercise extends AppCompatActivity implements RVInterface{
                 }
             }
 
-            String weight1 = weightStringBuilder.toString();
+            //condition to not write 0 sets in StartWorkoutPage
+            if(repList.size()==0){
+                dbHelper.updateExerciseDetails(Integer.valueOf(detailsId), "",
+                        repsStringBuilder.toString(), weightStringBuilder.toString());
+            } else {
+                dbHelper.updateExerciseDetails(Integer.valueOf(detailsId), String.valueOf(repList.size()),
+                        repsStringBuilder.toString(), weightStringBuilder.toString());
+            }
 
-
-            dbHelper.updateExerciseDetails(Integer.valueOf(detailsId), String.valueOf(repList.size()), reps1, weight1);
 
             Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
-
             intent.putExtra("WorkoutName", workoutName);
-
             v.getContext().startActivity(intent);
         });
     }
 
-    @Override
-    public void onItemClick(int position) {
-
-    }
-
-    @Override
-    public void onAddItemClick(int position) {
-
-    }
 }

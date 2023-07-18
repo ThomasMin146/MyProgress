@@ -3,19 +3,17 @@ package com.thomas.myprogress.adapters;
 import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.thomas.myprogress.models.ExerciseDetails;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.thomas.myprogress.R;
-import com.thomas.myprogress.models.ExerciseInfo;
 
 import java.util.ArrayList;
 

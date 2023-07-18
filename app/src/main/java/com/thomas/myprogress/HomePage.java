@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public class HomePage extends AppCompatActivity {
-    CardView startWorkoutCard, workoutHistoryCard;
+    CardView startWorkoutCard, workoutHistoryCard, exerciseGraphCard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,6 +15,7 @@ public class HomePage extends AppCompatActivity {
 
         startWorkoutCard = findViewById(R.id.startWorkoutCard);
         workoutHistoryCard = findViewById(R.id.workoutHistoryCard);
+        exerciseGraphCard = findViewById(R.id.exerciseGraphCard);
 
         startWorkoutCard.setOnClickListener(v -> {
             Intent intent = new Intent(HomePage.this, StartWorkoutPage.class);
@@ -24,6 +25,11 @@ public class HomePage extends AppCompatActivity {
 
         workoutHistoryCard.setOnClickListener(v -> {
             Intent intent = new Intent(HomePage.this, WorkoutHistory.class);
+            startActivity(intent);
+        });
+
+        exerciseGraphCard.setOnClickListener(v -> {
+            Intent intent = new Intent(HomePage.this, ExerciseGraph.class);
             startActivity(intent);
         });
 
