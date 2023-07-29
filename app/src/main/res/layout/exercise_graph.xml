@@ -12,14 +12,134 @@
         android:id="@+id/exercise"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_margin="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="0.75"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <TextView
+            android:id="@+id/repsChart"
+            android:text="Reps"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/textview_frame_black"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/weightChart"
+            android:text="Weight"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/textview_frame_black"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/timeChart"
+            android:text="Time"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:clickable="true"
+            android:background="@drawable/textview_frame_black"
+            android:focusable="true"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_weight="0.75"
+        android:orientation="horizontal"
+        android:weightSum="5">
+
+        <TextView
+            android:id="@+id/allChart"
+            android:text="All"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/textview_frame_black"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/yearChart"
+            android:text="1y"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/textview_frame_black"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/months6Chart"
+            android:text="6m"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/textview_frame_black"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/months3Chart"
+            android:text="3m"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:clickable="true"
+            android:background="@drawable/textview_frame_black"
+            android:focusable="true"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/months1Chart"
+            android:text="1m"
+            android:gravity="center"
+            android:textSize="25sp"
+            android:layout_width="0dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/textview_frame_black"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
 
     <com.github.mikephil.charting.charts.LineChart
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="6"
-        android:layout_margin="20dp"
+        android:layout_weight="4.5"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:id="@+id/graph"/>
 
 </LinearLayout>

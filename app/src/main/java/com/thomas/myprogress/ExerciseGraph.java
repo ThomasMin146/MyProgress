@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -18,6 +20,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.thomas.myprogress.adapters.GraphSpinnerAdapter;
+import com.thomas.myprogress.chart.CustomXAxisValueFormatter;
 import com.thomas.myprogress.models.Exercise;
 import com.thomas.myprogress.models.ExerciseDetails;
 
@@ -31,9 +34,10 @@ public class ExerciseGraph extends AppCompatActivity {
     Spinner exercise;
     String selectedExerciseOption;
     DataBaseHelper dbHelper;
-
-    ArrayList<ExerciseDetails> exerciseDetails;
-
+    TextView repsChart, weightChart, timeChart, allChart, yearChart, months6Chart, months3Chart, months1Chart;
+    LineChart chart;
+    List<Entry> entries;
+    ArrayList<Exercise> exercises;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,11 +47,19 @@ public class ExerciseGraph extends AppCompatActivity {
         dbHelper = new DataBaseHelper(this);
 
         exercise = findViewById(R.id.exercise);
-        LineChart chart = findViewById(R.id.graph);
 
+        repsChart = findViewById(R.id.repsChart);
+        weightChart = findViewById(R.id.weightChart);
+        timeChart = findViewById(R.id.timeChart);
+        allChart = findViewById(R.id.allChart);
+        yearChart = findViewById(R.id.yearChart);
+        months6Chart = findViewById(R.id.months6Chart);
+        months3Chart = findViewById(R.id.months3Chart);
+        months1Chart = findViewById(R.id.months1Chart);
 
-        ArrayList<Exercise> exercises = dbHelper.getAllExercises();
+        chart = findViewById(R.id.graph);
 
+        exercises = dbHelper.getAllExercises();
 
         ArrayList<String> exerciseNames = new ArrayList<>();
         exerciseNames.add("Select an exercise");
@@ -70,12 +82,13 @@ public class ExerciseGraph extends AppCompatActivity {
         chart.setDrawBorders(true);
 
         // Create dummy data
-        List<Entry> entries = new ArrayList<>();
+        entries = new ArrayList<>();
 
-        LineDataSet dataSet = new LineDataSet(entries, "Sample Data");
-        LineData lineData = new LineData(dataSet);
-        chart.setData(lineData);
         chart.getLegend().setEnabled(false);
+        chart.setViewPortOffsets(100f, 125f, 100f, 125f);
+
+        String[] timeIntervals = {"Last Month", "Last 3 Months", "Last 6 Months", "Last Year"};
+        CustomXAxisValueFormatter xAxisValueFormatter = new CustomXAxisValueFormatter(timeIntervals);
 
 
         // Customize Y-axis labels
@@ -99,6 +112,7 @@ public class ExerciseGraph extends AppCompatActivity {
         // Customize X-axis labels
         XAxis xAxis = chart.getXAxis();
         xAxis.setTextSize(20f); // Set text size for the X-axis labels
+        //xAxis.setValueFormatter(xAxisValueFormatter);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setEnabled(true);
         xAxis.setAxisMinimum(0);
@@ -107,34 +121,6 @@ public class ExerciseGraph extends AppCompatActivity {
         xAxis.setTextColor(Color.BLACK);
         xAxis.setDrawGridLines(false);
 
-
-
-
-        /*xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                // Calculate the relative time from the current date
-                long currentDate = System.currentTimeMillis();
-                long dateValue = (long) value;
-
-                long diff = currentDate - dateValue;
-                long seconds = diff / 1000;
-                long minutes = seconds / 60;
-                long hours = minutes / 60;
-                long days = hours / 24;
-                long months = days / 30;
-                long years = months / 12;
-
-                if (months > 0) {
-                    return months + "m";
-                } else if (years > 0) {
-                    return years + "y";
-                } else {
-                    return days + "d";
-                }
-            }
-        });*/
-
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
             public String getFormattedValue(float value) {
@@ -142,8 +128,9 @@ public class ExerciseGraph extends AppCompatActivity {
             }
         });
 
-        // Refresh chart
-        chart.invalidate();
+        repsChart.setOnClickListener(v -> {
+            chosenAttribute(repsChart);
+        });
 
         exercise.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -152,16 +139,22 @@ public class ExerciseGraph extends AppCompatActivity {
                 if (position != 0) {
                     // Update the selectedOption variable with the selected string
                     selectedExerciseOption = exerciseNames.get(position);
+                    chart.clear();
+                    entries.clear();
+                    ArrayList<ExerciseDetails> exerciseDetails = new ArrayList<>();
+                    ArrayList<Integer> xValues = new ArrayList<>();
 
                     for(Exercise exercise:exercises){
                         if(exercise.getName().equals(selectedExerciseOption)){
                             exerciseDetails = dbHelper.getExerciseDetailsByExerciseId(exercise.getId());
+
                         }
 
                     }
+                    int j = 0;
 
                     for(ExerciseDetails exerciseDetail:exerciseDetails){
-                        int j = 0;
+
                         String[] getRepsArray = exerciseDetail.getReps().split(",");
                         int totalreps = 0;
 
@@ -170,23 +163,17 @@ public class ExerciseGraph extends AppCompatActivity {
                                 totalreps = totalreps + 0;
                             } else {
                                 totalreps = totalreps + Integer.parseInt(getRepsArray[i].trim());
+                                Log.d("test", dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId()));
                             }
 
                         }
                         j++;
-                        entries.add(new Entry(j,totalreps));
+                        String dateee = dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId());
+                        String[] parts = dateee.split(" ");
+
+                        entries.add(new Entry(Integer.valueOf(parts[0]),totalreps));
 
                     }
-
-                    // Populate a different dataset based on the selected exercise
-                    //List<Entry> entries = new ArrayList<>();
-                    // Add your logic here to populate the entries based on the selected exercise
-
-                    /*entries.add(new Entry(1,1));
-                    entries.add(new Entry(2,2));
-                    entries.add(new Entry(3,3));
-                    entries.add(new Entry(4,4));
-                    entries.add(new Entry(5,5));*/
 
                     LineDataSet dataSet = new LineDataSet(entries, "");
                     LineData lineData = new LineData(dataSet);
@@ -219,6 +206,65 @@ public class ExerciseGraph extends AppCompatActivity {
         });
 
 
+
+    }
+
+    public void chosenAttribute(TextView textView){
+        textView.setTextColor(Color.RED);
+        textView.setBackgroundResource(R.drawable.textview_frame_red);
+
+        if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
+            chart.clear();
+            entries.clear();
+            ArrayList<ExerciseDetails> exerciseDetails = new ArrayList<>();
+
+            for(Exercise exercise:exercises){
+                if(exercise.getName().equals(selectedExerciseOption)){
+                    exerciseDetails = dbHelper.getExerciseDetailsByExerciseId(exercise.getId());
+
+                }
+
+            }
+            int j = 0;
+
+            for(ExerciseDetails exerciseDetail:exerciseDetails){
+
+                String[] getRepsArray = exerciseDetail.getReps().split(",");
+                int totalreps = 0;
+
+                for(int i = 0; i < getRepsArray.length; i++){
+                    if(getRepsArray[i].trim().equals("")){
+                        totalreps = totalreps + 0;
+                    } else {
+                        totalreps = totalreps + Integer.parseInt(getRepsArray[i].trim());
+                        Log.d("test", dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId()));
+                    }
+
+                }
+                j++;
+                String dateee = dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId());
+                String[] parts = dateee.split(" ");
+
+                entries.add(new Entry(Integer.valueOf(parts[0]),totalreps));
+
+            }
+
+            LineDataSet dataSet = new LineDataSet(entries, "");
+            LineData lineData = new LineData(dataSet);
+            chart.setData(lineData);
+            dataSet.setLineWidth(8);
+            dataSet.setValueTextSize(20);
+
+            dataSet.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return String.format(Locale.getDefault(), "%.0f", value);
+                }
+            });
+
+            chart.invalidate(); // Refresh chart
+
+        }
 
     }
 

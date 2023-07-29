@@ -64,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
-                android:text="Duration: "
+                android:text="Work time: "
                 android:textColor="@color/lightgray"
                 android:textSize="25sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -79,6 +79,27 @@
                 android:textSize="25sp"
                 app:layout_constraintStart_toEndOf="@+id/timerTV"
                 app:layout_constraintTop_toBottomOf="@+id/dateTextView" />
+
+            <TextView
+                android:id="@+id/restTimeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="Rest time: "
+                android:textColor="@color/lightgray"
+                android:textSize="25sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/timerTV" />
+
+            <TextView
+                android:id="@+id/restTimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:textColor="@color/white"
+                android:textSize="25sp"
+                app:layout_constraintStart_toEndOf="@+id/timerTV"
+                app:layout_constraintTop_toBottomOf="@+id/timerTextView" />
 
             <Button
                 android:id="@+id/deleteButton"

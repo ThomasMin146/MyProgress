@@ -140,6 +140,38 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
+    public String getWorkoutDate(int workoutId) {
+        SQLiteDatabase db = getReadableDatabase();
+        String[] projection = {"date"};
+        String selection = "id = ?";
+        String[] selectionArgs = {String.valueOf(workoutId)};
+
+        Cursor cursor = db.query("Workouts", projection, selection, selectionArgs, null, null, null);
+
+        String formattedDate = "Date not found";
+        if (cursor != null && cursor.moveToFirst()) {
+            int dateColumnIndex = cursor.getColumnIndexOrThrow("date");
+            String dbDate = cursor.getString(dateColumnIndex);
+
+            SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
+
+            try {
+                Date date = dbDateFormat.parse(dbDate);
+                formattedDate = displayDateFormat.format(date);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            cursor.close();
+        }
+
+        db.close();
+
+        return formattedDate;
+    }
+
+
     // Add a new row to the Exercises table
     public long addExercise(String name, String bodypart, String difficulty) {
         SQLiteDatabase db = getWritableDatabase();

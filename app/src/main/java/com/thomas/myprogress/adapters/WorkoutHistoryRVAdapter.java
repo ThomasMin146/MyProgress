@@ -50,8 +50,11 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
         String dateString = dateFormat.format(date);
 
         holder.dateTV.setText(dateString);
-        String formattedTime = formatTime(workouts.get(position).getWorkingTime() + workouts.get(position).getRestingTime());
+        String formattedTime = formatTime(workouts.get(position).getWorkingTime());
         holder.timerTV.setText(formattedTime);
+
+        String formattedTime2 = formatTime(workouts.get(position).getRestingTime());
+        holder.restTimeTV.setText(formattedTime2);
 
     }
 
@@ -70,7 +73,7 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        TextView workoutTV, dateTV, timerTV;
+        TextView workoutTV, dateTV, timerTV, restTimeTV;
         CardView cardView;
         Button deleteButton;
 
@@ -83,6 +86,7 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
             workoutTV = itemView.findViewById(R.id.workoutNameTextView);
             dateTV = itemView.findViewById(R.id.dateTextView);
             timerTV = itemView.findViewById(R.id.timerTextView);
+            restTimeTV = itemView.findViewById(R.id.restTimeTextView);
 
 
             cardView.setOnClickListener(v -> {
