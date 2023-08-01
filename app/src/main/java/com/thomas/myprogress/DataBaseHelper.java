@@ -171,6 +171,29 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return formattedDate;
     }
 
+    public int getWorkoutDuration(int workoutId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Query the database to get the workingTime and restingTime for the given workoutId
+        String query = "SELECT workingTime, restingTime FROM Workouts WHERE id = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(workoutId)});
+
+        int workingTime = 0;
+        int restingTime = 0;
+
+        if (cursor.moveToFirst()) {
+            workingTime = cursor.getInt(cursor.getColumnIndexOrThrow("workingTime"));
+            restingTime = cursor.getInt(cursor.getColumnIndexOrThrow("restingTime"));
+        }
+
+        cursor.close();
+        db.close();
+
+        // Calculate the workout duration by adding workingTime and restingTime
+        int workoutDuration = workingTime + restingTime;
+        return workoutDuration;
+    }
+
 
     // Add a new row to the Exercises table
     public long addExercise(String name, String bodypart, String difficulty) {
