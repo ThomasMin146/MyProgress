@@ -24,27 +24,31 @@ import com.thomas.myprogress.adapters.GraphSpinnerAdapter;
 import com.thomas.myprogress.chart.CustomXAxisValueFormatter;
 import com.thomas.myprogress.models.Exercise;
 import com.thomas.myprogress.models.ExerciseDetails;
+import com.thomas.myprogress.models.Workout;
 
 import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
 public class ExerciseGraph extends AppCompatActivity {
     Spinner exercise;
-    String selectedExerciseOption;
+    String selectedExerciseOption, typeOfData, timeSpan;
     DataBaseHelper dbHelper;
     TextView repsChart, weightChart, timeChart, monthsChart, yearsChart, daysChart;
     LineChart chart;
     List<Entry> entries;
     ArrayList<Exercise> exercises;
     ArrayList<ExerciseDetails> exerciseDetails;
-    ArrayList<String> xLabels;
+    ArrayList<Workout> workouts;
+    ArrayList<String> xLabels, data;
     ArrayList<String> exerciseNames;
     XAxis xAxis;
+    int labelPart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +56,13 @@ public class ExerciseGraph extends AppCompatActivity {
         setContentView(R.layout.exercise_graph);
 
         dbHelper = new DataBaseHelper(this);
+        typeOfData = "reps";
+        timeSpan = "Month";
+        labelPart = 2;
+
+        exercises = dbHelper.getAllExercises();
+        workouts = dbHelper.getAllWorkouts();
+        exerciseDetails = dbHelper.getAllExerciseDetails();
 
         exercise = findViewById(R.id.exercise);
 
@@ -65,11 +76,24 @@ public class ExerciseGraph extends AppCompatActivity {
 
         chart = findViewById(R.id.graph); //assign chart from layout
 
-        setupSpinner();
+        //Setup spinner
+        exerciseNames = new ArrayList<>();
+        exerciseNames.add("Select an exercise");
+
+        for (Exercise exercise : exercises) {
+            exerciseNames.add(exercise.getName());
+        }
+
+        GraphSpinnerAdapter exerciseAdapter = new GraphSpinnerAdapter
+                (this, android.R.layout.simple_spinner_item, exerciseNames);
+
+        exerciseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        exercise.setAdapter(exerciseAdapter);
+        exercise.setSelection(0, false);
 
         entries = new ArrayList<>();
-        exerciseDetails = new ArrayList<>();
         xLabels = new ArrayList<>();
+        data = new ArrayList<>();
 
         // Customize chart
         chart.setDescription(null);
@@ -113,27 +137,574 @@ public class ExerciseGraph extends AppCompatActivity {
         });
 
         repsChart.setOnClickListener(v -> {
-            repsAttribute();
+            data.clear();
+            entries.clear();
+            xLabels.clear();
+            typeOfData = "reps";
+
+            if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
+                repsAttribute();
+
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+
+                switch (timeSpan) {
+                    case "Month":
+                        daysAttribute();
+                        calendar.add(Calendar.MONTH, -1);
+                        labelPart = 2;
+                        break;
+                    case "Year":
+                        monthsAttribute();
+                        calendar.add(Calendar.MONTH, -12);
+                        labelPart = 1;
+                        break;
+                    case "All":
+                        yearsAttribute();
+                        calendar.add(Calendar.YEAR, -100);
+                        labelPart = 0;
+                        break;
+                    default:
+                }
+
+                Date previousDate = calendar.getTime();
+                ArrayList<Integer> workoutIDs = new ArrayList<>();
+
+                for(Workout workout:workouts){
+                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
+                        workoutIDs.add(workout.getId());
+                    }
+                }
+
+                for(ExerciseDetails exerciseDetail : exerciseDetails){
+                    if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+                        for(Integer workoutID: workoutIDs){
+                            if(exerciseDetail.getWorkoutId() == workoutID){
+                                data.add(exerciseDetail.getReps());
+                            }
+                        }
+                    }
+                }
+
+                for(int i = 0; i < data.size(); i++){
+                    if(typeOfData.equals("reps")){
+                        entries.add(new Entry(i, getTotalReps(data.get(i))));
+                    } else if (typeOfData.equals("weight")){
+                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                    } else if (typeOfData.equals("time")){
+                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    }
+                }
+
+                LineDataSet dataSet = new LineDataSet(entries, "");
+                LineData lineData = new LineData(dataSet);
+                chart.setData(lineData);
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(20);
+
+                dataSet.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return String.format(Locale.getDefault(), "%.0f", value);
+                    }
+                });
+
+                chart.invalidate();
+            }
         });
 
         weightChart.setOnClickListener(v -> {
-            weightAttribute();
+            data.clear();
+            entries.clear();
+            xLabels.clear();
+            typeOfData = "weight";
+
+
+            if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
+                weightAttribute();
+
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+
+                switch (timeSpan) {
+                    case "Month":
+                        daysAttribute();
+                        calendar.add(Calendar.MONTH, -1);
+                        labelPart = 2;
+                        break;
+                    case "Year":
+                        monthsAttribute();
+                        calendar.add(Calendar.MONTH, -12);
+                        labelPart = 1;
+                        break;
+                    case "All":
+                        yearsAttribute();
+                        calendar.add(Calendar.YEAR, -100);
+                        labelPart = 0;
+                        break;
+                    default:
+                }
+
+                Date previousDate = calendar.getTime();
+                ArrayList<Integer> workoutIDs = new ArrayList<>();
+
+                for(Workout workout:workouts){
+                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
+                        workoutIDs.add(workout.getId());
+                    }
+                }
+
+                for (ExerciseDetails exerciseDetail : exerciseDetails) {
+                    if (exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+                        for(Integer workoutID: workoutIDs){
+                            if(exerciseDetail.getWorkoutId() == workoutID){
+                                data.add(exerciseDetail.getWeight());
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; i < data.size(); i++) {
+                    if (typeOfData.equals("reps")) {
+                        entries.add(new Entry(i, getTotalReps(data.get(i))));
+                    } else if (typeOfData.equals("weight")) {
+                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                    } else if (typeOfData.equals("time")) {
+                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    }
+                }
+
+                LineDataSet dataSet = new LineDataSet(entries, "");
+                LineData lineData = new LineData(dataSet);
+                chart.setData(lineData);
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(20);
+
+                dataSet.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return String.format(Locale.getDefault(), "%.0f", value);
+                    }
+                });
+
+                chart.invalidate();
+            }
         });
 
         timeChart.setOnClickListener(v -> {
-            timeAttribute();
+            data.clear();
+            entries.clear();
+            xLabels.clear();
+            typeOfData = "time";
+
+            if (selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
+                timeAttribute();
+
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+
+                switch (timeSpan) {
+                    case "Month":
+                        daysAttribute();
+                        calendar.add(Calendar.MONTH, -1);
+                        labelPart = 2;
+                        break;
+                    case "Year":
+                        monthsAttribute();
+                        calendar.add(Calendar.MONTH, -12);
+                        labelPart = 1;
+                        break;
+                    case "All":
+                        yearsAttribute();
+                        calendar.add(Calendar.YEAR, -100);
+                        labelPart = 0;
+                        break;
+                    default:
+                }
+
+                Date previousDate = calendar.getTime();
+                ArrayList<Integer> workoutIDs = new ArrayList<>();
+
+                for(Workout workout:workouts){
+                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
+                        workoutIDs.add(workout.getId());
+                    }
+                }
+
+                for(ExerciseDetails exerciseDetail : exerciseDetails){
+                    if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+                        for(Workout workout: workouts){
+                            if(exerciseDetail.getWorkoutId() == workout.getId()){
+                                for(Integer workoutID: workoutIDs){
+                                    if(exerciseDetail.getWorkoutId() == workoutID){
+                                        int duration = workout.getRestingTime() + workout.getWorkingTime();
+                                        data.add(String.valueOf(duration));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; i < data.size(); i++) {
+                    if (typeOfData.equals("reps")) {
+                        entries.add(new Entry(i, getTotalReps(data.get(i))));
+                    } else if (typeOfData.equals("weight")) {
+                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                    } else if (typeOfData.equals("time")) {
+                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    }
+                }
+
+                LineDataSet dataSet = new LineDataSet(entries, "");
+                LineData lineData = new LineData(dataSet);
+                chart.setData(lineData);
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(20);
+
+                dataSet.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return String.format(Locale.getDefault(), "%.0f", value);
+                    }
+                });
+
+                chart.invalidate();
+            }
         });
 
         daysChart.setOnClickListener(v -> {
-            daysAttribute();
+            data.clear();
+            entries.clear();
+            xLabels.clear();
+            timeSpan = "Month";
+            labelPart = 2;
+
+            if (selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
+                daysAttribute();
+
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.MONTH, -1);
+                Date previousDate = calendar.getTime();
+                ArrayList<Integer> workoutIDs = new ArrayList<>();
+                ArrayList<String> workoutDates = new ArrayList<>();
+
+                for(Workout workout:workouts){
+                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
+                        workoutIDs.add(workout.getId());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+                        String dateString = dateFormat.format(workout.getDate());
+                        workoutDates.add(dateString);
+                    }
+                }
+
+                switch (typeOfData) {
+                    case "reps":
+                        repsAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                                for(int i = 0; i < workoutIDs.size(); i++){
+                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                        data.add(exerciseDetail.getReps());
+                                        String datee = workoutDates.get(i);
+                                        String[] parts = datee.split("-");
+                                        xLabels.add(parts[labelPart]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "weight":
+                        weightAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                                for(int i = 0; i < workoutIDs.size(); i++){
+                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                        data.add(exerciseDetail.getWeight());
+                                        String datee = workoutDates.get(i);
+                                        String[] parts = datee.split("-");
+                                        xLabels.add(parts[labelPart]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "time":
+                        timeAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+                                for(Workout workout: workouts){
+                                    if(exerciseDetail.getWorkoutId() == workout.getId()){
+                                        for(int i = 0; i < workoutIDs.size(); i++){
+                                            if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                                int duration = workout.getRestingTime() + workout.getWorkingTime();
+                                                data.add(String.valueOf(duration));
+                                                String datee = workoutDates.get(i);
+                                                String[] parts = datee.split("-");
+                                                xLabels.add(parts[labelPart]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                }
+                for (int i = 0; i < data.size(); i++) {
+                    if (typeOfData.equals("reps")) {
+                        entries.add(new Entry(i, getTotalReps(data.get(i))));
+                    } else if (typeOfData.equals("weight")) {
+                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                    } else if (typeOfData.equals("time")) {
+                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    }
+                }
+
+                LineDataSet dataSet = new LineDataSet(entries, "");
+                LineData lineData = new LineData(dataSet);
+                chart.setData(lineData);
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(20);
+
+                dataSet.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return String.format(Locale.getDefault(), "%.0f", value);
+                    }
+                });
+
+                xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
+                chart.invalidate();
+
+            }
         });
 
         monthsChart.setOnClickListener(v -> {
-            monthsAttribute();
+            data.clear();
+            entries.clear();
+            xLabels.clear();
+            timeSpan = "Year";
+            labelPart = 1;
+
+            if (selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
+                monthsAttribute();
+
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.MONTH, -12);
+                Date previousDate = calendar.getTime();
+                ArrayList<Integer> workoutIDs = new ArrayList<>();
+                ArrayList<String> workoutDates = new ArrayList<>();
+
+                for(Workout workout:workouts){
+                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
+                        workoutIDs.add(workout.getId());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+                        String dateString = dateFormat.format(workout.getDate());
+                        workoutDates.add(dateString);
+                    }
+                }
+
+                switch (typeOfData) {
+                    case "reps":
+                        repsAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                                for(int i = 0; i < workoutIDs.size(); i++){
+                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                        data.add(exerciseDetail.getReps());
+                                        String datee = workoutDates.get(i);
+                                        String[] parts = datee.split("-");
+                                        xLabels.add(parts[labelPart]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "weight":
+                        weightAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                                for(int i = 0; i < workoutIDs.size(); i++){
+                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                        data.add(exerciseDetail.getWeight());
+                                        String datee = workoutDates.get(i);
+                                        String[] parts = datee.split("-");
+                                        xLabels.add(parts[labelPart]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "time":
+                        timeAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+                                for(Workout workout: workouts){
+                                    if(exerciseDetail.getWorkoutId() == workout.getId()){
+                                        for(int i = 0; i < workoutIDs.size(); i++){
+                                            if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                                int duration = workout.getRestingTime() + workout.getWorkingTime();
+                                                data.add(String.valueOf(duration));
+                                                String datee = workoutDates.get(i);
+                                                String[] parts = datee.split("-");
+                                                xLabels.add(parts[labelPart]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                }
+                for (int i = 0; i < data.size(); i++) {
+                    if (typeOfData.equals("reps")) {
+                        entries.add(new Entry(i, getTotalReps(data.get(i))));
+                    } else if (typeOfData.equals("weight")) {
+                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                    } else if (typeOfData.equals("time")) {
+                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    }
+                }
+
+                LineDataSet dataSet = new LineDataSet(entries, "");
+                LineData lineData = new LineData(dataSet);
+                chart.setData(lineData);
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(20);
+
+                dataSet.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return String.format(Locale.getDefault(), "%.0f", value);
+                    }
+                });
+
+                xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
+                chart.invalidate();
+            }
         });
 
         yearsChart.setOnClickListener(v -> {
-            yearsAttribute();
+            data.clear();
+            entries.clear();
+            xLabels.clear();
+            timeSpan = "All";
+            labelPart = 0;
+
+            if (selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
+                yearsAttribute();
+
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.YEAR, -100);
+                Date previousDate = calendar.getTime();
+                ArrayList<Integer> workoutIDs = new ArrayList<>();
+                ArrayList<String> workoutDates = new ArrayList<>();
+
+                for(Workout workout:workouts){
+                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
+                        workoutIDs.add(workout.getId());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+                        String dateString = dateFormat.format(workout.getDate());
+                        workoutDates.add(dateString);
+                    }
+                }
+
+                switch (typeOfData) {
+                    case "reps":
+                        repsAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                                for(int i = 0; i < workoutIDs.size(); i++){
+                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                        data.add(exerciseDetail.getReps());
+                                        String datee = workoutDates.get(i);
+                                        String[] parts = datee.split("-");
+                                        xLabels.add(parts[labelPart]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "weight":
+                        weightAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                                for(int i = 0; i < workoutIDs.size(); i++){
+                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                        data.add(exerciseDetail.getWeight());
+                                        String datee = workoutDates.get(i);
+                                        String[] parts = datee.split("-");
+                                        xLabels.add(parts[labelPart]);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case "time":
+                        timeAttribute();
+                        for(ExerciseDetails exerciseDetail : exerciseDetails){
+                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+                                for(Workout workout: workouts){
+                                    if(exerciseDetail.getWorkoutId() == workout.getId()){
+                                        for(int i = 0; i < workoutIDs.size(); i++){
+                                            if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                                int duration = workout.getRestingTime() + workout.getWorkingTime();
+                                                data.add(String.valueOf(duration));
+                                                String datee = workoutDates.get(i);
+                                                String[] parts = datee.split("-");
+                                                xLabels.add(parts[labelPart]);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                }
+                for (int i = 0; i < data.size(); i++) {
+                    if (typeOfData.equals("reps")) {
+                        entries.add(new Entry(i, getTotalReps(data.get(i))));
+                    } else if (typeOfData.equals("weight")) {
+                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                    } else if (typeOfData.equals("time")) {
+                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    }
+                }
+
+                LineDataSet dataSet = new LineDataSet(entries, "");
+                LineData lineData = new LineData(dataSet);
+                chart.setData(lineData);
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(20);
+
+                dataSet.setValueFormatter(new ValueFormatter() {
+                    @Override
+                    public String getFormattedValue(float value) {
+                        return String.format(Locale.getDefault(), "%.0f", value);
+                    }
+                });
+
+                xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
+                chart.invalidate();
+            }
         });
 
         exercise.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -143,12 +714,154 @@ public class ExerciseGraph extends AppCompatActivity {
                 if (position != 0) {
                     // Update the selectedOption variable with the selected string
                     selectedExerciseOption = exerciseNames.get(position);
-                    repsAttribute();
-                    daysAttribute();
+                    data.clear();
+                    entries.clear();
+                    xLabels.clear();
+
+                    Date currentDate = new Date();
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(currentDate);
+
+                    switch (timeSpan) {
+                        case "Month":
+                            daysAttribute();
+                            calendar.add(Calendar.MONTH, -1);
+                            labelPart = 2;
+                            break;
+                        case "Year":
+                            monthsAttribute();
+                            calendar.add(Calendar.MONTH, -12);
+                            labelPart = 1;
+                            break;
+                        case "All":
+                            yearsAttribute();
+                            calendar.add(Calendar.YEAR, -100);
+                            labelPart = 0;
+                            break;
+                        default:
+                    }
+
+                    Date previousDate = calendar.getTime();
+
+                    ArrayList<Integer> workoutIDs = new ArrayList<>();
+                    ArrayList<String> workoutDates = new ArrayList<>();
+
+                    for(Workout workout:workouts){
+                        if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
+                            workoutIDs.add(workout.getId());
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+                            String dateString = dateFormat.format(workout.getDate());
+                            workoutDates.add(dateString);
+                        }
+                    }
+
+                    switch (typeOfData) {
+                        case "reps":
+                            repsAttribute();
+                            for(ExerciseDetails exerciseDetail : exerciseDetails){
+                                if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                                    for(int i = 0; i < workoutIDs.size(); i++){
+                                        if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                            data.add(exerciseDetail.getReps());
+                                            String datee = workoutDates.get(i);
+                                            String[] parts = datee.split("-");
+                                            xLabels.add(parts[labelPart]);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "weight":
+                            weightAttribute();
+                            for(ExerciseDetails exerciseDetail : exerciseDetails){
+                                if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                                    for(int i = 0; i < workoutIDs.size(); i++){
+                                        if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                            data.add(exerciseDetail.getWeight());
+                                            String datee = workoutDates.get(i);
+                                            String[] parts = datee.split("-");
+                                            xLabels.add(parts[labelPart]);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        case "time":
+                            timeAttribute();
+                            for(ExerciseDetails exerciseDetail : exerciseDetails){
+                                if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+                                    for(Workout workout: workouts){
+                                        if(exerciseDetail.getWorkoutId() == workout.getId()){
+                                            for(int i = 0; i < workoutIDs.size(); i++){
+                                                if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                                    int duration = workout.getRestingTime() + workout.getWorkingTime();
+                                                    data.add(String.valueOf(duration));
+                                                    String datee = workoutDates.get(i);
+                                                    String[] parts = datee.split("-");
+                                                    xLabels.add(parts[labelPart]);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+                        default:
+                    }
+
+                    for(int i = 0; i < data.size(); i++){
+                        if(typeOfData.equals("reps")){
+                            entries.add(new Entry(i, getTotalReps(data.get(i))));
+                        } else if (typeOfData.equals("weight")){
+                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                        } else if (typeOfData.equals("time")){
+                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                        }
+                    }
+
+                    LineDataSet dataSet = new LineDataSet(entries, "");
+                    LineData lineData = new LineData(dataSet);
+                    chart.setData(lineData);
+                    dataSet.setLineWidth(8);
+                    dataSet.setValueTextSize(20);
+
+                    dataSet.setValueFormatter(new ValueFormatter() {
+                        @Override
+                        public String getFormattedValue(float value) {
+                            return String.format(Locale.getDefault(), "%.0f", value);
+                        }
+                    });
+
+                    xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
+                    chart.invalidate();
 
                 } else {
                     // Handle the case when the initial selection is made
                     selectedExerciseOption = null;
+
+                    //Set attribute buttons to nothing selected
+                    weightChart.setTextColor(Color.BLACK);
+                    weightChart.setBackgroundResource(R.drawable.textview_frame_black);
+
+                    repsChart.setTextColor(Color.BLACK);
+                    repsChart.setBackgroundResource(R.drawable.textview_frame_black);
+
+                    timeChart.setTextColor(Color.BLACK);
+                    timeChart.setBackgroundResource(R.drawable.textview_frame_black);
+
+                    //Set timespan buttons to nothing selected
+                    daysChart.setTextColor(Color.BLACK);
+                    daysChart.setBackgroundResource(R.drawable.textview_frame_black);
+
+                    monthsChart.setTextColor(Color.BLACK);
+                    monthsChart.setBackgroundResource(R.drawable.textview_frame_black);
+
+                    yearsChart.setTextColor(Color.BLACK);
+                    yearsChart.setBackgroundResource(R.drawable.textview_frame_black);
+
+                    chart.clear();
                 }
                 // Do something with the selected option
             }
@@ -157,75 +870,20 @@ public class ExerciseGraph extends AppCompatActivity {
             public void onNothingSelected(AdapterView<?> parent) {
                 // Handle the case when nothing is selected
                 selectedExerciseOption = null;
+
             }
         });
     }
 
     public void repsAttribute(){
-        repsChart.setTextColor(Color.RED);
-        repsChart.setBackgroundResource(R.drawable.textview_frame_red);
-
         weightChart.setTextColor(Color.BLACK);
         weightChart.setBackgroundResource(R.drawable.textview_frame_black);
 
+        repsChart.setTextColor(Color.RED);
+        repsChart.setBackgroundResource(R.drawable.textview_frame_red);
+
         timeChart.setTextColor(Color.BLACK);
         timeChart.setBackgroundResource(R.drawable.textview_frame_black);
-
-        if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
-            entries.clear();
-            exerciseDetails.clear();
-            xLabels.clear();
-
-            for(Exercise exercise:exercises){
-                if(exercise.getName().equals(selectedExerciseOption)){
-                    exerciseDetails = dbHelper.getExerciseDetailsByExerciseId(exercise.getId());
-                }
-
-            }
-
-            int j = 0;
-
-            for(ExerciseDetails exerciseDetail:exerciseDetails){
-                String[] getRepsArray = exerciseDetail.getReps().split(",");
-                int totalreps = 0;
-
-                for(int i = 0; i < getRepsArray.length; i++){
-                    if(getRepsArray[i].trim().equals("")){
-                        totalreps = totalreps + 0;
-                    } else {
-                        totalreps = totalreps + Integer.parseInt(getRepsArray[i].trim());
-                    }
-
-                }
-
-                String dateee = dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId());
-                String[] parts = dateee.split(" ");
-                xLabels.add(parts[0]);
-
-                entries.add(new Entry(j,totalreps));
-                j++;
-            }
-
-            LineDataSet dataSet = new LineDataSet(entries, "");
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            dataSet.setLineWidth(8);
-            dataSet.setValueTextSize(20);
-
-            dataSet.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return String.format(Locale.getDefault(), "%.0f", value);
-                }
-            });
-
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-
-            // Refresh chart
-            chart.invalidate();
-
-        }
-
     }
 
     public void weightAttribute(){
@@ -237,64 +895,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
         timeChart.setTextColor(Color.BLACK);
         timeChart.setBackgroundResource(R.drawable.textview_frame_black);
-
-        if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
-            entries.clear();
-            exerciseDetails.clear();
-            xLabels.clear();
-
-            for(Exercise exercise:exercises){
-                if(exercise.getName().equals(selectedExerciseOption)){
-                    exerciseDetails = dbHelper.getExerciseDetailsByExerciseId(exercise.getId());
-                }
-
-            }
-
-            int j = 0;
-
-            for(ExerciseDetails exerciseDetail:exerciseDetails){
-                String[] getWeightArray = exerciseDetail.getWeight().split(",");
-                int maxweight = 0;
-
-                for(int i = 0; i < getWeightArray.length; i++){
-                    if(getWeightArray[i].trim().equals("")){
-
-                    } else {
-                        if(maxweight < Integer.valueOf(getWeightArray[i].trim())){
-                            maxweight = Integer.valueOf(getWeightArray[i].trim());
-                        }
-                    }
-
-                }
-
-                String dateee = dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId());
-                String[] parts = dateee.split(" ");
-                xLabels.add(parts[0]);
-
-                entries.add(new Entry(j,maxweight));
-                j++;
-            }
-
-            LineDataSet dataSet = new LineDataSet(entries, "");
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            dataSet.setLineWidth(8);
-            dataSet.setValueTextSize(20);
-
-            dataSet.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return String.format(Locale.getDefault(), "%.0f", value);
-                }
-            });
-
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-
-            // Refresh chart
-            chart.invalidate();
-
-        }
-
     }
 
     public void timeAttribute(){
@@ -306,55 +906,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
         weightChart.setTextColor(Color.BLACK);
         weightChart.setBackgroundResource(R.drawable.textview_frame_black);
-
-        if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
-            entries.clear();
-            exerciseDetails.clear();
-            xLabels.clear();
-
-            for(Exercise exercise:exercises){
-                if(exercise.getName().equals(selectedExerciseOption)){
-                    exerciseDetails = dbHelper.getExerciseDetailsByExerciseId(exercise.getId());
-                }
-
-            }
-
-            int j = 0;
-
-            for(ExerciseDetails exerciseDetail:exerciseDetails){
-
-                int duration = dbHelper.getWorkoutDuration(exerciseDetail.getWorkoutId());
-                int durationInMinutes = duration / (1000 * 60);
-
-                String dateee = dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId());
-                String[] parts = dateee.split(" ");
-                xLabels.add(parts[0]);
-
-
-                entries.add(new Entry(j,durationInMinutes));
-                j++;
-            }
-
-            LineDataSet dataSet = new LineDataSet(entries, "");
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            dataSet.setLineWidth(8);
-            dataSet.setValueTextSize(20);
-
-            dataSet.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return String.format(Locale.getDefault(), "%.0f", value);
-                }
-            });
-
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-
-            // Refresh chart
-            chart.invalidate();
-
-        }
-
     }
 
     private void daysAttribute(){
@@ -366,61 +917,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
         yearsChart.setTextColor(Color.BLACK);
         yearsChart.setBackgroundResource(R.drawable.textview_frame_black);
-
-        if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
-            entries.clear();
-            exerciseDetails.clear();
-            xLabels.clear();
-
-            for(Exercise exercise:exercises){
-                if(exercise.getName().equals(selectedExerciseOption)){
-                    exerciseDetails = dbHelper.getExerciseDetailsByExerciseId(exercise.getId());
-                }
-
-            }
-
-            int j = 0;
-
-            for(ExerciseDetails exerciseDetail:exerciseDetails){
-                String[] getRepsArray = exerciseDetail.getReps().split(",");
-                int totalreps = 0;
-
-                for(int i = 0; i < getRepsArray.length; i++){
-                    if(getRepsArray[i].trim().equals("")){
-                        totalreps = totalreps + 0;
-                    } else {
-                        totalreps = totalreps + Integer.parseInt(getRepsArray[i].trim());
-                    }
-
-                }
-
-                String dateee = dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId());
-                String[] parts = dateee.split(" ");
-                xLabels.add(parts[0]);
-
-                entries.add(new Entry(j,totalreps));
-                j++;
-            }
-
-            LineDataSet dataSet = new LineDataSet(entries, "");
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            dataSet.setLineWidth(8);
-            dataSet.setValueTextSize(20);
-
-            dataSet.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return String.format(Locale.getDefault(), "%.0f", value);
-                }
-            });
-
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-
-            // Refresh chart
-            chart.invalidate();
-
-        }
     }
 
     private void monthsAttribute(){
@@ -432,61 +928,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
         yearsChart.setTextColor(Color.BLACK);
         yearsChart.setBackgroundResource(R.drawable.textview_frame_black);
-
-        if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
-            entries.clear();
-            exerciseDetails.clear();
-            xLabels.clear();
-
-            for(Exercise exercise:exercises){
-                if(exercise.getName().equals(selectedExerciseOption)){
-                    exerciseDetails = dbHelper.getExerciseDetailsByExerciseId(exercise.getId());
-                }
-
-            }
-
-            int j = 0;
-
-            for(ExerciseDetails exerciseDetail:exerciseDetails){
-                String[] getRepsArray = exerciseDetail.getReps().split(",");
-                int totalreps = 0;
-
-                for(int i = 0; i < getRepsArray.length; i++){
-                    if(getRepsArray[i].trim().equals("")){
-                        totalreps = totalreps + 0;
-                    } else {
-                        totalreps = totalreps + Integer.parseInt(getRepsArray[i].trim());
-                    }
-
-                }
-
-                String dateee = dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId());
-                String[] parts = dateee.split(" ");
-                xLabels.add(parts[1]);
-
-                entries.add(new Entry(j,totalreps));
-                j++;
-            }
-
-            LineDataSet dataSet = new LineDataSet(entries, "");
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            dataSet.setLineWidth(8);
-            dataSet.setValueTextSize(20);
-
-            dataSet.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return String.format(Locale.getDefault(), "%.0f", value);
-                }
-            });
-
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-
-            // Refresh chart
-            chart.invalidate();
-
-        }
     }
 
     private void yearsAttribute(){
@@ -498,79 +939,37 @@ public class ExerciseGraph extends AppCompatActivity {
 
         monthsChart.setTextColor(Color.BLACK);
         monthsChart.setBackgroundResource(R.drawable.textview_frame_black);
-
-        if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
-            entries.clear();
-            exerciseDetails.clear();
-            xLabels.clear();
-
-            for(Exercise exercise:exercises){
-                if(exercise.getName().equals(selectedExerciseOption)){
-                    exerciseDetails = dbHelper.getExerciseDetailsByExerciseId(exercise.getId());
-                }
-
-            }
-
-            int j = 0;
-
-            for(ExerciseDetails exerciseDetail:exerciseDetails){
-                String[] getRepsArray = exerciseDetail.getReps().split(",");
-                int totalreps = 0;
-
-                for(int i = 0; i < getRepsArray.length; i++){
-                    if(getRepsArray[i].trim().equals("")){
-                        totalreps = totalreps + 0;
-                    } else {
-                        totalreps = totalreps + Integer.parseInt(getRepsArray[i].trim());
-                    }
-
-                }
-
-                String dateee = dbHelper.getWorkoutDate(exerciseDetail.getWorkoutId());
-                String[] parts = dateee.split(" ");
-                xLabels.add(parts[2]);
-
-                entries.add(new Entry(j,totalreps));
-                j++;
-            }
-
-            LineDataSet dataSet = new LineDataSet(entries, "");
-            LineData lineData = new LineData(dataSet);
-            chart.setData(lineData);
-            dataSet.setLineWidth(8);
-            dataSet.setValueTextSize(20);
-
-            dataSet.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return String.format(Locale.getDefault(), "%.0f", value);
-                }
-            });
-
-            xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-
-            // Refresh chart
-            chart.invalidate();
-
-        }
     }
 
-    private void setupSpinner(){
-        exercises = dbHelper.getAllExercises();
-        exerciseNames = new ArrayList<>();
-        exerciseNames.add("Select an exercise");
-
-        for (Exercise exercise : exercises) {
-            exerciseNames.add(exercise.getName());
+    private int getTotalReps(String exerciseDetail){
+        String[] exerciseDetailArray = exerciseDetail.split(",");
+        int totalreps = 0;
+        for(int i = 0; i < exerciseDetailArray.length; i++){
+            if(exerciseDetailArray[i].trim().equals("")){
+            } else {
+                totalreps = totalreps + Integer.parseInt(exerciseDetailArray[i].trim());
+            }
         }
+        return totalreps;
+    }
 
-        GraphSpinnerAdapter exerciseAdapter = new GraphSpinnerAdapter
-                (this, android.R.layout.simple_spinner_item, exerciseNames);
+    private int getMaximumWeight(String exerciseDetail){
+        String[] exerciseDetailArray = exerciseDetail.split(",");
+        int maxWeight = 0;
+        for(int i = 0; i < exerciseDetailArray.length; i++){
+            if(exerciseDetailArray[i].trim().equals("")){
+            } else {
+                if(maxWeight < Integer.parseInt(exerciseDetailArray[i].trim())){
+                    maxWeight = Integer.parseInt(exerciseDetailArray[i].trim());
+                }
+            }
+        }
+        return maxWeight;
+    }
 
-        exerciseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        exercise.setAdapter(exerciseAdapter);
-        exercise.setSelection(0, false);
-
+    private int getWorkoutDuration(String duration){
+        int durationInMinutes = Integer.parseInt(duration) / (1000 * 60);
+        return durationInMinutes;
     }
 
 }

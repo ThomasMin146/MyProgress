@@ -17,6 +17,7 @@ import java.io.OutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -376,6 +377,64 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return exerciseList;
     }
 
+    public ArrayList<String> getSelectedExerciseDetailsData(String exerciseName, String attribute, String timeSpan){
+        ArrayList<String> exerciseListData = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+
+        int exerciseID = getExerciseIdByName(exerciseName);
+
+        String selection = "exercise_id = ?";
+        String[] selectionArgs = { String.valueOf(exerciseID) };
+
+        Cursor cursor = db.query("ExerciseDetails", null, selection, selectionArgs, null, null, null);
+
+        while (cursor.moveToNext()) {
+            String data = cursor.getString(cursor.getColumnIndexOrThrow(attribute));
+
+            exerciseListData.add(data);
+        }
+
+        cursor.close();
+        db.close();
+
+        return exerciseListData;
+    }
+
+    public ArrayList<Integer> getWorkoutIDsBetweenDates(String startDate) {
+        // Get a readable database instance from the helper
+        SQLiteDatabase db = getReadableDatabase();
+        ArrayList<Integer> workoutIDsList = new ArrayList<>();
+
+        // Get today's date
+        Date today = new Date();
+
+        // Parse the start date from the parameter
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        Date start;
+        try {
+            start = dateFormat.parse(startDate);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // Return null if the start date is not valid
+        }
+
+        // Calculate the end date as today's date
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(today);
+        Date end = calendar.getTime();
+
+        // Perform the query
+
+        String selection = "date BETWEEN ? AND ?";
+        String[] selectionArgs = {dateFormat.format(start), dateFormat.format(end)};
+        Cursor cursor = db.query("Workouts", null, selection, selectionArgs, null, null, null);
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            workoutIDsList.add(id);
+        }
+        return workoutIDsList;
+    }
+
     public ArrayList<ExerciseDetails> getExerciseDetailsByExerciseId(int exerciseId) {
         ArrayList<ExerciseDetails> exerciseList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
@@ -401,7 +460,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         return exerciseList;
     }
-
 
     public ArrayList<Exercise> getAllExercises() {
         ArrayList<Exercise> exercises = new ArrayList<>();
@@ -464,6 +522,23 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
         db.close();
         return exerciseName;
+    }
+
+    public int getExerciseIdByName(String exerciseName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        int exerciseId = -1; // Default value if exercise not found
+
+        String query = "SELECT id FROM Exercises WHERE name = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{exerciseName});
+
+        if (cursor.moveToFirst()) {
+            exerciseId = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+        }
+
+        cursor.close();
+        db.close();
+
+        return exerciseId;
     }
 
     public void updateExerciseDetailsWorkoutID(long workoutId) {
