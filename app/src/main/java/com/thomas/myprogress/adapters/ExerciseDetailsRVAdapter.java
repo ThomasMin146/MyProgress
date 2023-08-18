@@ -78,8 +78,12 @@ public class ExerciseDetailsRVAdapter extends RecyclerView.Adapter<ExerciseDetai
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    //exerciseInfo.get(getAdapterPosition()).setReps(s.toString());
-                    repList.set(getAdapterPosition(), s.toString());
+                    if(s.toString().isEmpty()){
+                        repList.set(getAdapterPosition(), "0");
+                    } else {
+                        repList.set(getAdapterPosition(), s.toString());
+                    }
+
                 }
 
                 @Override
@@ -96,7 +100,12 @@ public class ExerciseDetailsRVAdapter extends RecyclerView.Adapter<ExerciseDetai
 
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    weightList.set(getAdapterPosition(), s.toString());
+                    if(s.toString().isEmpty()){
+                        weightList.set(getAdapterPosition(), "0");
+                    } else {
+                        weightList.set(getAdapterPosition(), s.toString());
+                    }
+
                 }
 
                 @Override

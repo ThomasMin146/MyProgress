@@ -22,6 +22,7 @@ public class UpdateExercise extends AppCompatActivity {
     DataBaseHelper dbHelper;
     String selectedBodypartOption;
     String selectedDifficultyOption;
+    String workoutName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,8 @@ public class UpdateExercise extends AppCompatActivity {
         updateExerciseButton = findViewById(R.id.updateExerciseButton);
         bodypart = findViewById(R.id.bodyPartOfNewExercise);
         difficulty = findViewById(R.id.difficultyOfNewExercise);
+
+        workoutName = getIntent().getStringExtra("WorkoutName");
 
         createExerciseButton.setVisibility(View.GONE);
         updateExerciseButton.setVisibility(View.VISIBLE);
@@ -79,6 +82,7 @@ public class UpdateExercise extends AppCompatActivity {
             dbHelper.updateExercise(id, nameOfNewExercise.getText().toString(), selectedBodypartOption, selectedDifficultyOption);
 
             Intent intent = new Intent(UpdateExercise.this, AddExercise.class);
+            intent.putExtra("WorkoutName", workoutName);
             startActivity(intent);
         });
 

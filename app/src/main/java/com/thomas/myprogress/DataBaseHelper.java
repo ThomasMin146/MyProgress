@@ -195,6 +195,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return workoutDuration;
     }
 
+    public int getLastWorkoutId() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = { "id" };
+        String sortOrder = "id DESC"; // Order by ID in descending order
+        try (Cursor cursor = db.query("Workouts", projection, null, null, null, null, sortOrder)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getInt(cursor.getColumnIndexOrThrow("id"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return -1; // No workouts found or an error occurred
+    }
+
 
     // Add a new row to the Exercises table
     public long addExercise(String name, String bodypart, String difficulty) {
@@ -223,7 +238,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     }
 
     // Update a row in the Workouts table
-    public int updateWorkout(long workoutId, String name, String date, int workingTime, int restingTime) {
+    public int updateWorkout(long workoutId, String name, String date, long workingTime, long restingTime) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("name", name);
@@ -235,6 +250,34 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         int count = db.update("Workouts", values, selection, selectionArgs);
         db.close();
         return count;
+    }
+
+    public int updateWorkoutName(long workoutId, String newName) {
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("name", newName);
+        String selection = "id=?";
+        String[] selectionArgs = { String.valueOf(workoutId) };
+        int count = db.update("Workouts", values, selection, selectionArgs);
+        db.close();
+        return count;
+    }
+
+    public String getWorkoutName(int workoutID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] projection = { "name" };
+        String selection = "id = ?";
+        String[] selectionArgs = { String.valueOf(workoutID) };
+
+        try (Cursor cursor = db.query("Workouts", projection, selection, selectionArgs, null, null, null)) {
+            if (cursor != null && cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndexOrThrow("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null; // Workout name not found
     }
 
     // Update a row in the Exercises table

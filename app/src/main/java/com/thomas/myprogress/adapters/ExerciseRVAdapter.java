@@ -23,14 +23,13 @@ public class ExerciseRVAdapter extends RecyclerView.Adapter<ExerciseRVAdapter.Ex
     ArrayList<Exercise> exercises;
     RVInterface rvInterface;
     long workoutId;
-    String workoutName;
 
-    public ExerciseRVAdapter(Context context, ArrayList<Exercise> exercises, RVInterface rvInterface, long workoutId, String workoutName){
+
+    public ExerciseRVAdapter(Context context, ArrayList<Exercise> exercises, RVInterface rvInterface, long workoutId){
         this.context = context;
         this.exercises = exercises;
         this.rvInterface = rvInterface;
         this.workoutId = workoutId;
-        this.workoutName = workoutName;
     }
 
     @NonNull
@@ -44,12 +43,9 @@ public class ExerciseRVAdapter extends RecyclerView.Adapter<ExerciseRVAdapter.Ex
 
     @Override
     public void onBindViewHolder(@NonNull ExerciseViewHolder holder, int position) {
-        // Set the data for each item
-        // here add text from database
         holder.name.setText(exercises.get(position).getName());
         holder.bodypart.setText(exercises.get(position).getBodypart());
         holder.difficulty.setText(exercises.get(position).getDifficulty());
-
     }
 
     @Override

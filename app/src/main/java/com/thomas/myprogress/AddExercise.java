@@ -25,7 +25,6 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     DataBaseHelper dbHelper;
     Button createExercise;
     EditText searchEditText;
-    String workoutName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +39,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
 
         exercises = dbHelper.getAllExercises();
 
-        workoutName = getIntent().getStringExtra("WorkoutName");
-
-        addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, -1, workoutName);
+        addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, dbHelper.getLastWorkoutId());
         exerciseRV.setAdapter(addExerciseAdapter);
         exerciseRV.setLayoutManager(new LinearLayoutManager(this));
 
@@ -114,7 +111,6 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     public void onAddItemClick(int position) {
         Intent intent = new Intent(AddExercise.this, StartWorkoutPage.class);
         intent.putExtra("ExerciseId", exercises.get(position).getId());
-        intent.putExtra("WorkoutName", workoutName);
         intent.putExtra("ExerciseName", exercises.get(position).getName());
         startActivity(intent);
     }

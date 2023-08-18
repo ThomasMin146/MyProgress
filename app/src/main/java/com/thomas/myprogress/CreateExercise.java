@@ -20,6 +20,7 @@ public class CreateExercise extends AppCompatActivity {
     DataBaseHelper dbHelper;
     String selectedBodypartOption;
     String selectedDifficultyOption;
+    String workoutName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class CreateExercise extends AppCompatActivity {
         nameOfNewExercise = findViewById(R.id.nameOfNewExercise);
         bodypart = findViewById(R.id.bodyPartOfNewExercise);
         difficulty = findViewById(R.id.difficultyOfNewExercise);
+
+        workoutName = getIntent().getStringExtra("WorkoutName");
 
         createExerciseButton = findViewById(R.id.createExerciseButton);
 
@@ -53,6 +56,7 @@ public class CreateExercise extends AppCompatActivity {
             long exerciseId = dbHelper.addExercise(nameOfNewExercise.getText().toString(), selectedBodypartOption, selectedDifficultyOption);
             Intent intent = new Intent(CreateExercise.this, AddExercise.class);
             intent.putExtra("exerciseId", exerciseId);
+            intent.putExtra("WorkoutName", workoutName);
             startActivity(intent);
         });
 
