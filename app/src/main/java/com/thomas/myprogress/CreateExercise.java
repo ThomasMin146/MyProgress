@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.thomas.myprogress.adapters.CustomSpinnerAdapter;
 
@@ -20,7 +21,7 @@ public class CreateExercise extends AppCompatActivity {
     DataBaseHelper dbHelper;
     String selectedBodypartOption;
     String selectedDifficultyOption;
-    String workoutName;
+    TextView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +33,7 @@ public class CreateExercise extends AppCompatActivity {
         nameOfNewExercise = findViewById(R.id.nameOfNewExercise);
         bodypart = findViewById(R.id.bodyPartOfNewExercise);
         difficulty = findViewById(R.id.difficultyOfNewExercise);
-
-        workoutName = getIntent().getStringExtra("WorkoutName");
-
+        backBtn = findViewById(R.id.backButton);
         createExerciseButton = findViewById(R.id.createExerciseButton);
 
         String[] bodypartOptions = {"Select a bodypart", "LEGS", "ABS", "CORE", "TRICEPS", "BICEPS", "CHEST", "BACK", "SHOULDERS"};
@@ -52,11 +51,15 @@ public class CreateExercise extends AppCompatActivity {
         bodypart.setSelection(0, false);
         difficulty.setSelection(0, false);
 
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(CreateExercise.this, AddExercise.class);
+            startActivity(intent);
+        });
+
         createExerciseButton.setOnClickListener(v -> {
             long exerciseId = dbHelper.addExercise(nameOfNewExercise.getText().toString(), selectedBodypartOption, selectedDifficultyOption);
             Intent intent = new Intent(CreateExercise.this, AddExercise.class);
             intent.putExtra("exerciseId", exerciseId);
-            intent.putExtra("WorkoutName", workoutName);
             startActivity(intent);
         });
 

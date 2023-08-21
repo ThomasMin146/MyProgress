@@ -1,10 +1,13 @@
 package com.thomas.myprogress;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,8 +18,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.thomas.myprogress.adapters.WorkoutRVAdapter;
 import com.thomas.myprogress.models.ExerciseDetails;
 
@@ -34,9 +35,9 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
     RecyclerView exerciseRecyclerView;
     WorkoutRVAdapter exerciseAdapter;
     EditText workoutName;
-    boolean isWorking;
-    long workingTime, restingTime;
-
+    boolean isWorking, isRunning;
+    long workingTime, restingTime, elapsedTime;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,10 +46,17 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
         dbHelper = new DataBaseHelper(this);
         stopwatch = new Stopwatch();
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
-        isWorking = false;
-        workingTime = 0;
-        restingTime = 0;
+        // Read data from SharedPreferences
+        isWorking = sharedPreferences.getBoolean("isWorking", false);
+        isRunning = sharedPreferences.getBoolean("isRunning", false);
+        elapsedTime = sharedPreferences.getLong("elapsed_time", 0L);
+
+        Log.d("test", String.valueOf(isRunning));
+
+        workingTime = dbHelper.getWorkingTimeForId(dbHelper.getLastWorkoutId());
+        restingTime = dbHelper.getRestingTimeForId(dbHelper.getLastWorkoutId());
 
         exerciseDetails = dbHelper.getExerciseDetailsByWorkoutId(dbHelper.getLastWorkoutId());
 
@@ -70,6 +78,48 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         exerciseAdapter = new WorkoutRVAdapter(this, exerciseDetails, this);
         exerciseRecyclerView.setAdapter(exerciseAdapter);
         exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        stopwatch.setElapsedTime(elapsedTime);
+
+        long elapsedMillis = stopwatch.getElapsedTime();
+        String formattedTime = formatTime(elapsedMillis);
+        minTime.setText(formattedTime);
+        if(isWorking) minTime.setBackgroundColor(Color.RED);
+        else minTime.setBackgroundColor(Color.GREEN);
+
+        if(isRunning && elapsedTime != 0L){
+            stopwatch.resume();
+            stopButton.setVisibility(View.GONE);
+            resumeButton.setVisibility(View.GONE);
+            setButton.setVisibility(View.VISIBLE);
+            playButton.setVisibility(View.GONE);
+            pauseButton.setVisibility(View.VISIBLE);
+
+            if(isWorking) minTime.setBackgroundColor(Color.RED);
+            else minTime.setBackgroundColor(Color.GREEN);
+        }
+
+        if(!isRunning && elapsedTime == 0L)  {
+            stopButton.setVisibility(View.GONE);
+            resumeButton.setVisibility(View.GONE);
+            setButton.setVisibility(View.GONE);
+            playButton.setVisibility(View.VISIBLE);
+            pauseButton.setVisibility(View.GONE);
+
+            if(isWorking) minTime.setBackgroundColor(Color.RED);
+            else minTime.setBackgroundColor(Color.GREEN);
+        }
+
+        if(!isRunning && elapsedTime != 0L){
+            stopButton.setVisibility(View.VISIBLE);
+            resumeButton.setVisibility(View.VISIBLE);
+            setButton.setVisibility(View.GONE);
+            playButton.setVisibility(View.GONE);
+            pauseButton.setVisibility(View.GONE);
+
+            if(isWorking) minTime.setBackgroundColor(Color.RED);
+            else minTime.setBackgroundColor(Color.GREEN);
+        }
 
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -103,16 +153,16 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         });
 
         backButton.setOnClickListener(v -> {
-            Intent intent = new Intent(StartWorkoutPage.this, HomePage.class);
-            intent.putExtra("WorkoutName", workoutName.getText().toString());
-            startActivity(intent);
+            Intent intent3 = new Intent(StartWorkoutPage.this, HomePage.class);
+            startActivity(intent3);
         });
 
         playButton.setOnClickListener(v -> {
             stopwatch.start();
             isWorking = true;
-            minTime.setBackgroundColor(Color.RED);
 
+
+            minTime.setBackgroundColor(Color.RED);
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
             setButton.setVisibility(View.VISIBLE);
@@ -120,6 +170,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
         pauseButton.setOnClickListener(v -> {
             stopwatch.pause();
+
             setButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.GONE);
             stopButton.setVisibility(View.VISIBLE);
@@ -144,29 +195,41 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         });
 
         setButton.setOnClickListener(v -> {
+            Date currentDate = new Date();
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+            String formattedDate2 = dateFormat2.format(currentDate);
 
             if(isWorking){
                 minTime.setBackgroundColor(Color.GREEN);
-                workingTime = workingTime + stopwatch.getElapsedTime();
+                workingTime = dbHelper.getWorkingTimeForId(dbHelper.getLastWorkoutId()) + stopwatch.getElapsedTime();
 
                 isWorking = false;
+
             } else {
                 minTime.setBackgroundColor(Color.RED);
-                restingTime = restingTime + stopwatch.getElapsedTime();
+                restingTime = dbHelper.getRestingTimeForId(dbHelper.getLastWorkoutId()) + stopwatch.getElapsedTime();
 
                 isWorking = true;
             }
+
+            Log.d("test", "Working time: "+workingTime);
+            Log.d("test", "Resting time: "+restingTime);
+
+            dbHelper.updateWorkout(dbHelper.getLastWorkoutId(), workoutName.getText().toString()
+                    , formattedDate2, workingTime, restingTime);
 
             stopwatch.reset();
             stopwatch.start();
         });
 
         addButton.setOnClickListener(v -> {
-            Intent intent = new Intent(StartWorkoutPage.this, AddExercise.class);
-            startActivity(intent);
+            Intent intent2 = new Intent(StartWorkoutPage.this, AddExercise.class);
+            startActivity(intent2);
         });
 
         saveWorkout.setOnClickListener(v -> {
+            stopwatch.reset();
+
             Date currentDate = new Date();
             SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate2 = dateFormat2.format(currentDate);
@@ -177,16 +240,22 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
                 restingTime = restingTime + stopwatch.getElapsedTime();
             }
 
-            dbHelper.updateWorkout(dbHelper.getLastWorkoutId(), workoutName.getText().toString(), formattedDate2, workingTime, restingTime);
+            if(workoutName.getText().toString().trim().isEmpty()){
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Workout couldn't be saved");
+                builder.setMessage("Please provide a name for your workout before saving.");
+                builder.setNeutralButton("Ok", (null));
+                builder.show();
 
-            dbHelper.updateExerciseDetailsWorkoutID(dbHelper.getLastWorkoutId());
-
-            Intent intent = new Intent(StartWorkoutPage.this, HomePage.class);
-            HomePage.isLastWorkoutSaved = true;
-            startActivity(intent);
-
+            } else{
+                dbHelper.updateWorkout(dbHelper.getLastWorkoutId(), workoutName.getText().toString(), formattedDate2, workingTime, restingTime);
+                dbHelper.updateExerciseDetailsWorkoutID(dbHelper.getLastWorkoutId());
+                isWorking = false;
+                Intent intent1 = new Intent(StartWorkoutPage.this, HomePage.class);
+                HomePage.isLastWorkoutSaved = true;
+                startActivity(intent1);
+            }
         });
-
     }
 
     private String formatTime(long elapsedMillis) {
@@ -200,8 +269,6 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent(StartWorkoutPage.this, ChosenExercise.class);
-
-        intent.putExtra("WorkoutName", workoutName.getText().toString());
 
         intent.putExtra("Name", dbHelper.getExerciseName(exerciseDetails.get(position).getExerciseId()));
         intent.putExtra("ID", String.valueOf(exerciseDetails.get(position).getId()));
@@ -219,5 +286,17 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
     }
 
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        // Write data to SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("elapsed_time", stopwatch.getElapsedTime()); // Example elapsed time value
+        editor.putBoolean("isRunning", stopwatch.isRunning()); // Example isRunning value
+        editor.putBoolean("isWorking", isWorking); // Example isWorking value
+        editor.apply(); // Commit changes
+
+    }
 
 }

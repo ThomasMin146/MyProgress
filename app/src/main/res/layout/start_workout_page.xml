@@ -108,6 +108,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/minTime"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:visibility="gone"
             tools:ignore="NotSibling">
 
         </Button>

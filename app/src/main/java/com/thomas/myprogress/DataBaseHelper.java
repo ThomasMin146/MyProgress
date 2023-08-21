@@ -141,60 +141,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         return newRowId;
     }
 
-    public String getWorkoutDate(int workoutId) {
-        SQLiteDatabase db = getReadableDatabase();
-        String[] projection = {"date"};
-        String selection = "id = ?";
-        String[] selectionArgs = {String.valueOf(workoutId)};
-
-        Cursor cursor = db.query("Workouts", projection, selection, selectionArgs, null, null, null);
-
-        String formattedDate = "Date not found";
-        if (cursor != null && cursor.moveToFirst()) {
-            int dateColumnIndex = cursor.getColumnIndexOrThrow("date");
-            String dbDate = cursor.getString(dateColumnIndex);
-
-            SimpleDateFormat dbDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.getDefault());
-
-            try {
-                Date date = dbDateFormat.parse(dbDate);
-                formattedDate = displayDateFormat.format(date);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            cursor.close();
-        }
-
-        db.close();
-
-        return formattedDate;
-    }
-
-    public int getWorkoutDuration(int workoutId) {
-        SQLiteDatabase db = this.getReadableDatabase();
-
-        // Query the database to get the workingTime and restingTime for the given workoutId
-        String query = "SELECT workingTime, restingTime FROM Workouts WHERE id = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{String.valueOf(workoutId)});
-
-        int workingTime = 0;
-        int restingTime = 0;
-
-        if (cursor.moveToFirst()) {
-            workingTime = cursor.getInt(cursor.getColumnIndexOrThrow("workingTime"));
-            restingTime = cursor.getInt(cursor.getColumnIndexOrThrow("restingTime"));
-        }
-
-        cursor.close();
-        db.close();
-
-        // Calculate the workout duration by adding workingTime and restingTime
-        int workoutDuration = workingTime + restingTime;
-        return workoutDuration;
-    }
-
     public int getLastWorkoutId() {
         SQLiteDatabase db = this.getReadableDatabase();
         String[] projection = { "id" };
@@ -235,6 +181,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         long newRowId = db.insert("ExerciseDetails", null, values);
         db.close();
         return newRowId;
+    }
+
+    public int deleteExerciseDetailsByWorkoutId(long workoutId) {
+        SQLiteDatabase db = getWritableDatabase();
+        String whereClause = "workout_id=?";
+        String[] whereArgs = { String.valueOf(workoutId) };
+        int deletedRowCount = db.delete("ExerciseDetails", whereClause, whereArgs);
+        db.close();
+        return deletedRowCount;
     }
 
     // Update a row in the Workouts table
@@ -597,7 +552,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public ArrayList<Workout> getAllWorkouts() {
         ArrayList<Workout> workoutList = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.query("Workouts", null, null, null, null, null, "date DESC");
+        Cursor cursor = db.query("Workouts", null, null, null, null, null, "id DESC");
 
         while (cursor.moveToNext()) {
             int id = cursor.getInt(cursor.getColumnIndexOrThrow("id"));
@@ -624,6 +579,48 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 
         return workoutList;
+    }
+
+    public int getWorkingTimeForId(int id) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] columns = {"workingTime"};
+        String selection = "id = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        Cursor cursor = db.query("Workouts", columns, selection, selectionArgs, null, null, null);
+
+        int workingTime = 0; // Default value
+
+        if (cursor.moveToFirst()) {
+            workingTime = cursor.getInt(cursor.getColumnIndexOrThrow("workingTime"));
+        }
+
+        cursor.close();
+        db.close();
+
+        return workingTime;
+    }
+
+    public int getRestingTimeForId(int id) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String[] columns = {"restingTime"};
+        String selection = "id = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        Cursor cursor = db.query("Workouts", columns, selection, selectionArgs, null, null, null);
+
+        int restingTime = 0; // Default value
+
+        if (cursor.moveToFirst()) {
+            restingTime = cursor.getInt(cursor.getColumnIndexOrThrow("restingTime"));
+        }
+
+        cursor.close();
+        db.close();
+
+        return restingTime;
     }
 
 

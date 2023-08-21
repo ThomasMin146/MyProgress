@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.thomas.myprogress.adapters.ExerciseRVAdapter;
 import com.thomas.myprogress.models.Exercise;
@@ -25,6 +26,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     DataBaseHelper dbHelper;
     Button createExercise;
     EditText searchEditText;
+    TextView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +38,18 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         exerciseRV = findViewById(R.id.exerciseRV);
         createExercise = findViewById(R.id.createExercise);
         searchEditText = findViewById(R.id.searchExerciseET);
+        backBtn = findViewById(R.id.backButton);
 
         exercises = dbHelper.getAllExercises();
 
         addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, dbHelper.getLastWorkoutId());
         exerciseRV.setAdapter(addExerciseAdapter);
         exerciseRV.setLayoutManager(new LinearLayoutManager(this));
+
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(AddExercise.this, StartWorkoutPage.class);
+            startActivity(intent);
+        });
 
         createExercise.setOnClickListener(v -> {
             Intent intent = new Intent(AddExercise.this, CreateExercise.class);

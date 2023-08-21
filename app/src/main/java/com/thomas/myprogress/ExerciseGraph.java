@@ -2,6 +2,7 @@ package com.thomas.myprogress;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,7 +40,7 @@ public class ExerciseGraph extends AppCompatActivity {
     Spinner exercise;
     String selectedExerciseOption, typeOfData, timeSpan;
     DataBaseHelper dbHelper;
-    TextView repsChart, weightChart, timeChart, monthsChart, yearsChart, daysChart;
+    TextView repsChart, weightChart, timeChart, monthsChart, yearsChart, daysChart, backBtn;
     LineChart chart;
     List<Entry> entries;
     ArrayList<Exercise> exercises;
@@ -74,6 +75,7 @@ public class ExerciseGraph extends AppCompatActivity {
         monthsChart = findViewById(R.id.monthsChart);
         daysChart = findViewById(R.id.daysChart);
 
+        backBtn = findViewById(R.id.backButton);
         chart = findViewById(R.id.graph); //assign chart from layout
 
         //Setup spinner
@@ -134,6 +136,11 @@ public class ExerciseGraph extends AppCompatActivity {
             public String getFormattedValue(float value) {
                 return String.valueOf((int) value);
             }
+        });
+
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(ExerciseGraph.this, HomePage.class);
+            startActivity(intent);
         });
 
         repsChart.setOnClickListener(v -> {

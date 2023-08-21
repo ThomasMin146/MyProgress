@@ -15,7 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.thomas.myprogress.adapters.CustomSpinnerAdapter;
 
 public class UpdateExercise extends AppCompatActivity {
-    TextView exercise;
+    TextView exercise, backBtn;
     EditText nameOfNewExercise;
     Button createExerciseButton, updateExerciseButton;
     Spinner bodypart, difficulty;
@@ -37,8 +37,7 @@ public class UpdateExercise extends AppCompatActivity {
         updateExerciseButton = findViewById(R.id.updateExerciseButton);
         bodypart = findViewById(R.id.bodyPartOfNewExercise);
         difficulty = findViewById(R.id.difficultyOfNewExercise);
-
-        workoutName = getIntent().getStringExtra("WorkoutName");
+        backBtn = findViewById(R.id.backButton);
 
         createExerciseButton.setVisibility(View.GONE);
         updateExerciseButton.setVisibility(View.VISIBLE);
@@ -77,12 +76,16 @@ public class UpdateExercise extends AppCompatActivity {
             }
         }
 
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(UpdateExercise.this, AddExercise.class);
+            startActivity(intent);
+        });
+
         updateExerciseButton.setOnClickListener(v -> {
             int id = getIntent().getIntExtra("ID", -1);
             dbHelper.updateExercise(id, nameOfNewExercise.getText().toString(), selectedBodypartOption, selectedDifficultyOption);
 
             Intent intent = new Intent(UpdateExercise.this, AddExercise.class);
-            intent.putExtra("WorkoutName", workoutName);
             startActivity(intent);
         });
 

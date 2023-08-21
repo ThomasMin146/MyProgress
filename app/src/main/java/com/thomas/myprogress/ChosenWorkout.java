@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -14,9 +15,8 @@ import com.thomas.myprogress.models.ExerciseDetails;
 
 import java.util.ArrayList;
 
-public class ChosenWorkout extends AppCompatActivity implements RVInterface{
-
-    TextView workoutName;
+public class ChosenWorkout extends AppCompatActivity {
+    TextView workoutName, backBtn;
     ArrayList<ExerciseDetails> exerciseDetails;
     DataBaseHelper dbHelper;
     RecyclerView exerciseRecyclerView;
@@ -29,32 +29,23 @@ public class ChosenWorkout extends AppCompatActivity implements RVInterface{
 
         workoutName = findViewById(R.id.workoutName);
         exerciseRecyclerView = findViewById(R.id.workoutRecyclerView);
+        backBtn = findViewById(R.id.backButton);
+
         dbHelper = new DataBaseHelper(this);
 
-        workoutName.setText(getIntent().getStringExtra("name"));
-
         int workoutid = getIntent().getIntExtra("id", -1);
+        String workoutNameString = getIntent().getStringExtra("name");
+        workoutName.setText(workoutNameString);
         exerciseDetails = dbHelper.getExerciseDetailsByWorkoutId(workoutid);
 
-        //exerciseDetails = new ArrayList<>();
-        //exerciseDetails.add(new ExerciseDetails(300,300,300,"1", "5", "10"));
-
-
-
-        exerciseAdapter = new ExerciseDetailsHistoryRVAdapter(this, exerciseDetails, this);
+        exerciseAdapter = new ExerciseDetailsHistoryRVAdapter(this, exerciseDetails);
         exerciseRecyclerView.setAdapter(exerciseAdapter);
         exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(ChosenWorkout.this, WorkoutHistory.class);
+            startActivity(intent);
+        });
     }
 
-    @Override
-    public void onItemClick(int position) {
-
-    }
-
-    @Override
-    public void onAddItemClick(int position) {
-
-    }
 }

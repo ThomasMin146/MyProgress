@@ -8,13 +8,33 @@
     android:weightSum="7"
     tools:context=".ChosenWorkout">
 
-    <Spinner
-        android:id="@+id/exercise"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="7">
+
+        <TextView
+            android:id="@+id/backButton"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_marginTop="10dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/baseline_arrow_back_24"
+            />
+
+        <Spinner
+            android:id="@+id/exercise"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_weight="6"/>
+
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"

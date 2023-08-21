@@ -26,8 +26,6 @@ public class HomePage extends AppCompatActivity {
         exerciseGraphCard = findViewById(R.id.exerciseGraphCard);
         dbHelper = new DataBaseHelper(this);
 
-        Log.d("test", String.valueOf(isLastWorkoutSaved));
-
         startWorkoutCard.setOnClickListener(v -> {
             Intent intent = new Intent(HomePage.this, StartWorkoutPage.class);
 
@@ -36,7 +34,7 @@ public class HomePage extends AppCompatActivity {
                 SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
                 String formattedDate = dateFormat2.format(currentDate);
 
-                dbHelper.addWorkout("Workout", formattedDate, 0L, 0L);
+                dbHelper.addWorkout("", formattedDate, 0L, 0L);
                 isLastWorkoutSaved = false;
             }
 

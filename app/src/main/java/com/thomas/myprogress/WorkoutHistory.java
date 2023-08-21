@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.thomas.myprogress.adapters.WorkoutHistoryRVAdapter;
 import com.thomas.myprogress.adapters.WorkoutRVAdapter;
@@ -19,6 +20,7 @@ public class WorkoutHistory extends AppCompatActivity implements RVInterface{
     RecyclerView workoutRecyclerView;
     WorkoutHistoryRVAdapter workoutAdapter;
     DataBaseHelper dbHelper;
+    TextView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,12 +31,17 @@ public class WorkoutHistory extends AppCompatActivity implements RVInterface{
 
         workouts = dbHelper.getAllWorkouts();
 
-
         workoutRecyclerView = findViewById(R.id.workoutRecyclerView);
+        backBtn = findViewById(R.id.backButton);
 
         workoutAdapter = new WorkoutHistoryRVAdapter(this, workouts, this);
         workoutRecyclerView.setAdapter(workoutAdapter);
         workoutRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        backBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(WorkoutHistory.this, HomePage.class);
+            startActivity(intent);
+        });
 
     }
 
@@ -43,7 +50,6 @@ public class WorkoutHistory extends AppCompatActivity implements RVInterface{
         Intent intent = new Intent(WorkoutHistory.this, ChosenWorkout.class);
         intent.putExtra("name", workouts.get(position).getName());
         intent.putExtra("id", workouts.get(position).getId());
-
         startActivity(intent);
     }
 

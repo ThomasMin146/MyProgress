@@ -55,9 +55,7 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
 
         String formattedTime2 = formatTime(workouts.get(position).getRestingTime());
         holder.restTimeTV.setText(formattedTime2);
-
     }
-
 
     @Override
     public int getItemCount() {
@@ -88,7 +86,6 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
             timerTV = itemView.findViewById(R.id.timerTextView);
             restTimeTV = itemView.findViewById(R.id.restTimeTextView);
 
-
             cardView.setOnClickListener(v -> {
                 rvInterface.onItemClick(getAdapterPosition());
 
@@ -102,6 +99,7 @@ public class WorkoutHistoryRVAdapter extends RecyclerView.Adapter<WorkoutHistory
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     // Delete the item
                     dbHelper.deleteWorkout(workouts.get(getAdapterPosition()).getId());
+                    dbHelper.deleteExerciseDetailsByWorkoutId(workouts.get(getAdapterPosition()).getId());
                     workouts.remove(getAdapterPosition());
                     notifyItemRemoved(getAdapterPosition());
 
