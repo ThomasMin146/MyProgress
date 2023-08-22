@@ -34,7 +34,7 @@ public class ExerciseGraph extends AppCompatActivity {
     Spinner exercise;
     String selectedExerciseOption, typeOfData, timeSpan;
     DataBaseHelper dbHelper;
-    TextView repsChart, weightChart, timeChart, monthsChart, yearsChart, daysChart, backBtn, customMessageTextView;
+    TextView repsChart, weightChart, timeChart, monthsChart, yearsChart, daysChart, backBtn;
     LineChart chart;
     List<Entry> entries;
     ArrayList<Exercise> exercises;
@@ -69,7 +69,6 @@ public class ExerciseGraph extends AppCompatActivity {
         monthsChart = findViewById(R.id.monthsChart);
         daysChart = findViewById(R.id.daysChart);
 
-        customMessageTextView = findViewById(R.id.customMessageTextView);
 
         backBtn = findViewById(R.id.backButton);
         chart = findViewById(R.id.graph); //assign chart from layout
@@ -92,8 +91,6 @@ public class ExerciseGraph extends AppCompatActivity {
         entries = new ArrayList<>();
         xLabels = new ArrayList<>();
         data = new ArrayList<>();
-
-        emptyChartMessage();
 
         // Customize chart
         chart.setDescription(null);
@@ -224,7 +221,6 @@ public class ExerciseGraph extends AppCompatActivity {
                 });
 
                 chart.invalidate();
-                emptyChartMessage();
             }
         });
 
@@ -307,7 +303,6 @@ public class ExerciseGraph extends AppCompatActivity {
                 });
 
                 chart.invalidate();
-                emptyChartMessage();
             }
         });
 
@@ -395,7 +390,6 @@ public class ExerciseGraph extends AppCompatActivity {
                 });
 
                 chart.invalidate();
-                emptyChartMessage();
             }
         });
 
@@ -510,7 +504,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
                 xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
                 chart.invalidate();
-                emptyChartMessage();
             }
         });
 
@@ -625,7 +618,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
                 xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
                 chart.invalidate();
-                emptyChartMessage();
             }
         });
 
@@ -740,7 +732,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
                 xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
                 chart.invalidate();
-                emptyChartMessage();
             }
         });
 
@@ -877,7 +868,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
                     xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
                     chart.invalidate();
-                    emptyChartMessage();
 
                 } else {
                     // Handle the case when the initial selection is made
@@ -905,7 +895,6 @@ public class ExerciseGraph extends AppCompatActivity {
 
                     entries.clear();
                     chart.clear();
-                    emptyChartMessage();
                 }
                 // Do something with the selected option
             }
@@ -1016,15 +1005,5 @@ public class ExerciseGraph extends AppCompatActivity {
         return durationInMinutes;
     }
 
-    private void emptyChartMessage(){
-        // Check if chart data is empty
-        if (entries.isEmpty()) {
-            chart.setVisibility(View.GONE);
-            customMessageTextView.setVisibility(View.VISIBLE);
-        } else {
-            chart.setVisibility(View.VISIBLE);
-            customMessageTextView.setVisibility(View.GONE);
-        }
-    }
 
 }
