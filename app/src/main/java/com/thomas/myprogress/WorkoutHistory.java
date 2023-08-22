@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.thomas.myprogress.adapters.WorkoutHistoryRVAdapter;
-import com.thomas.myprogress.adapters.WorkoutRVAdapter;
-import com.thomas.myprogress.models.ExerciseDetails;
 import com.thomas.myprogress.models.Workout;
 
 import java.util.ArrayList;

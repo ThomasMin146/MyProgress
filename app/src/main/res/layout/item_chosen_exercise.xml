@@ -17,7 +17,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:background="@drawable/gradient_background">
 
                 <TextView
                     android:id="@+id/setsTextView"
@@ -26,7 +27,7 @@
                     android:layout_weight="1"
                     android:textSize="25sp"
                     android:gravity="center"
-                    android:hint="Sets" />
+                    android:hint="@string/sets" />
 
                 <EditText
                     android:id="@+id/editTextReps"
@@ -36,7 +37,7 @@
                     android:textSize="25sp"
                     android:gravity="center"
                     android:inputType="number"
-                    android:hint="Reps" />
+                    android:hint="@string/reps" />
 
                 <EditText
                     android:id="@+id/editTextWeight"
@@ -46,7 +47,7 @@
                     android:textSize="25sp"
                     android:gravity="center"
                     android:inputType="number"
-                    android:hint="Weight" />
+                    android:hint="@string/weight" />
 
                 <Button
                     android:id="@+id/removeRowButton"
@@ -54,7 +55,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:backgroundTint="@color/black"
-                    android:text="-"
+                    android:text="@string/minus"
                     android:textSize="25sp">
 
                 </Button>

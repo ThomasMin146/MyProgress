@@ -22,7 +22,6 @@ public class UpdateExercise extends AppCompatActivity {
     DataBaseHelper dbHelper;
     String selectedBodypartOption;
     String selectedDifficultyOption;
-    String workoutName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +58,7 @@ public class UpdateExercise extends AppCompatActivity {
 
         exercise.setText(getIntent().getStringExtra("ExerciseName"));
         nameOfNewExercise.setText(getIntent().getStringExtra("ExerciseName"));
+
 
         ArrayAdapter<String> bodypartAA = (ArrayAdapter<String>) bodypart.getAdapter();
         if (bodypartAA != null) {

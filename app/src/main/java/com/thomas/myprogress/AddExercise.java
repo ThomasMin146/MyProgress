@@ -3,20 +3,15 @@ package com.thomas.myprogress;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.thomas.myprogress.adapters.ExerciseRVAdapter;
 import com.thomas.myprogress.models.Exercise;
-
 import java.util.ArrayList;
 
 public class AddExercise extends AppCompatActivity implements RVInterface{
@@ -94,7 +89,6 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
                     itemDifficulty.contains(searchText.toLowerCase())) {
                 filteredList.add(exercise);
             }
-
 
         }
 

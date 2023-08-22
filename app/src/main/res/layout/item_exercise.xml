@@ -31,21 +31,23 @@
                 android:id="@+id/nameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:textSize="35dp"
-                android:textColor="@color/white"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:textSize="35sp"
+                android:textColor="@color/googleGreen"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Name" />
+                android:text="@string/name" />
 
             <TextView
                 android:id="@+id/repetitionTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Reps: "
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/reps_item"
                 android:textColor="@color/lightgray"
-                android:textSize="25sp"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -53,10 +55,10 @@
                 android:id="@+id/repsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Reps"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="25sp"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toEndOf="@+id/repetitionTV"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -64,10 +66,11 @@
                 android:id="@+id/bodyPartTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Sets: "
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/sets_item"
                 android:textColor="@color/lightgray"
-                android:textSize="25sp"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/repetitionTV" />
 
@@ -75,10 +78,10 @@
                 android:id="@+id/setsTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Sets"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="25sp"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toEndOf="@+id/bodyPartTV"
                 app:layout_constraintTop_toBottomOf="@+id/repsTextView" />
 
@@ -86,10 +89,11 @@
                 android:id="@+id/difficultyTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Weight: "
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/weight_item"
                 android:textColor="@color/lightgray"
-                android:textSize="25sp"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bodyPartTV" />
 
@@ -97,10 +101,10 @@
                 android:id="@+id/weightTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Weight"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="25sp"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toEndOf="@+id/difficultyTV"
                 app:layout_constraintTop_toBottomOf="@+id/setsTextView" />
 
@@ -108,9 +112,9 @@
                 android:id="@+id/deleteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="-"
+                android:text="@string/minus"
                 android:textSize="25sp"
-                android:backgroundTint="@color/red"
+                android:backgroundTint="@color/googleRed"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">

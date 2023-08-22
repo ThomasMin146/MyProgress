@@ -2,10 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="gray">#808080</color>
+    <color name="grey">#808080</color>
+    <color name="light_grey">#D3D3D3</color>
     <color name="lightgray">#D3D3D3</color>
+    <color name="gray">#808080</color>
+    <color name="dark_grey">#5A5A5A</color>
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
+    <color name="googleRed">#DB4437</color>
+    <color name="googleGreen">#0F9D58</color>
 
 
 </resources>

@@ -4,16 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.AxisBase;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -22,17 +20,13 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.thomas.myprogress.adapters.GraphSpinnerAdapter;
-import com.thomas.myprogress.chart.CustomXAxisValueFormatter;
 import com.thomas.myprogress.models.Exercise;
 import com.thomas.myprogress.models.ExerciseDetails;
 import com.thomas.myprogress.models.Workout;
-
-import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,7 +34,7 @@ public class ExerciseGraph extends AppCompatActivity {
     Spinner exercise;
     String selectedExerciseOption, typeOfData, timeSpan;
     DataBaseHelper dbHelper;
-    TextView repsChart, weightChart, timeChart, monthsChart, yearsChart, daysChart, backBtn;
+    TextView repsChart, weightChart, timeChart, monthsChart, yearsChart, daysChart, backBtn, customMessageTextView;
     LineChart chart;
     List<Entry> entries;
     ArrayList<Exercise> exercises;
@@ -75,6 +69,8 @@ public class ExerciseGraph extends AppCompatActivity {
         monthsChart = findViewById(R.id.monthsChart);
         daysChart = findViewById(R.id.daysChart);
 
+        customMessageTextView = findViewById(R.id.customMessageTextView);
+
         backBtn = findViewById(R.id.backButton);
         chart = findViewById(R.id.graph); //assign chart from layout
 
@@ -97,15 +93,20 @@ public class ExerciseGraph extends AppCompatActivity {
         xLabels = new ArrayList<>();
         data = new ArrayList<>();
 
+        emptyChartMessage();
+
         // Customize chart
         chart.setDescription(null);
         chart.setDrawBorders(true);
+        chart.setBorderWidth(4f);
         chart.getLegend().setEnabled(false);
+        chart.getXAxis().setLabelCount(4);
         chart.setViewPortOffsets(150f, 125f, 75f, 125f);
 
         // Customize Y-axis labels
         YAxis leftAxis = chart.getAxisLeft();
-        leftAxis.setTextSize(20f); // Set text size for the left Y-axis labels
+        leftAxis.setTextSize(25f); // Set text size for the left Y-axis labels
+
         leftAxis.setEnabled(true);
         leftAxis.setDrawLabels(true);
         leftAxis.setAxisMinimum(0);
@@ -122,7 +123,7 @@ public class ExerciseGraph extends AppCompatActivity {
 
         // Customize X-axis labels
         xAxis = chart.getXAxis();
-        xAxis.setTextSize(20f); // Set text size for the X-axis labels
+        xAxis.setTextSize(25f); // Set text size for the X-axis labels
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setEnabled(true);
         xAxis.setAxisMinimum(0);
@@ -147,6 +148,7 @@ public class ExerciseGraph extends AppCompatActivity {
             data.clear();
             entries.clear();
             xLabels.clear();
+
             typeOfData = "reps";
 
             if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
@@ -206,9 +208,13 @@ public class ExerciseGraph extends AppCompatActivity {
 
                 LineDataSet dataSet = new LineDataSet(entries, "");
                 LineData lineData = new LineData(dataSet);
-                chart.setData(lineData);
+                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                dataSet.setColor(Color.parseColor("#DB4437"));
                 dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(20);
+                dataSet.setValueTextSize(25);
+                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+                chart.setData(lineData);
+
 
                 dataSet.setValueFormatter(new ValueFormatter() {
                     @Override
@@ -218,6 +224,7 @@ public class ExerciseGraph extends AppCompatActivity {
                 });
 
                 chart.invalidate();
+                emptyChartMessage();
             }
         });
 
@@ -284,10 +291,13 @@ public class ExerciseGraph extends AppCompatActivity {
                 }
 
                 LineDataSet dataSet = new LineDataSet(entries, "");
+                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                dataSet.setColor(Color.parseColor("#DB4437"));
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(25);
+                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 LineData lineData = new LineData(dataSet);
                 chart.setData(lineData);
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(20);
 
                 dataSet.setValueFormatter(new ValueFormatter() {
                     @Override
@@ -297,6 +307,7 @@ public class ExerciseGraph extends AppCompatActivity {
                 });
 
                 chart.invalidate();
+                emptyChartMessage();
             }
         });
 
@@ -367,10 +378,14 @@ public class ExerciseGraph extends AppCompatActivity {
                 }
 
                 LineDataSet dataSet = new LineDataSet(entries, "");
+                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                dataSet.setColor(Color.parseColor("#DB4437"));
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(25);
+                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 LineData lineData = new LineData(dataSet);
                 chart.setData(lineData);
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(20);
+
 
                 dataSet.setValueFormatter(new ValueFormatter() {
                     @Override
@@ -380,6 +395,7 @@ public class ExerciseGraph extends AppCompatActivity {
                 });
 
                 chart.invalidate();
+                emptyChartMessage();
             }
         });
 
@@ -476,10 +492,14 @@ public class ExerciseGraph extends AppCompatActivity {
                 }
 
                 LineDataSet dataSet = new LineDataSet(entries, "");
+                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                dataSet.setColor(Color.parseColor("#DB4437"));
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(25);
+                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 LineData lineData = new LineData(dataSet);
                 chart.setData(lineData);
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(20);
+
 
                 dataSet.setValueFormatter(new ValueFormatter() {
                     @Override
@@ -490,7 +510,7 @@ public class ExerciseGraph extends AppCompatActivity {
 
                 xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
                 chart.invalidate();
-
+                emptyChartMessage();
             }
         });
 
@@ -587,10 +607,14 @@ public class ExerciseGraph extends AppCompatActivity {
                 }
 
                 LineDataSet dataSet = new LineDataSet(entries, "");
+                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                dataSet.setColor(Color.parseColor("#DB4437"));
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(25);
+                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 LineData lineData = new LineData(dataSet);
                 chart.setData(lineData);
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(20);
+
 
                 dataSet.setValueFormatter(new ValueFormatter() {
                     @Override
@@ -601,6 +625,7 @@ public class ExerciseGraph extends AppCompatActivity {
 
                 xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
                 chart.invalidate();
+                emptyChartMessage();
             }
         });
 
@@ -697,10 +722,14 @@ public class ExerciseGraph extends AppCompatActivity {
                 }
 
                 LineDataSet dataSet = new LineDataSet(entries, "");
+                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                dataSet.setColor(Color.parseColor("#DB4437"));
+                dataSet.setLineWidth(8);
+                dataSet.setValueTextSize(25);
+                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                 LineData lineData = new LineData(dataSet);
                 chart.setData(lineData);
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(20);
+
 
                 dataSet.setValueFormatter(new ValueFormatter() {
                     @Override
@@ -711,6 +740,7 @@ public class ExerciseGraph extends AppCompatActivity {
 
                 xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
                 chart.invalidate();
+                emptyChartMessage();
             }
         });
 
@@ -829,10 +859,14 @@ public class ExerciseGraph extends AppCompatActivity {
                     }
 
                     LineDataSet dataSet = new LineDataSet(entries, "");
+                    dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+                    dataSet.setColor(Color.parseColor("#DB4437"));
+                    dataSet.setLineWidth(8);
+                    dataSet.setValueTextSize(25);
+                    dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
                     LineData lineData = new LineData(dataSet);
                     chart.setData(lineData);
-                    dataSet.setLineWidth(8);
-                    dataSet.setValueTextSize(20);
+
 
                     dataSet.setValueFormatter(new ValueFormatter() {
                         @Override
@@ -843,32 +877,35 @@ public class ExerciseGraph extends AppCompatActivity {
 
                     xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
                     chart.invalidate();
+                    emptyChartMessage();
 
                 } else {
                     // Handle the case when the initial selection is made
                     selectedExerciseOption = null;
 
                     //Set attribute buttons to nothing selected
-                    weightChart.setTextColor(Color.BLACK);
+                    weightChart.setTextColor(Color.WHITE);
                     weightChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-                    repsChart.setTextColor(Color.BLACK);
+                    repsChart.setTextColor(Color.WHITE);
                     repsChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-                    timeChart.setTextColor(Color.BLACK);
+                    timeChart.setTextColor(Color.WHITE);
                     timeChart.setBackgroundResource(R.drawable.textview_frame_black);
 
                     //Set timespan buttons to nothing selected
-                    daysChart.setTextColor(Color.BLACK);
+                    daysChart.setTextColor(Color.WHITE);
                     daysChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-                    monthsChart.setTextColor(Color.BLACK);
+                    monthsChart.setTextColor(Color.WHITE);
                     monthsChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-                    yearsChart.setTextColor(Color.BLACK);
+                    yearsChart.setTextColor(Color.WHITE);
                     yearsChart.setBackgroundResource(R.drawable.textview_frame_black);
 
+                    entries.clear();
                     chart.clear();
+                    emptyChartMessage();
                 }
                 // Do something with the selected option
             }
@@ -883,68 +920,68 @@ public class ExerciseGraph extends AppCompatActivity {
     }
 
     public void repsAttribute(){
-        weightChart.setTextColor(Color.BLACK);
+        weightChart.setTextColor(Color.WHITE);
         weightChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-        repsChart.setTextColor(Color.RED);
+        repsChart.setTextColor(Color.parseColor("#DB4437"));
         repsChart.setBackgroundResource(R.drawable.textview_frame_red);
 
-        timeChart.setTextColor(Color.BLACK);
+        timeChart.setTextColor(Color.WHITE);
         timeChart.setBackgroundResource(R.drawable.textview_frame_black);
     }
 
     public void weightAttribute(){
-        weightChart.setTextColor(Color.RED);
+        weightChart.setTextColor(Color.parseColor("#DB4437"));
         weightChart.setBackgroundResource(R.drawable.textview_frame_red);
 
-        repsChart.setTextColor(Color.BLACK);
+        repsChart.setTextColor(Color.WHITE);
         repsChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-        timeChart.setTextColor(Color.BLACK);
+        timeChart.setTextColor(Color.WHITE);
         timeChart.setBackgroundResource(R.drawable.textview_frame_black);
     }
 
     public void timeAttribute(){
-        timeChart.setTextColor(Color.RED);
+        timeChart.setTextColor(Color.parseColor("#DB4437"));
         timeChart.setBackgroundResource(R.drawable.textview_frame_red);
 
-        repsChart.setTextColor(Color.BLACK);
+        repsChart.setTextColor(Color.WHITE);
         repsChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-        weightChart.setTextColor(Color.BLACK);
+        weightChart.setTextColor(Color.WHITE);
         weightChart.setBackgroundResource(R.drawable.textview_frame_black);
     }
 
     private void daysAttribute(){
-        daysChart.setTextColor(Color.RED);
+        daysChart.setTextColor(Color.parseColor("#DB4437"));
         daysChart.setBackgroundResource(R.drawable.textview_frame_red);
 
-        monthsChart.setTextColor(Color.BLACK);
+        monthsChart.setTextColor(Color.WHITE);
         monthsChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-        yearsChart.setTextColor(Color.BLACK);
+        yearsChart.setTextColor(Color.WHITE);
         yearsChart.setBackgroundResource(R.drawable.textview_frame_black);
     }
 
     private void monthsAttribute(){
-        monthsChart.setTextColor(Color.RED);
+        monthsChart.setTextColor(Color.parseColor("#DB4437"));
         monthsChart.setBackgroundResource(R.drawable.textview_frame_red);
 
-        daysChart.setTextColor(Color.BLACK);
+        daysChart.setTextColor(Color.WHITE);
         daysChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-        yearsChart.setTextColor(Color.BLACK);
+        yearsChart.setTextColor(Color.WHITE);
         yearsChart.setBackgroundResource(R.drawable.textview_frame_black);
     }
 
     private void yearsAttribute(){
-        yearsChart.setTextColor(Color.RED);
+        yearsChart.setTextColor(Color.parseColor("#DB4437"));
         yearsChart.setBackgroundResource(R.drawable.textview_frame_red);
 
-        daysChart.setTextColor(Color.BLACK);
+        daysChart.setTextColor(Color.WHITE);
         daysChart.setBackgroundResource(R.drawable.textview_frame_black);
 
-        monthsChart.setTextColor(Color.BLACK);
+        monthsChart.setTextColor(Color.WHITE);
         monthsChart.setBackgroundResource(R.drawable.textview_frame_black);
     }
 
@@ -977,6 +1014,17 @@ public class ExerciseGraph extends AppCompatActivity {
     private int getWorkoutDuration(String duration){
         int durationInMinutes = Integer.parseInt(duration) / (1000 * 60);
         return durationInMinutes;
+    }
+
+    private void emptyChartMessage(){
+        // Check if chart data is empty
+        if (entries.isEmpty()) {
+            chart.setVisibility(View.GONE);
+            customMessageTextView.setVisibility(View.VISIBLE);
+        } else {
+            chart.setVisibility(View.VISIBLE);
+            customMessageTextView.setVisibility(View.GONE);
+        }
     }
 
 }

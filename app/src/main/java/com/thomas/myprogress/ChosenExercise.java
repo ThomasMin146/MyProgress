@@ -14,11 +14,11 @@ import com.thomas.myprogress.adapters.ExerciseDetailsRVAdapter;
 import java.util.ArrayList;
 
 public class ChosenExercise extends AppCompatActivity {
-    private Button addSetButton, saveSetButton;
+    Button addSetButton, saveSetButton;
     RecyclerView rvLayout;
     ArrayList<String> repList, weightList;
     DataBaseHelper dbHelper;
-
+    TextView backBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +26,7 @@ public class ChosenExercise extends AppCompatActivity {
         setContentView(R.layout.chosen_exercise);
 
         TextView textView = findViewById(R.id.exerciseName);
+        backBtn = findViewById(R.id.backButton);
 
         dbHelper = new DataBaseHelper(this);
         rvLayout = findViewById(R.id.rvLayout);
@@ -50,7 +51,7 @@ public class ChosenExercise extends AppCompatActivity {
         textView.setText(name);
 
         if(!sets.equals("")){
-            for(int j = 0; j < Integer.valueOf(sets); j++){
+            for(int j = 0; j < Integer.parseInt(sets); j++){
                 repList.add(repsArray[j]);
                 weightList.add(weightArray[j]);
 
@@ -101,17 +102,21 @@ public class ChosenExercise extends AppCompatActivity {
 
             //condition to not write 0 sets in StartWorkoutPage
             if(repList.size()==0){
-                dbHelper.updateExerciseDetails(Integer.valueOf(detailsId), "",
+                dbHelper.updateExerciseDetails(Integer.parseInt(detailsId), "",
                         repsStringBuilder.toString(), weightStringBuilder.toString());
             } else {
-                dbHelper.updateExerciseDetails(Integer.valueOf(detailsId), String.valueOf(repList.size()),
+                dbHelper.updateExerciseDetails(Integer.parseInt(detailsId), String.valueOf(repList.size()),
                         repsStringBuilder.toString(), weightStringBuilder.toString());
             }
-
 
             Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
             intent.putExtra("WorkoutName", workoutName);
             v.getContext().startActivity(intent);
+        });
+
+        backBtn.setOnClickListener(v -> {
+            Intent intent3 = new Intent(ChosenExercise.this, StartWorkoutPage.class);
+            startActivity(intent3);
         });
     }
 

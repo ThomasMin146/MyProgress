@@ -95,8 +95,8 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
 
-            if(isWorking) minTime.setBackgroundColor(Color.RED);
-            else minTime.setBackgroundColor(Color.GREEN);
+            if(isWorking) minTime.setBackgroundColor(Color.parseColor("#DB4437"));
+            else minTime.setBackgroundColor(Color.parseColor("#0F9D58"));
         }
 
         if(!isRunning && elapsedTime == 0L)  {
@@ -106,8 +106,8 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
             playButton.setVisibility(View.VISIBLE);
             pauseButton.setVisibility(View.GONE);
 
-            if(isWorking) minTime.setBackgroundColor(Color.RED);
-            else minTime.setBackgroundColor(Color.GREEN);
+            if(isWorking) minTime.setBackgroundColor(Color.parseColor("#DB4437"));
+            else minTime.setBackgroundColor(Color.parseColor("#0F9D58"));
         }
 
         if(!isRunning && elapsedTime != 0L){
@@ -117,8 +117,8 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.GONE);
 
-            if(isWorking) minTime.setBackgroundColor(Color.RED);
-            else minTime.setBackgroundColor(Color.GREEN);
+            if(isWorking) minTime.setBackgroundColor(Color.parseColor("#DB4437"));
+            else minTime.setBackgroundColor(Color.parseColor("#0F9D58"));
         }
 
         Handler handler = new Handler();
@@ -162,7 +162,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
             isWorking = true;
 
 
-            minTime.setBackgroundColor(Color.RED);
+            minTime.setBackgroundColor(Color.parseColor("#DB4437"));
             playButton.setVisibility(View.GONE);
             pauseButton.setVisibility(View.VISIBLE);
             setButton.setVisibility(View.VISIBLE);
@@ -188,7 +188,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
         stopButton.setOnClickListener(v -> {
             stopwatch.reset();
-            minTime.setText("00 : 00 . 00");
+            minTime.setText(R.string.start_timer);
             stopButton.setVisibility(View.GONE);
             resumeButton.setVisibility(View.GONE);
             playButton.setVisibility(View.VISIBLE);
@@ -196,24 +196,21 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
         setButton.setOnClickListener(v -> {
             Date currentDate = new Date();
-            SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String formattedDate2 = dateFormat2.format(currentDate);
 
             if(isWorking){
-                minTime.setBackgroundColor(Color.GREEN);
+                minTime.setBackgroundColor(Color.parseColor("#0F9D58"));
                 workingTime = dbHelper.getWorkingTimeForId(dbHelper.getLastWorkoutId()) + stopwatch.getElapsedTime();
 
                 isWorking = false;
 
             } else {
-                minTime.setBackgroundColor(Color.RED);
+                minTime.setBackgroundColor(Color.parseColor("#DB4437"));
                 restingTime = dbHelper.getRestingTimeForId(dbHelper.getLastWorkoutId()) + stopwatch.getElapsedTime();
 
                 isWorking = true;
             }
-
-            Log.d("test", "Working time: "+workingTime);
-            Log.d("test", "Resting time: "+restingTime);
 
             dbHelper.updateWorkout(dbHelper.getLastWorkoutId(), workoutName.getText().toString()
                     , formattedDate2, workingTime, restingTime);
@@ -231,7 +228,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
             stopwatch.reset();
 
             Date currentDate = new Date();
-            SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
             String formattedDate2 = dateFormat2.format(currentDate);
 
             if(isWorking){
@@ -250,9 +247,10 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
             } else{
                 dbHelper.updateWorkout(dbHelper.getLastWorkoutId(), workoutName.getText().toString(), formattedDate2, workingTime, restingTime);
                 dbHelper.updateExerciseDetailsWorkoutID(dbHelper.getLastWorkoutId());
-                isWorking = false;
                 Intent intent1 = new Intent(StartWorkoutPage.this, HomePage.class);
-                HomePage.isLastWorkoutSaved = true;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("isLastWorkoutSaved", true);
+                editor.apply();
                 startActivity(intent1);
             }
         });

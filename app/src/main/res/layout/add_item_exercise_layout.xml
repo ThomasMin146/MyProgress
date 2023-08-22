@@ -32,20 +32,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textSize="35sp"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="Name" />
+                android:text="@string/name" />
 
             <TextView
                 android:id="@+id/bodyPartTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="BodyPart: "
-                android:textColor="@color/lightgray"
-                android:textSize="20sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/bodypart"
+                android:textColor="@color/light_grey"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -53,10 +55,10 @@
                 android:id="@+id/bodyPartTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="BodyPart"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toEndOf="@+id/bodyPartTV"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -64,10 +66,11 @@
                 android:id="@+id/difficultyTV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Difficulty: "
-                android:textColor="@color/lightgray"
-                android:textSize="20sp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="@string/difficulty"
+                android:textColor="@color/light_grey"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bodyPartTV" />
 
@@ -75,17 +78,18 @@
                 android:id="@+id/difficultyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="10dp"
-                android:text="Difficulty"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="22.5sp"
                 app:layout_constraintStart_toEndOf="@+id/difficultyTV"
                 app:layout_constraintTop_toBottomOf="@+id/bodyPartTV" />
 
             <Button
                 android:id="@+id/deleteExerciseButton"
                 android:layout_width="75dp"
-                android:layout_height="45dp"
+                android:layout_height="48dp"
+                android:contentDescription="@string/delete_item"
                 android:backgroundTint="@color/red"
                 android:drawableBottom="@drawable/baseline_delete_24"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -97,7 +101,8 @@
             <Button
                 android:id="@+id/addExerciseButton"
                 android:layout_width="75dp"
-                android:layout_height="45dp"
+                android:contentDescription="@string/add_exercise"
+                android:layout_height="48dp"
                 android:backgroundTint="@color/green"
                 android:drawableBottom="@drawable/baseline_add_24"
                 app:layout_constraintEnd_toEndOf="parent"

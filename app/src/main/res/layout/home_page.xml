@@ -2,9 +2,9 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -14,29 +14,30 @@
         android:layout_weight="1"
         android:layout_margin="20dp"
         android:clickable="true"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="25dp">
+        android:focusable="true"
+        app:cardCornerRadius="15dp">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
+            android:contentDescription="@string/start_workout"
             android:src="@drawable/start_workout">
         </ImageView>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#90000000" />
+            android:background="#AA000000" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Start a workout"
+            android:text="@string/start_workout"
             android:gravity="center"
+            android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="40dp" />
+            android:textSize="35sp" />
 
     </androidx.cardview.widget.CardView>
 
@@ -47,14 +48,14 @@
         android:layout_weight="1"
         android:layout_margin="20dp"
         android:clickable="true"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="25dp">
+        android:focusable="true"
+        app:cardCornerRadius="15dp">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
+            android:contentDescription="@string/workout_history"
             android:src="@drawable/workout_history">
         </ImageView>
 
@@ -66,10 +67,11 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Workout history"
+            android:text="@string/workout_history"
             android:gravity="center"
+            android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="40dp" />
+            android:textSize="35sp" />
 
     </androidx.cardview.widget.CardView>
 
@@ -80,29 +82,30 @@
         android:layout_weight="1"
         android:layout_margin="20dp"
         android:clickable="true"
-        app:cardBackgroundColor="@color/black"
-        app:cardCornerRadius="25dp"
-        app:cardElevation="25dp">
+        android:focusable="true"
+        app:cardCornerRadius="15dp">
 
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
+            android:contentDescription="@string/exercise_graph"
             android:src="@drawable/exercise_graph">
         </ImageView>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#99000000" />
+            android:background="#AA000000" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Exercise graph"
+            android:text="@string/exercise_graph"
             android:gravity="center"
+            android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="40dp" />
+            android:textSize="35sp" />
 
     </androidx.cardview.widget.CardView>
 

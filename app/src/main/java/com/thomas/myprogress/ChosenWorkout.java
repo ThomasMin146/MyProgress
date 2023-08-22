@@ -3,16 +3,11 @@ package com.thomas.myprogress;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
-
 import com.thomas.myprogress.adapters.ExerciseDetailsHistoryRVAdapter;
-import com.thomas.myprogress.adapters.WorkoutHistoryRVAdapter;
-import com.thomas.myprogress.adapters.WorkoutRVAdapter;
 import com.thomas.myprogress.models.ExerciseDetails;
-
 import java.util.ArrayList;
 
 public class ChosenWorkout extends AppCompatActivity {
@@ -33,10 +28,10 @@ public class ChosenWorkout extends AppCompatActivity {
 
         dbHelper = new DataBaseHelper(this);
 
-        int workoutid = getIntent().getIntExtra("id", -1);
+        int workoutId = getIntent().getIntExtra("id", -1);
         String workoutNameString = getIntent().getStringExtra("name");
         workoutName.setText(workoutNameString);
-        exerciseDetails = dbHelper.getExerciseDetailsByWorkoutId(workoutid);
+        exerciseDetails = dbHelper.getExerciseDetailsByWorkoutId(workoutId);
 
         exerciseAdapter = new ExerciseDetailsHistoryRVAdapter(this, exerciseDetails);
         exerciseRecyclerView.setAdapter(exerciseAdapter);

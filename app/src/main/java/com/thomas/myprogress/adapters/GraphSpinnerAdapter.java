@@ -1,6 +1,7 @@
 package com.thomas.myprogress.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ public class GraphSpinnerAdapter extends ArrayAdapter<String> {
     public View getView(int position, View convertView, ViewGroup parent) {
         TextView view = (TextView) super.getView(position, convertView, parent);
         view.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30); // Adjust the text size as needed
+        view.setTypeface(null, Typeface.BOLD);
         return view;
     }
 
