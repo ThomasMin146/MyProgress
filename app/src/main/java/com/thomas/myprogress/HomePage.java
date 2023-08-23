@@ -41,10 +41,6 @@ public class HomePage extends AppCompatActivity {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("isLastWorkoutSaved", false);
                 editor.apply();
-            } else {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putLong("elapsed_time", 0L);
-                editor.apply();
             }
 
             startActivity(intent);

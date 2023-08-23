@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/gradient_background">
+    android:id="@+id/rootView"
+    android:background="@drawable/gradient_background_blue">
 
     <TextView
         android:id="@+id/backButton"
@@ -82,7 +83,6 @@
         app:layout_constraintTop_toBottomOf="@id/saveWorkout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/playButton"
         android:textSize="40sp"/>
 
     <Button
