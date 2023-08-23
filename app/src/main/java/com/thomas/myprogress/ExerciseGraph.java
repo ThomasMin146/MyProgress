@@ -69,7 +69,6 @@ public class ExerciseGraph extends AppCompatActivity {
         monthsChart = findViewById(R.id.monthsChart);
         daysChart = findViewById(R.id.daysChart);
 
-
         backBtn = findViewById(R.id.backButton);
         chart = findViewById(R.id.graph); //assign chart from layout
 
@@ -194,12 +193,16 @@ public class ExerciseGraph extends AppCompatActivity {
                 }
 
                 for(int i = 0; i < data.size(); i++){
-                    if(typeOfData.equals("reps")){
-                        entries.add(new Entry(i, getTotalReps(data.get(i))));
-                    } else if (typeOfData.equals("weight")){
-                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                    } else if (typeOfData.equals("time")){
-                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    switch (typeOfData) {
+                        case "reps":
+                            entries.add(new Entry(i, getTotalReps(data.get(i))));
+                            break;
+                        case "weight":
+                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                            break;
+                        case "time":
+                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                            break;
                     }
                 }
 
@@ -277,12 +280,16 @@ public class ExerciseGraph extends AppCompatActivity {
                 }
 
                 for (int i = 0; i < data.size(); i++) {
-                    if (typeOfData.equals("reps")) {
-                        entries.add(new Entry(i, getTotalReps(data.get(i))));
-                    } else if (typeOfData.equals("weight")) {
-                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                    } else if (typeOfData.equals("time")) {
-                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    switch (typeOfData) {
+                        case "reps":
+                            entries.add(new Entry(i, getTotalReps(data.get(i))));
+                            break;
+                        case "weight":
+                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                            break;
+                        case "time":
+                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                            break;
                     }
                 }
 
@@ -363,12 +370,16 @@ public class ExerciseGraph extends AppCompatActivity {
                 }
 
                 for (int i = 0; i < data.size(); i++) {
-                    if (typeOfData.equals("reps")) {
-                        entries.add(new Entry(i, getTotalReps(data.get(i))));
-                    } else if (typeOfData.equals("weight")) {
-                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                    } else if (typeOfData.equals("time")) {
-                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    switch (typeOfData) {
+                        case "reps":
+                            entries.add(new Entry(i, getTotalReps(data.get(i))));
+                            break;
+                        case "weight":
+                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                            break;
+                        case "time":
+                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                            break;
                     }
                 }
 
@@ -414,7 +425,7 @@ public class ExerciseGraph extends AppCompatActivity {
                 for(Workout workout:workouts){
                     if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
                         workoutIDs.add(workout.getId());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
                         String dateString = dateFormat.format(workout.getDate());
                         workoutDates.add(dateString);
                     }
@@ -476,12 +487,16 @@ public class ExerciseGraph extends AppCompatActivity {
                     default:
                 }
                 for (int i = 0; i < data.size(); i++) {
-                    if (typeOfData.equals("reps")) {
-                        entries.add(new Entry(i, getTotalReps(data.get(i))));
-                    } else if (typeOfData.equals("weight")) {
-                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                    } else if (typeOfData.equals("time")) {
-                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    switch (typeOfData) {
+                        case "reps":
+                            entries.add(new Entry(i, getTotalReps(data.get(i))));
+                            break;
+                        case "weight":
+                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                            break;
+                        case "time":
+                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                            break;
                     }
                 }
 
@@ -528,7 +543,7 @@ public class ExerciseGraph extends AppCompatActivity {
                 for(Workout workout:workouts){
                     if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
                         workoutIDs.add(workout.getId());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
                         String dateString = dateFormat.format(workout.getDate());
                         workoutDates.add(dateString);
                     }
@@ -590,12 +605,16 @@ public class ExerciseGraph extends AppCompatActivity {
                     default:
                 }
                 for (int i = 0; i < data.size(); i++) {
-                    if (typeOfData.equals("reps")) {
-                        entries.add(new Entry(i, getTotalReps(data.get(i))));
-                    } else if (typeOfData.equals("weight")) {
-                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                    } else if (typeOfData.equals("time")) {
-                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    switch (typeOfData) {
+                        case "reps":
+                            entries.add(new Entry(i, getTotalReps(data.get(i))));
+                            break;
+                        case "weight":
+                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                            break;
+                        case "time":
+                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                            break;
                     }
                 }
 
@@ -642,7 +661,7 @@ public class ExerciseGraph extends AppCompatActivity {
                 for(Workout workout:workouts){
                     if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
                         workoutIDs.add(workout.getId());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
                         String dateString = dateFormat.format(workout.getDate());
                         workoutDates.add(dateString);
                     }
@@ -704,12 +723,16 @@ public class ExerciseGraph extends AppCompatActivity {
                     default:
                 }
                 for (int i = 0; i < data.size(); i++) {
-                    if (typeOfData.equals("reps")) {
-                        entries.add(new Entry(i, getTotalReps(data.get(i))));
-                    } else if (typeOfData.equals("weight")) {
-                        entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                    } else if (typeOfData.equals("time")) {
-                        entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    switch (typeOfData) {
+                        case "reps":
+                            entries.add(new Entry(i, getTotalReps(data.get(i))));
+                            break;
+                        case "weight":
+                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                            break;
+                        case "time":
+                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                            break;
                     }
                 }
 
@@ -777,7 +800,7 @@ public class ExerciseGraph extends AppCompatActivity {
                     for(Workout workout:workouts){
                         if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
                             workoutIDs.add(workout.getId());
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd");
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
                             String dateString = dateFormat.format(workout.getDate());
                             workoutDates.add(dateString);
                         }
@@ -840,12 +863,16 @@ public class ExerciseGraph extends AppCompatActivity {
                     }
 
                     for(int i = 0; i < data.size(); i++){
-                        if(typeOfData.equals("reps")){
-                            entries.add(new Entry(i, getTotalReps(data.get(i))));
-                        } else if (typeOfData.equals("weight")){
-                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                        } else if (typeOfData.equals("time")){
-                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                        switch (typeOfData) {
+                            case "reps":
+                                entries.add(new Entry(i, getTotalReps(data.get(i))));
+                                break;
+                            case "weight":
+                                entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                                break;
+                            case "time":
+                                entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                                break;
                         }
                     }
 
@@ -977,10 +1004,9 @@ public class ExerciseGraph extends AppCompatActivity {
     private int getTotalReps(String exerciseDetail){
         String[] exerciseDetailArray = exerciseDetail.split(",");
         int totalreps = 0;
-        for(int i = 0; i < exerciseDetailArray.length; i++){
-            if(exerciseDetailArray[i].trim().equals("")){
-            } else {
-                totalreps = totalreps + Integer.parseInt(exerciseDetailArray[i].trim());
+        for (String s : exerciseDetailArray) {
+            if (!s.trim().equals("")) {
+                totalreps = totalreps + Integer.parseInt(s.trim());
             }
         }
         return totalreps;
@@ -989,11 +1015,10 @@ public class ExerciseGraph extends AppCompatActivity {
     private int getMaximumWeight(String exerciseDetail){
         String[] exerciseDetailArray = exerciseDetail.split(",");
         int maxWeight = 0;
-        for(int i = 0; i < exerciseDetailArray.length; i++){
-            if(exerciseDetailArray[i].trim().equals("")){
-            } else {
-                if(maxWeight < Integer.parseInt(exerciseDetailArray[i].trim())){
-                    maxWeight = Integer.parseInt(exerciseDetailArray[i].trim());
+        for (String s : exerciseDetailArray) {
+            if (!s.trim().equals("")) {
+                if (maxWeight < Integer.parseInt(s.trim())) {
+                    maxWeight = Integer.parseInt(s.trim());
                 }
             }
         }
@@ -1001,8 +1026,7 @@ public class ExerciseGraph extends AppCompatActivity {
     }
 
     private int getWorkoutDuration(String duration){
-        int durationInMinutes = Integer.parseInt(duration) / (1000 * 60);
-        return durationInMinutes;
+        return Integer.parseInt(duration) / (1000 * 60);
     }
 
 

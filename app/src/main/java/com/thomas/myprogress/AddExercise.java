@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     Button createExercise;
     EditText searchEditText;
     TextView backBtn;
+    int listPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, dbHelper.getLastWorkoutId());
         exerciseRV.setAdapter(addExerciseAdapter);
         exerciseRV.setLayoutManager(new LinearLayoutManager(this));
+
+        listPosition = getIntent().getIntExtra("Position", 0);
 
         backBtn.setOnClickListener(v -> {
             Intent intent = new Intent(AddExercise.this, StartWorkoutPage.class);
@@ -114,6 +118,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         Intent intent = new Intent(AddExercise.this, StartWorkoutPage.class);
         intent.putExtra("ExerciseId", exercises.get(position).getId());
         intent.putExtra("ExerciseName", exercises.get(position).getName());
+        intent.putExtra("Position", listPosition);
         startActivity(intent);
     }
 

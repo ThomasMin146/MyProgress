@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +53,8 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         isRunning = sharedPreferences.getBoolean("isRunning", false);
         elapsedTime = sharedPreferences.getLong("elapsed_time", 0L);
 
+        int rvPosition = getIntent().getIntExtra("Position", 0);
+
         workingTime = dbHelper.getWorkingTimeForId(dbHelper.getLastWorkoutId());
         restingTime = dbHelper.getRestingTimeForId(dbHelper.getLastWorkoutId());
 
@@ -76,6 +79,10 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         exerciseAdapter = new WorkoutRVAdapter(this, exerciseDetails, this);
         exerciseRecyclerView.setAdapter(exerciseAdapter);
         exerciseRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        LinearLayoutManager layoutManager = (LinearLayoutManager) exerciseRecyclerView.getLayoutManager();
+
+        layoutManager.scrollToPositionWithOffset(rvPosition, 0);
 
         stopwatch.setElapsedTime(elapsedTime);
 
@@ -208,6 +215,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
 
         addButton.setOnClickListener(v -> {
             Intent intent2 = new Intent(StartWorkoutPage.this, AddExercise.class);
+            intent2.putExtra("Position", exerciseDetails.size());
             startActivity(intent2);
         });
 
@@ -262,7 +270,7 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
         intent.putExtra("Reps", exerciseDetails.get(position).getReps());
         intent.putExtra("Sets", exerciseDetails.get(position).getSets());
         intent.putExtra("Weight", exerciseDetails.get(position).getWeight());
-        intent.putExtra("position", position);
+        intent.putExtra("Position", position);
 
         startActivity(intent);
 

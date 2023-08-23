@@ -38,6 +38,9 @@ public class ChosenExercise extends AppCompatActivity {
         String sets = getIntent().getStringExtra("Sets");
         String weight = getIntent().getStringExtra("Weight");
 
+        int rvPosition = getIntent().getIntExtra("RVPosition", 0);
+        int position = getIntent().getIntExtra("Position", 0);
+
         String[] repsArray = reps.split(", ");
         String[] weightArray = weight.split(", ");
 
@@ -111,11 +114,13 @@ public class ChosenExercise extends AppCompatActivity {
 
             Intent intent = new Intent(v.getContext(), StartWorkoutPage.class);
             intent.putExtra("WorkoutName", workoutName);
+            intent.putExtra("Position", position);
             v.getContext().startActivity(intent);
         });
 
         backBtn.setOnClickListener(v -> {
             Intent intent3 = new Intent(ChosenExercise.this, StartWorkoutPage.class);
+            intent3.putExtra("Position", position);
             startActivity(intent3);
         });
     }
