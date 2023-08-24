@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textSize="35sp"
+                android:textSize="30sp"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +47,7 @@
                 android:paddingEnd="10dp"
                 android:text="@string/bodypart"
                 android:textColor="@color/light_grey"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -58,7 +58,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/bodyPartTV"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -70,7 +70,7 @@
                 android:paddingEnd="10dp"
                 android:text="@string/difficulty"
                 android:textColor="@color/light_grey"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bodyPartTV" />
 
@@ -81,32 +81,32 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/difficultyTV"
                 app:layout_constraintTop_toBottomOf="@+id/bodyPartTV" />
 
             <Button
                 android:id="@+id/deleteExerciseButton"
-                android:layout_width="75dp"
-                android:layout_height="48dp"
+                android:layout_width="70dp"
+                android:layout_height="45dp"
                 android:contentDescription="@string/delete_item"
                 android:backgroundTint="@color/red"
                 android:drawableBottom="@drawable/baseline_delete_24"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 app:layout_constraintBottom_toBottomOf="parent">
 
             </Button>
 
             <Button
                 android:id="@+id/addExerciseButton"
-                android:layout_width="75dp"
+                android:layout_width="70dp"
                 android:contentDescription="@string/add_exercise"
-                android:layout_height="48dp"
+                android:layout_height="45dp"
                 android:backgroundTint="@color/green"
                 android:drawableBottom="@drawable/baseline_add_24"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_margin="5dp"
+                android:layout_margin="3dp"
                 app:layout_constraintTop_toTopOf="parent">
 
             </Button>

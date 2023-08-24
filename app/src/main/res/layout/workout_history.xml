@@ -8,8 +8,8 @@
 
     <TextView
         android:id="@+id/backButton"
-        android:layout_width="80dp"
-        android:layout_height="90dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:clickable="true"
         android:focusable="true"
         android:layout_marginTop="7dp"
@@ -17,17 +17,17 @@
         app:layout_constraintStart_toStartOf="parent"
         android:contentDescription="@string/back"
         android:background="@drawable/baseline_arrow_back_24"
-        app:layout_constraintEnd_toStartOf="@id/workoutHistoryName"
-        app:layout_constraintBottom_toTopOf="@id/workoutRecyclerView"/>
+        app:layout_constraintEnd_toStartOf="@id/workoutHistoryName"/>
 
     <TextView
         android:id="@+id/workoutHistoryName"
         android:layout_width="0dp"
-        android:layout_height="95dp"
+        android:layout_height="67dp"
         android:text="@string/workout_history"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:gravity="center_vertical"
+        android:gravity="center"
+        android:layout_marginEnd="60dp"
         android:textSize="35sp"
         app:layout_constraintStart_toEndOf="@id/backButton"
         app:layout_constraintTop_toTopOf="parent"

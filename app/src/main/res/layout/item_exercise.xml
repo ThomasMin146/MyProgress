@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
-                android:textSize="35sp"
+                android:textSize="30sp"
                 android:textColor="@color/googleGreen"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -47,7 +47,7 @@
                 android:paddingEnd="10dp"
                 android:text="@string/reps_item"
                 android:textColor="@color/lightgray"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -58,7 +58,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/repetitionTV"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -70,7 +70,7 @@
                 android:paddingEnd="10dp"
                 android:text="@string/sets_item"
                 android:textColor="@color/lightgray"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/repetitionTV" />
 
@@ -81,7 +81,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/bodyPartTV"
                 app:layout_constraintTop_toBottomOf="@+id/repsTextView" />
 
@@ -93,7 +93,7 @@
                 android:paddingEnd="10dp"
                 android:text="@string/weight_item"
                 android:textColor="@color/lightgray"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/bodyPartTV" />
 
@@ -104,7 +104,7 @@
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="@color/white"
-                android:textSize="22.5sp"
+                android:textSize="20sp"
                 app:layout_constraintStart_toEndOf="@+id/difficultyTV"
                 app:layout_constraintTop_toBottomOf="@+id/setsTextView" />
 

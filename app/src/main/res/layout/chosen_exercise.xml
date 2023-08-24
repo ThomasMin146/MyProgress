@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -7,47 +8,56 @@
 
     <TextView
         android:id="@+id/backButton"
-        android:layout_width="80dp"
-        android:layout_height="90dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:clickable="true"
         android:focusable="true"
         android:layout_marginTop="7dp"
+        android:contentDescription="@string/back"
+        android:background="@drawable/baseline_arrow_back_24"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/back"
-        android:background="@drawable/baseline_arrow_back_24"/>
+        app:layout_constraintBottom_toTopOf="@id/setsTV"
+        app:layout_constraintEnd_toStartOf="@id/exerciseName"/>
 
     <TextView
         android:id="@+id/exerciseName"
-        android:layout_width="wrap_content"
-        android:layout_height="95dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/exercise_name"
         android:textStyle="bold"
         android:textColor="@color/black"
-        android:gravity="center_vertical"
-        android:textSize="35sp"
+        android:gravity="center"
+        android:layout_marginEnd="60dp"
+        android:textSize="30sp"
         app:layout_constraintStart_toEndOf="@id/backButton"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/repsTV"/>
 
     <TextView
         android:id="@+id/setsTV"
         android:layout_width="100dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:textSize="25sp"
         android:gravity="center"
         android:text="@string/sets_item"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/exerciseName"/>
+        app:layout_constraintTop_toBottomOf="@id/exerciseName"
+        app:layout_constraintEnd_toStartOf="@id/repsTV"
+        app:layout_constraintBottom_toTopOf="@id/rvLayout"/>
 
     <TextView
         android:id="@+id/repsTV"
         android:layout_width="90dp"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:textSize="25sp"
         android:gravity="center"
         android:text="@string/reps_item"
         app:layout_constraintStart_toEndOf="@id/setsTV"
-        app:layout_constraintTop_toBottomOf="@id/exerciseName"/>
+        app:layout_constraintTop_toBottomOf="@id/exerciseName"
+        app:layout_constraintEnd_toStartOf="@id/weightTV"
+        app:layout_constraintBottom_toTopOf="@id/rvLayout"/>
 
     <TextView
         android:id="@+id/weightTV"
@@ -57,7 +67,8 @@
         android:gravity="center"
         android:text="@string/weight_item"
         app:layout_constraintStart_toEndOf="@id/repsTV"
-        app:layout_constraintTop_toBottomOf="@id/exerciseName"/>
+        app:layout_constraintTop_toBottomOf="@id/exerciseName"
+        app:layout_constraintBottom_toTopOf="@id/rvLayout"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvLayout"
