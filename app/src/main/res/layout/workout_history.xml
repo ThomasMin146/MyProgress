@@ -17,12 +17,13 @@
         app:layout_constraintStart_toStartOf="parent"
         android:contentDescription="@string/back"
         android:background="@drawable/baseline_arrow_back_24"
-        app:layout_constraintEnd_toStartOf="@id/workoutHistoryName"/>
+        app:layout_constraintEnd_toStartOf="@id/workoutHistoryName"
+        app:layout_constraintBottom_toTopOf="@id/workoutRecyclerView"/>
 
     <TextView
         android:id="@+id/workoutHistoryName"
         android:layout_width="0dp"
-        android:layout_height="67dp"
+        android:layout_height="wrap_content"
         android:text="@string/workout_history"
         android:textStyle="bold"
         android:textColor="@color/black"

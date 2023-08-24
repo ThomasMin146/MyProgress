@@ -23,7 +23,7 @@
     <TextView
         android:id="@+id/workoutName"
         android:layout_width="0dp"
-        android:layout_height="67dp"
+        android:layout_height="wrap_content"
         android:text="@string/name_of_the_workout"
         android:textStyle="bold"
         android:textColor="@color/black"

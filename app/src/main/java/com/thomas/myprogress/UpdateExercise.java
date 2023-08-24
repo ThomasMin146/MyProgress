@@ -56,7 +56,7 @@ public class UpdateExercise extends AppCompatActivity {
         bodypart.setSelection(0, false);
         difficulty.setSelection(0, false);
 
-        exercise.setText(getIntent().getStringExtra("ExerciseName"));
+        exercise.setText("Update exercise");
         nameOfNewExercise.setText(getIntent().getStringExtra("ExerciseName"));
 
 
