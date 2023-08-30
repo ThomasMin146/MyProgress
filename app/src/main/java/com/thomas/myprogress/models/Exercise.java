@@ -5,6 +5,7 @@ public class Exercise {
     private String name;
     private String bodypart;
     private String difficulty;
+    private boolean isChecked;
 
     // Constructors, getters, and setters
 
@@ -13,6 +14,7 @@ public class Exercise {
         this.name = name;
         this.bodypart = bodypart;
         this.difficulty = difficulty;
+        this.isChecked = false;
     }
 
     public int getId() {
@@ -45,6 +47,14 @@ public class Exercise {
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }
 

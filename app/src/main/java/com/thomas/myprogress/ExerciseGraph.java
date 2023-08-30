@@ -105,8 +105,8 @@ public class ExerciseGraph extends AppCompatActivity {
 
         leftAxis.setEnabled(true);
         leftAxis.setDrawLabels(true);
-        leftAxis.setAxisMinimum(0);
-        leftAxis.setSpaceTop(0);
+        leftAxis.setSpaceTop(10);
+        leftAxis.setSpaceBottom(10);
         leftAxis.setDrawAxisLine(false);
         leftAxis.setGranularity(1);
         leftAxis.setGranularityEnabled(true);
@@ -122,11 +122,13 @@ public class ExerciseGraph extends AppCompatActivity {
         xAxis.setTextSize(25f); // Set text size for the X-axis labels
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setEnabled(true);
-        xAxis.setAxisMinimum(0);
+        xAxis.setSpaceMax(1);
+        xAxis.setSpaceMin(1);
         xAxis.setGranularity(1);
         xAxis.setGranularityEnabled(true);
         xAxis.setTextColor(Color.BLACK);
         xAxis.setDrawGridLines(false);
+
 
         leftAxis.setValueFormatter(new ValueFormatter() {
             @Override
@@ -150,80 +152,8 @@ public class ExerciseGraph extends AppCompatActivity {
             if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")){
                 repsAttribute();
 
-                Date currentDate = new Date();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currentDate);
+                setupData();
 
-                switch (timeSpan) {
-                    case "Month":
-                        daysAttribute();
-                        calendar.add(Calendar.MONTH, -1);
-                        labelPart = 2;
-                        break;
-                    case "Year":
-                        monthsAttribute();
-                        calendar.add(Calendar.MONTH, -12);
-                        labelPart = 1;
-                        break;
-                    case "All":
-                        yearsAttribute();
-                        calendar.add(Calendar.YEAR, -100);
-                        labelPart = 0;
-                        break;
-                    default:
-                }
-
-                Date previousDate = calendar.getTime();
-                ArrayList<Integer> workoutIDs = new ArrayList<>();
-
-                for(Workout workout:workouts){
-                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
-                        workoutIDs.add(workout.getId());
-                    }
-                }
-
-                for(ExerciseDetails exerciseDetail : exerciseDetails){
-                    if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-                        for(Integer workoutID: workoutIDs){
-                            if(exerciseDetail.getWorkoutId() == workoutID){
-                                data.add(exerciseDetail.getReps());
-                            }
-                        }
-                    }
-                }
-
-                for(int i = 0; i < data.size(); i++){
-                    switch (typeOfData) {
-                        case "reps":
-                            entries.add(new Entry(i, getTotalReps(data.get(i))));
-                            break;
-                        case "weight":
-                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                            break;
-                        case "time":
-                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
-                            break;
-                    }
-                }
-
-                LineDataSet dataSet = new LineDataSet(entries, "");
-                LineData lineData = new LineData(dataSet);
-                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                dataSet.setColor(Color.parseColor("#DB4437"));
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(25);
-                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                chart.setData(lineData);
-
-
-                dataSet.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return String.format(Locale.getDefault(), "%.0f", value);
-                    }
-                });
-
-                chart.invalidate();
             }
         });
 
@@ -237,79 +167,8 @@ public class ExerciseGraph extends AppCompatActivity {
             if(selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
                 weightAttribute();
 
-                Date currentDate = new Date();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currentDate);
+                setupData();
 
-                switch (timeSpan) {
-                    case "Month":
-                        daysAttribute();
-                        calendar.add(Calendar.MONTH, -1);
-                        labelPart = 2;
-                        break;
-                    case "Year":
-                        monthsAttribute();
-                        calendar.add(Calendar.MONTH, -12);
-                        labelPart = 1;
-                        break;
-                    case "All":
-                        yearsAttribute();
-                        calendar.add(Calendar.YEAR, -100);
-                        labelPart = 0;
-                        break;
-                    default:
-                }
-
-                Date previousDate = calendar.getTime();
-                ArrayList<Integer> workoutIDs = new ArrayList<>();
-
-                for(Workout workout:workouts){
-                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
-                        workoutIDs.add(workout.getId());
-                    }
-                }
-
-                for (ExerciseDetails exerciseDetail : exerciseDetails) {
-                    if (exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-                        for(Integer workoutID: workoutIDs){
-                            if(exerciseDetail.getWorkoutId() == workoutID){
-                                data.add(exerciseDetail.getWeight());
-                            }
-                        }
-                    }
-                }
-
-                for (int i = 0; i < data.size(); i++) {
-                    switch (typeOfData) {
-                        case "reps":
-                            entries.add(new Entry(i, getTotalReps(data.get(i))));
-                            break;
-                        case "weight":
-                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                            break;
-                        case "time":
-                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
-                            break;
-                    }
-                }
-
-                LineDataSet dataSet = new LineDataSet(entries, "");
-                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                dataSet.setColor(Color.parseColor("#DB4437"));
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(25);
-                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                LineData lineData = new LineData(dataSet);
-                chart.setData(lineData);
-
-                dataSet.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return String.format(Locale.getDefault(), "%.0f", value);
-                    }
-                });
-
-                chart.invalidate();
             }
         });
 
@@ -322,85 +181,9 @@ public class ExerciseGraph extends AppCompatActivity {
             if (selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
                 timeAttribute();
 
-                Date currentDate = new Date();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currentDate);
-
-                switch (timeSpan) {
-                    case "Month":
-                        daysAttribute();
-                        calendar.add(Calendar.MONTH, -1);
-                        labelPart = 2;
-                        break;
-                    case "Year":
-                        monthsAttribute();
-                        calendar.add(Calendar.MONTH, -12);
-                        labelPart = 1;
-                        break;
-                    case "All":
-                        yearsAttribute();
-                        calendar.add(Calendar.YEAR, -100);
-                        labelPart = 0;
-                        break;
-                    default:
-                }
-
-                Date previousDate = calendar.getTime();
-                ArrayList<Integer> workoutIDs = new ArrayList<>();
-
-                for(Workout workout:workouts){
-                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
-                        workoutIDs.add(workout.getId());
-                    }
-                }
-
-                for(ExerciseDetails exerciseDetail : exerciseDetails){
-                    if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-                        for(Workout workout: workouts){
-                            if(exerciseDetail.getWorkoutId() == workout.getId()){
-                                for(Integer workoutID: workoutIDs){
-                                    if(exerciseDetail.getWorkoutId() == workoutID){
-                                        int duration = workout.getRestingTime() + workout.getWorkingTime();
-                                        data.add(String.valueOf(duration));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                for (int i = 0; i < data.size(); i++) {
-                    switch (typeOfData) {
-                        case "reps":
-                            entries.add(new Entry(i, getTotalReps(data.get(i))));
-                            break;
-                        case "weight":
-                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                            break;
-                        case "time":
-                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
-                            break;
-                    }
-                }
-
-                LineDataSet dataSet = new LineDataSet(entries, "");
-                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                dataSet.setColor(Color.parseColor("#DB4437"));
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(25);
-                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                LineData lineData = new LineData(dataSet);
-                chart.setData(lineData);
+                setupData();
 
 
-                dataSet.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return String.format(Locale.getDefault(), "%.0f", value);
-                    }
-                });
-
-                chart.invalidate();
             }
         });
 
@@ -413,112 +196,8 @@ public class ExerciseGraph extends AppCompatActivity {
 
             if (selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
                 daysAttribute();
+                setupData();
 
-                Date currentDate = new Date();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currentDate);
-                calendar.add(Calendar.MONTH, -1);
-                Date previousDate = calendar.getTime();
-                ArrayList<Integer> workoutIDs = new ArrayList<>();
-                ArrayList<String> workoutDates = new ArrayList<>();
-
-                for(Workout workout:workouts){
-                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
-                        workoutIDs.add(workout.getId());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
-                        String dateString = dateFormat.format(workout.getDate());
-                        workoutDates.add(dateString);
-                    }
-                }
-
-                switch (typeOfData) {
-                    case "reps":
-                        repsAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-
-                                for(int i = 0; i < workoutIDs.size(); i++){
-                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                        data.add(exerciseDetail.getReps());
-                                        String datee = workoutDates.get(i);
-                                        String[] parts = datee.split("-");
-                                        xLabels.add(parts[labelPart]);
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "weight":
-                        weightAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-
-                                for(int i = 0; i < workoutIDs.size(); i++){
-                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                        data.add(exerciseDetail.getWeight());
-                                        String datee = workoutDates.get(i);
-                                        String[] parts = datee.split("-");
-                                        xLabels.add(parts[labelPart]);
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "time":
-                        timeAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-                                for(Workout workout: workouts){
-                                    if(exerciseDetail.getWorkoutId() == workout.getId()){
-                                        for(int i = 0; i < workoutIDs.size(); i++){
-                                            if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                                int duration = workout.getRestingTime() + workout.getWorkingTime();
-                                                data.add(String.valueOf(duration));
-                                                String datee = workoutDates.get(i);
-                                                String[] parts = datee.split("-");
-                                                xLabels.add(parts[labelPart]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                }
-                for (int i = 0; i < data.size(); i++) {
-                    switch (typeOfData) {
-                        case "reps":
-                            entries.add(new Entry(i, getTotalReps(data.get(i))));
-                            break;
-                        case "weight":
-                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                            break;
-                        case "time":
-                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
-                            break;
-                    }
-                }
-
-                LineDataSet dataSet = new LineDataSet(entries, "");
-                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                dataSet.setColor(Color.parseColor("#DB4437"));
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(25);
-                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                LineData lineData = new LineData(dataSet);
-                chart.setData(lineData);
-
-
-                dataSet.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return String.format(Locale.getDefault(), "%.0f", value);
-                    }
-                });
-
-                xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-                chart.invalidate();
             }
         });
 
@@ -531,112 +210,8 @@ public class ExerciseGraph extends AppCompatActivity {
 
             if (selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
                 monthsAttribute();
+                setupData();
 
-                Date currentDate = new Date();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currentDate);
-                calendar.add(Calendar.MONTH, -12);
-                Date previousDate = calendar.getTime();
-                ArrayList<Integer> workoutIDs = new ArrayList<>();
-                ArrayList<String> workoutDates = new ArrayList<>();
-
-                for(Workout workout:workouts){
-                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
-                        workoutIDs.add(workout.getId());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
-                        String dateString = dateFormat.format(workout.getDate());
-                        workoutDates.add(dateString);
-                    }
-                }
-
-                switch (typeOfData) {
-                    case "reps":
-                        repsAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-
-                                for(int i = 0; i < workoutIDs.size(); i++){
-                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                        data.add(exerciseDetail.getReps());
-                                        String datee = workoutDates.get(i);
-                                        String[] parts = datee.split("-");
-                                        xLabels.add(parts[labelPart]);
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "weight":
-                        weightAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-
-                                for(int i = 0; i < workoutIDs.size(); i++){
-                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                        data.add(exerciseDetail.getWeight());
-                                        String datee = workoutDates.get(i);
-                                        String[] parts = datee.split("-");
-                                        xLabels.add(parts[labelPart]);
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "time":
-                        timeAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-                                for(Workout workout: workouts){
-                                    if(exerciseDetail.getWorkoutId() == workout.getId()){
-                                        for(int i = 0; i < workoutIDs.size(); i++){
-                                            if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                                int duration = workout.getRestingTime() + workout.getWorkingTime();
-                                                data.add(String.valueOf(duration));
-                                                String datee = workoutDates.get(i);
-                                                String[] parts = datee.split("-");
-                                                xLabels.add(parts[labelPart]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                }
-                for (int i = 0; i < data.size(); i++) {
-                    switch (typeOfData) {
-                        case "reps":
-                            entries.add(new Entry(i, getTotalReps(data.get(i))));
-                            break;
-                        case "weight":
-                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                            break;
-                        case "time":
-                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
-                            break;
-                    }
-                }
-
-                LineDataSet dataSet = new LineDataSet(entries, "");
-                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                dataSet.setColor(Color.parseColor("#DB4437"));
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(25);
-                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                LineData lineData = new LineData(dataSet);
-                chart.setData(lineData);
-
-
-                dataSet.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return String.format(Locale.getDefault(), "%.0f", value);
-                    }
-                });
-
-                xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-                chart.invalidate();
             }
         });
 
@@ -649,112 +224,8 @@ public class ExerciseGraph extends AppCompatActivity {
 
             if (selectedExerciseOption != null && !selectedExerciseOption.equals("Select an exercise")) {
                 yearsAttribute();
+                setupData();
 
-                Date currentDate = new Date();
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(currentDate);
-                calendar.add(Calendar.YEAR, -100);
-                Date previousDate = calendar.getTime();
-                ArrayList<Integer> workoutIDs = new ArrayList<>();
-                ArrayList<String> workoutDates = new ArrayList<>();
-
-                for(Workout workout:workouts){
-                    if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
-                        workoutIDs.add(workout.getId());
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
-                        String dateString = dateFormat.format(workout.getDate());
-                        workoutDates.add(dateString);
-                    }
-                }
-
-                switch (typeOfData) {
-                    case "reps":
-                        repsAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-
-                                for(int i = 0; i < workoutIDs.size(); i++){
-                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                        data.add(exerciseDetail.getReps());
-                                        String datee = workoutDates.get(i);
-                                        String[] parts = datee.split("-");
-                                        xLabels.add(parts[labelPart]);
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "weight":
-                        weightAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-
-                                for(int i = 0; i < workoutIDs.size(); i++){
-                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                        data.add(exerciseDetail.getWeight());
-                                        String datee = workoutDates.get(i);
-                                        String[] parts = datee.split("-");
-                                        xLabels.add(parts[labelPart]);
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    case "time":
-                        timeAttribute();
-                        for(ExerciseDetails exerciseDetail : exerciseDetails){
-                            if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-                                for(Workout workout: workouts){
-                                    if(exerciseDetail.getWorkoutId() == workout.getId()){
-                                        for(int i = 0; i < workoutIDs.size(); i++){
-                                            if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                                int duration = workout.getRestingTime() + workout.getWorkingTime();
-                                                data.add(String.valueOf(duration));
-                                                String datee = workoutDates.get(i);
-                                                String[] parts = datee.split("-");
-                                                xLabels.add(parts[labelPart]);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        break;
-                    default:
-                }
-                for (int i = 0; i < data.size(); i++) {
-                    switch (typeOfData) {
-                        case "reps":
-                            entries.add(new Entry(i, getTotalReps(data.get(i))));
-                            break;
-                        case "weight":
-                            entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                            break;
-                        case "time":
-                            entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
-                            break;
-                    }
-                }
-
-                LineDataSet dataSet = new LineDataSet(entries, "");
-                dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                dataSet.setColor(Color.parseColor("#DB4437"));
-                dataSet.setLineWidth(8);
-                dataSet.setValueTextSize(25);
-                dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                LineData lineData = new LineData(dataSet);
-                chart.setData(lineData);
-
-
-                dataSet.setValueFormatter(new ValueFormatter() {
-                    @Override
-                    public String getFormattedValue(float value) {
-                        return String.format(Locale.getDefault(), "%.0f", value);
-                    }
-                });
-
-                xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-                chart.invalidate();
             }
         });
 
@@ -769,132 +240,7 @@ public class ExerciseGraph extends AppCompatActivity {
                     entries.clear();
                     xLabels.clear();
 
-                    Date currentDate = new Date();
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(currentDate);
-
-                    switch (timeSpan) {
-                        case "Month":
-                            daysAttribute();
-                            calendar.add(Calendar.MONTH, -1);
-                            labelPart = 2;
-                            break;
-                        case "Year":
-                            monthsAttribute();
-                            calendar.add(Calendar.MONTH, -12);
-                            labelPart = 1;
-                            break;
-                        case "All":
-                            yearsAttribute();
-                            calendar.add(Calendar.YEAR, -100);
-                            labelPart = 0;
-                            break;
-                        default:
-                    }
-
-                    Date previousDate = calendar.getTime();
-
-                    ArrayList<Integer> workoutIDs = new ArrayList<>();
-                    ArrayList<String> workoutDates = new ArrayList<>();
-
-                    for(Workout workout:workouts){
-                        if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
-                            workoutIDs.add(workout.getId());
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
-                            String dateString = dateFormat.format(workout.getDate());
-                            workoutDates.add(dateString);
-                        }
-                    }
-
-                    switch (typeOfData) {
-                        case "reps":
-                            repsAttribute();
-                            for(ExerciseDetails exerciseDetail : exerciseDetails){
-                                if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-
-                                    for(int i = 0; i < workoutIDs.size(); i++){
-                                        if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                            data.add(exerciseDetail.getReps());
-                                            String datee = workoutDates.get(i);
-                                            String[] parts = datee.split("-");
-                                            xLabels.add(parts[labelPart]);
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "weight":
-                            weightAttribute();
-                            for(ExerciseDetails exerciseDetail : exerciseDetails){
-                                if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-
-                                    for(int i = 0; i < workoutIDs.size(); i++){
-                                        if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                            data.add(exerciseDetail.getWeight());
-                                            String datee = workoutDates.get(i);
-                                            String[] parts = datee.split("-");
-                                            xLabels.add(parts[labelPart]);
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        case "time":
-                            timeAttribute();
-                            for(ExerciseDetails exerciseDetail : exerciseDetails){
-                                if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
-                                    for(Workout workout: workouts){
-                                        if(exerciseDetail.getWorkoutId() == workout.getId()){
-                                            for(int i = 0; i < workoutIDs.size(); i++){
-                                                if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
-                                                    int duration = workout.getRestingTime() + workout.getWorkingTime();
-                                                    data.add(String.valueOf(duration));
-                                                    String datee = workoutDates.get(i);
-                                                    String[] parts = datee.split("-");
-                                                    xLabels.add(parts[labelPart]);
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-                        default:
-                    }
-
-                    for(int i = 0; i < data.size(); i++){
-                        switch (typeOfData) {
-                            case "reps":
-                                entries.add(new Entry(i, getTotalReps(data.get(i))));
-                                break;
-                            case "weight":
-                                entries.add(new Entry(i, getMaximumWeight(data.get(i))));
-                                break;
-                            case "time":
-                                entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
-                                break;
-                        }
-                    }
-
-                    LineDataSet dataSet = new LineDataSet(entries, "");
-                    dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-                    dataSet.setColor(Color.parseColor("#DB4437"));
-                    dataSet.setLineWidth(8);
-                    dataSet.setValueTextSize(25);
-                    dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
-                    LineData lineData = new LineData(dataSet);
-                    chart.setData(lineData);
-
-
-                    dataSet.setValueFormatter(new ValueFormatter() {
-                        @Override
-                        public String getFormattedValue(float value) {
-                            return String.format(Locale.getDefault(), "%.0f", value);
-                        }
-                    });
-
-                    xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
-                    chart.invalidate();
+                    setupData();
 
                 } else {
                     // Handle the case when the initial selection is made
@@ -933,6 +279,136 @@ public class ExerciseGraph extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void setupData(){
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        switch (timeSpan) {
+            case "Month":
+                daysAttribute();
+                calendar.add(Calendar.MONTH, -1);
+                labelPart = 2;
+                break;
+            case "Year":
+                monthsAttribute();
+                calendar.add(Calendar.MONTH, -12);
+                labelPart = 1;
+                break;
+            case "All":
+                yearsAttribute();
+                calendar.add(Calendar.YEAR, -100);
+                labelPart = 0;
+                break;
+            default:
+        }
+
+        Date previousDate = calendar.getTime();
+
+        ArrayList<Integer> workoutIDs = new ArrayList<>();
+        ArrayList<String> workoutDates = new ArrayList<>();
+
+        for(Workout workout:workouts){
+            if(workout.getDate().after(previousDate) || workout.getDate().equals(previousDate)){
+                workoutIDs.add(workout.getId());
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MMM-dd", Locale.US);
+                String dateString = dateFormat.format(workout.getDate());
+                workoutDates.add(dateString);
+            }
+        }
+
+        switch (typeOfData) {
+            case "reps":
+                repsAttribute();
+
+                for(ExerciseDetails exerciseDetail : exerciseDetails){
+                    if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                        for(int i = 0; i < workoutIDs.size(); i++){
+                            if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                data.add(exerciseDetail.getReps());
+                                String date = workoutDates.get(i);
+                                String[] parts = date.split("-");
+                                xLabels.add(parts[labelPart]);
+                            }
+                        }
+                    }
+                }
+                break;
+            case "weight":
+                weightAttribute();
+                for(ExerciseDetails exerciseDetail : exerciseDetails){
+                    if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+
+                        for(int i = 0; i < workoutIDs.size(); i++){
+                            if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                data.add(exerciseDetail.getWeight());
+                                String date = workoutDates.get(i);
+                                String[] parts = date.split("-");
+                                xLabels.add(parts[labelPart]);
+                            }
+                        }
+                    }
+                }
+                break;
+            case "time":
+                timeAttribute();
+                for(ExerciseDetails exerciseDetail : exerciseDetails){
+                    if(exerciseDetail.getExerciseId() == dbHelper.getExerciseIdByName(selectedExerciseOption)){
+                        for(Workout workout: workouts){
+                            if(exerciseDetail.getWorkoutId() == workout.getId()){
+                                for(int i = 0; i < workoutIDs.size(); i++){
+                                    if(exerciseDetail.getWorkoutId() == workoutIDs.get(i)){
+                                        int duration = workout.getRestingTime() + workout.getWorkingTime();
+                                        data.add(String.valueOf(duration));
+                                        String date = workoutDates.get(i);
+                                        String[] parts = date.split("-");
+                                        xLabels.add(parts[labelPart]);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                break;
+            default:
+        }
+
+        for(int i = 0; i < data.size(); i++){
+            switch (typeOfData) {
+                case "reps":
+                    entries.add(new Entry(i, getTotalReps(data.get(i))));
+                    break;
+                case "weight":
+                    entries.add(new Entry(i, getMaximumWeight(data.get(i))));
+                    break;
+                case "time":
+                    entries.add(new Entry(i, getWorkoutDuration(data.get(i))));
+                    break;
+            }
+        }
+
+        LineDataSet dataSet = new LineDataSet(entries, "");
+        dataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        dataSet.setColor(Color.parseColor("#DB4437"));
+        dataSet.setLineWidth(8);
+        dataSet.setValueTextSize(25);
+        dataSet.setValueTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        LineData lineData = new LineData(dataSet);
+        chart.setData(lineData);
+
+
+        dataSet.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                return String.format(Locale.getDefault(), "%.0f", value);
+            }
+        });
+
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(xLabels));
+        chart.invalidate();
     }
 
     public void repsAttribute(){
@@ -1028,6 +504,5 @@ public class ExerciseGraph extends AppCompatActivity {
     private int getWorkoutDuration(String duration){
         return Integer.parseInt(duration) / (1000 * 60);
     }
-
 
 }

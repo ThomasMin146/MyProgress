@@ -281,6 +281,11 @@ public class StartWorkoutPage extends AppCompatActivity implements RVInterface{
     }
 
     @Override
+    public void onLongItemClick(int position, boolean isChecked) {
+
+    }
+
+    @Override
     protected void onPause()
     {
         super.onPause();

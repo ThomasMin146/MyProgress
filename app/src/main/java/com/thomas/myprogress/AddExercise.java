@@ -8,19 +8,19 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.thomas.myprogress.adapters.ExerciseRVAdapter;
 import com.thomas.myprogress.models.Exercise;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class AddExercise extends AppCompatActivity implements RVInterface{
     ExerciseRVAdapter addExerciseAdapter;
-    ArrayList<Exercise> exercises;
+    ArrayList<Exercise> exercises, filteredList;
     RecyclerView exerciseRV;
     DataBaseHelper dbHelper;
-    Button createExercise;
+    TextView createExercise;
     EditText searchEditText;
     TextView backBtn;
     int listPosition;
@@ -38,6 +38,8 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         backBtn = findViewById(R.id.backButton);
 
         exercises = dbHelper.getAllExercises();
+        //filteredList = dbHelper.getAllExercises();
+        filteredList = new ArrayList<>();
 
         addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, dbHelper.getLastWorkoutId());
         exerciseRV.setAdapter(addExerciseAdapter);
@@ -76,7 +78,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     }
 
     private void filterItems(String searchText) {
-        ArrayList<Exercise> filteredList = new ArrayList<>();
+        filteredList.clear();
 
         for (Exercise exercise : exercises) {
             // Perform the search logic based on your item's properties
@@ -94,15 +96,24 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
                 filteredList.add(exercise);
             }
 
+
         }
 
         // Update the RecyclerView adapter with the filtered list
         addExerciseAdapter.setItems(filteredList);
     }
 
-
     @Override
     public void onItemClick(int position) {
+        Intent intent = new Intent(AddExercise.this, StartWorkoutPage.class);
+        intent.putExtra("ExerciseId", exercises.get(position).getId());
+        intent.putExtra("ExerciseName", exercises.get(position).getName());
+        intent.putExtra("Position", listPosition);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onAddItemClick(int position) {
         Intent intent = new Intent(AddExercise.this, UpdateExercise.class);
         intent.putExtra("ID", exercises.get(position).getId());
         intent.putExtra("ExerciseName", exercises.get(position).getName());
@@ -111,15 +122,13 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         intent.putExtra("position", position);
 
         startActivity(intent);
+
     }
 
     @Override
-    public void onAddItemClick(int position) {
-        Intent intent = new Intent(AddExercise.this, StartWorkoutPage.class);
-        intent.putExtra("ExerciseId", exercises.get(position).getId());
-        intent.putExtra("ExerciseName", exercises.get(position).getName());
-        intent.putExtra("Position", listPosition);
-        startActivity(intent);
+    public void onLongItemClick(int position, boolean isChecked) {
+        exercises.get(position).setChecked(isChecked);
+
     }
 
 }

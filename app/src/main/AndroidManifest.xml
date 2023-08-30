@@ -25,24 +25,24 @@
             android:exported="false" />
         <activity
             android:name=".CreateExercise"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
             android:name=".UpdateExercise"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
             android:name=".ChosenExercise"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
             android:name=".AddExercise"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
             android:name=".StartWorkoutPage"
-            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="stateHidden|adjustResize|adjustPan" />
         <activity
             android:name=".WelcomePage"
             android:exported="false" />
