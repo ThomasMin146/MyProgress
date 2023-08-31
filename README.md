@@ -6,7 +6,7 @@
 
 
 ![HomePage](https://github.com/ThomasMin146/MyProgress/assets/128095936/48e85410-e4bd-47d4-aa26-58767daf20b0)
-<img src="[https://github.com/favicon.ico](https://github.com/ThomasMin146/MyProgress/assets/128095936/48e85410-e4bd-47d4-aa26-58767daf20b0)" width="32">
+<img src="[https://github.com/favicon.ico](https://github.com/ThomasMin146/MyProgress/assets/128095936/48e85410-e4bd-47d4-aa26-58767daf20b0)" width="20">
 
 
 * In workout page you can give your workout a name, or add exercises to your workout via add button. In your workout you can track how many sets, reps and weight did you use with exercise aswell as how long have you been working and resting.
