@@ -4,15 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.thomas.myprogress.models.ExerciseDetails;
 import com.thomas.myprogress.DataBaseHelper;
 import com.thomas.myprogress.R;
-import com.thomas.myprogress.RVInterface;
 
 import java.util.ArrayList;
 
@@ -31,7 +28,7 @@ public class ExerciseDetailsHistoryRVAdapter extends RecyclerView.Adapter<Exerci
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
         View itemView = inflater.inflate(R.layout.item_exercise_history, parent, false);
-        return new ExerciseDetailsHistoryRVAdapter.MyViewHolder(itemView);
+        return new MyViewHolder(itemView);
     }
 
     @Override
@@ -40,7 +37,6 @@ public class ExerciseDetailsHistoryRVAdapter extends RecyclerView.Adapter<Exerci
         holder.repsTV.setText(exerciseDetails.get(position).getReps());
         holder.setsTV.setText(exerciseDetails.get(position).getSets());
         holder.weightTV.setText(exerciseDetails.get(position).getWeight());
-
     }
 
     @Override
@@ -49,7 +45,7 @@ public class ExerciseDetailsHistoryRVAdapter extends RecyclerView.Adapter<Exerci
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameTV, repsTV, setsTV, weightTV;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,5 +56,7 @@ public class ExerciseDetailsHistoryRVAdapter extends RecyclerView.Adapter<Exerci
             weightTV = itemView.findViewById(R.id.weightTextView);
 
         }
+
     }
+
 }

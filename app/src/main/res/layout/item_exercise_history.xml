@@ -41,10 +41,9 @@
 
             <TextView
                 android:id="@+id/repetitionTV"
-                android:layout_width="88dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/reps_item"
                 android:textColor="@color/lightgray"
                 android:textSize="20sp"
@@ -66,11 +65,10 @@
 
             <TextView
                 android:id="@+id/bodyPartTV"
-                android:layout_width="88dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:text="@string/sets_item"
+                android:layout_marginStart="10dp"
                 android:textColor="@color/lightgray"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,23 +76,21 @@
 
             <TextView
                 android:id="@+id/setsTextView"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:layout_marginEnd="10dp"
                 android:textColor="@color/white"
                 android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/bodyPartTV"
                 app:layout_constraintTop_toBottomOf="@+id/repsTextView" />
 
             <TextView
                 android:id="@+id/difficultyTV"
-                android:layout_width="88dp"
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:text="@string/weight_item"
+                android:layout_marginStart="10dp"
                 android:textColor="@color/lightgray"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -104,8 +100,6 @@
                 android:id="@+id/weightTextView"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
                 android:textColor="@color/white"
                 android:layout_marginEnd="10dp"
                 android:textSize="20sp"

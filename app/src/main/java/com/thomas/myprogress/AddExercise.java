@@ -7,13 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.thomas.myprogress.adapters.ExerciseRVAdapter;
 import com.thomas.myprogress.models.Exercise;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class AddExercise extends AppCompatActivity implements RVInterface{
     ExerciseRVAdapter addExerciseAdapter;
@@ -23,6 +23,7 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
     TextView createExercise;
     EditText searchEditText;
     TextView backBtn;
+    Button addExercises;
     int listPosition;
 
     @Override
@@ -36,12 +37,14 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         createExercise = findViewById(R.id.createExercise);
         searchEditText = findViewById(R.id.searchExerciseET);
         backBtn = findViewById(R.id.backButton);
+        addExercises = findViewById(R.id.addExercises);
 
         exercises = dbHelper.getAllExercises();
         //filteredList = dbHelper.getAllExercises();
         filteredList = new ArrayList<>();
 
         addExerciseAdapter = new ExerciseRVAdapter(this, exercises, this, dbHelper.getLastWorkoutId());
+
         exerciseRV.setAdapter(addExerciseAdapter);
         exerciseRV.setLayoutManager(new LinearLayoutManager(this));
 
@@ -66,13 +69,30 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // Filter the RecyclerView items based on the search text
-                filterItems(s.toString().trim());
+                //filterItems(s.toString().trim());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 // Not used in this case
+                filterItems(s.toString().trim());
+
             }
+        });
+
+        addExercises.setOnClickListener(v -> {
+            Intent intent = new Intent(AddExercise.this, StartWorkoutPage.class);
+
+            for(Exercise exercise : exercises){
+                if(exercise.isChecked()){
+                    dbHelper.addExerciseDetails(dbHelper.getLastWorkoutId(), exercise.getId(), "","","");
+                    intent.putExtra("ExerciseId", exercise.getId());
+                    intent.putExtra("ExerciseName", exercise.getName());
+                    intent.putExtra("Position", listPosition);
+                }
+            }
+
+            startActivity(intent);
         });
 
     }
@@ -95,7 +115,6 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
                     itemDifficulty.contains(searchText.toLowerCase())) {
                 filteredList.add(exercise);
             }
-
 
         }
 
@@ -120,14 +139,26 @@ public class AddExercise extends AppCompatActivity implements RVInterface{
         intent.putExtra("Bodypart", exercises.get(position).getBodypart());
         intent.putExtra("Difficulty", exercises.get(position).getDifficulty());
         intent.putExtra("position", position);
-
         startActivity(intent);
 
     }
 
     @Override
     public void onLongItemClick(int position, boolean isChecked) {
-        exercises.get(position).setChecked(isChecked);
+        int amountOfSelected = 0;
+
+        for(Exercise exercise : exercises){
+            if(exercise.isChecked()){
+                amountOfSelected++;
+            }
+        }
+
+        if(amountOfSelected > 0) {
+            addExercises.setVisibility(View.VISIBLE);
+            addExercises.setText(getResources().getString(R.string.add_selected_exercises, amountOfSelected));
+        } else if (amountOfSelected == 0){
+            addExercises.setVisibility(View.GONE);
+        }
 
     }
 

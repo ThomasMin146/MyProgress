@@ -1,8 +1,6 @@
 package com.thomas.myprogress.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +8,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
@@ -26,17 +23,15 @@ public class ExerciseRVAdapter extends RecyclerView.Adapter<ExerciseRVAdapter.Ex
     ArrayList<Exercise> exercises;
     RVInterface rvInterface;
     long workoutId;
+    DataBaseHelper dbHelper1;
+
 
     public ExerciseRVAdapter(Context context, ArrayList<Exercise> exercises, RVInterface rvInterface, long workoutId){
         this.context = context;
         this.exercises = exercises;
         this.rvInterface = rvInterface;
         this.workoutId = workoutId;
-
-        // Initialize the selection status for each exercise item
-        for (Exercise exercise : exercises) {
-            exercise.setChecked(exercise.isChecked());
-        }
+        dbHelper1 = new DataBaseHelper(context);
     }
 
     @NonNull
@@ -44,7 +39,7 @@ public class ExerciseRVAdapter extends RecyclerView.Adapter<ExerciseRVAdapter.Ex
     public ExerciseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the item layout
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.add_item_exercise_layout2, parent, false);
+        View view = inflater.inflate(R.layout.add_item_exercise_layout, parent, false);
         return new ExerciseViewHolder(view, rvInterface);
     }
 
@@ -53,6 +48,15 @@ public class ExerciseRVAdapter extends RecyclerView.Adapter<ExerciseRVAdapter.Ex
         holder.name.setText(exercises.get(position).getName());
         holder.bodypart.setText(exercises.get(position).getBodypart());
         holder.difficulty.setText(exercises.get(position).getDifficulty());
+        holder.cardView.setChecked(exercises.get(position).isChecked());
+
+        /*holder.cardView.setOnLongClickListener(v -> {
+            holder.cardView.toggle();
+            exercises.get(position).setChecked(holder.cardView.isChecked());
+            rvInterface.onLongItemClick(position, holder.cardView.isChecked());
+            return true;
+        });*/
+
 
     }
 
@@ -87,6 +91,7 @@ public class ExerciseRVAdapter extends RecyclerView.Adapter<ExerciseRVAdapter.Ex
 
             cardView = itemView.findViewById(R.id.exerciseCV);
 
+
             cardView.setOnClickListener(v -> {
                 dbHelper.addExerciseDetails(workoutId, exercises.get(getAdapterPosition()).getId(), "","","");
                 rvInterface.onItemClick(getAdapterPosition());
@@ -101,6 +106,13 @@ public class ExerciseRVAdapter extends RecyclerView.Adapter<ExerciseRVAdapter.Ex
 
             addExerciseButton.setOnClickListener(v -> {
                 rvInterface.onAddItemClick(getAdapterPosition());
+            });
+
+            cardView.setOnLongClickListener(v -> {
+                cardView.toggle();
+                exercises.get(getAdapterPosition()).setChecked(cardView.isChecked());
+                rvInterface.onLongItemClick(getAdapterPosition(), cardView.isChecked());
+                return true;
             });
 
 

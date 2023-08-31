@@ -45,5 +45,7 @@
     <string name="update">Update</string>
     <string name="choosing_difficulty">Choosing difficulty</string>
     <string name="choosing_bodypart">Choosing bodypart</string>
+    <string name="add_selected_exercises">Add %1$d selected exercises</string>
+
 
 </resources>
