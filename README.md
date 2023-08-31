@@ -14,6 +14,10 @@
 ![WorkoutWorkingPage](https://github.com/ThomasMin146/MyProgress/assets/128095936/686c9db5-c095-4657-9a92-7964d14bf71b)
 <img src="[https://github.com/ThomasMin146/MyProgress/assets/128095936/686c9db5-c095-4657-9a92-7964d14bf71b)" width="10">
 
+
+![WorkoutRestingPage](https://github.com/ThomasMin146/MyProgress/assets/128095936/9173c1ad-6772-4e0b-96cc-ae1b989f4f79)
+<img src="[https://github.com/ThomasMin146/MyProgress/assets/128095936/9173c1ad-6772-4e0b-96cc-ae1b989f4f79)" width="10">
+
 * If you don't find your favorite exercise in AddExercise page, you can simply create one by clicking on + button in top right corner. There are functions to edit or delete exercise in case you did a mistake. You can also add multiple exercises at once.
 * After finishing your workout, you can click S button which saves current workout and allows another workout to be started for the next working session.
 * All workouts are added to Workout history, where you can check what kind of workouts have you done and when. You can also click on each workout to see all exercises you did aswell as their details.
